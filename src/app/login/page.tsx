@@ -10,10 +10,10 @@ import { useToast } from '@/hooks/use-toast';
 import { useI18n } from '@/context/i18n';
 
 const users = [
-  { role: 'Produsen', role_key: 'role_producer', email: 'produsen@agribid.id', password: 'produsen123' },
-  { role: 'Penawar', role_key: 'role_bidder', email: 'penawar@agribid.id', password: 'penawar123' },
-  { role: 'Mitra', role_key: 'role_partner', email: 'mitra@agribid.id', password: 'mitra123' },
-  { role: 'Eksportir', role_key: 'role_exporter', email: 'eksportir@agribid.id', password: 'eksportir123' },
+  { role: 'Produsen', role_key: 'role_producer', email: 'produsen@agribid.id', password: 'produsen123', path: '/dashboard/producer' },
+  { role: 'Penawar', role_key: 'role_bidder', email: 'penawar@agribid.id', password: 'penawar123', path: '/dashboard/bidder' },
+  { role: 'Mitra', role_key: 'role_partner', email: 'mitra@agribid.id', password: 'mitra123', path: '/dashboard/partner' },
+  { role: 'Eksportir', role_key: 'role_exporter', email: 'eksportir@agribid.id', password: 'eksportir123', path: '/dashboard/exporter' },
 ];
 
 export default function MultiLoginPage() {
@@ -21,12 +21,12 @@ export default function MultiLoginPage() {
   const router = useRouter();
   const { t } = useI18n();
 
-  const handleLogin = (role: string) => {
+  const handleLogin = (role: string, path: string) => {
     toast({
       title: `${t('login_success_title')} sebagai ${role}`,
       description: t('login_success_desc'),
     });
-    router.push('/dashboard');
+    router.push(path);
   };
 
   return (
@@ -55,7 +55,7 @@ export default function MultiLoginPage() {
                   <TableCell>{user.email}</TableCell>
                   <TableCell className="font-mono">{user.password}</TableCell>
                   <TableCell className="text-right">
-                    <Button onClick={() => handleLogin(t(user.role_key as any))}>Login</Button>
+                    <Button onClick={() => handleLogin(t(user.role_key as any), user.path)}>Login</Button>
                   </TableCell>
                 </TableRow>
               ))}
