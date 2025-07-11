@@ -23,11 +23,11 @@ export function AppHeader() {
   const { toast } = useToast()
   const { t, language, setLanguage, currency, setCurrency } = useI18n();
 
-  const handleLoginToggle = () => {
-    setIsLoggedIn(!isLoggedIn);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
     toast({
-      title: isLoggedIn ? t('logout_success_title') : t('login_success_title'),
-      description: isLoggedIn ? t('logout_success_desc') : t('login_success_desc'),
+      title: t('logout_success_title'),
+      description: t('logout_success_desc'),
     })
   };
 
@@ -121,7 +121,7 @@ export function AppHeader() {
                 <DropdownMenuItem asChild><Link href="/profile"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLoginToggle}>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>{t('log_out')}</span>
                 </DropdownMenuItem>
@@ -132,7 +132,7 @@ export function AppHeader() {
               <Button asChild variant="ghost">
                 <Link href="/login">{t('log_in')}</Link>
               </Button>
-              <Button asChild onClick={handleLoginToggle} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+              <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
                  <Link href="/signup">{t('sign_up')}</Link>
               </Button>
             </div>
