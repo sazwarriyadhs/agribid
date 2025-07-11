@@ -22,6 +22,10 @@ export default function LoginPage() {
       title: t('login_success_title'),
       description: t('login_success_desc'),
     });
+    // This is a simulation. In a real app, you'd get a token
+    // and update a global state or cookie.
+    // We can simulate this by telling the header to update.
+    // For now, we just redirect.
     router.push('/dashboard');
   };
 

@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useI18n } from '@/context/i18n';
+import { useToast } from '@/hooks/use-toast';
 
 const roles = [
   { key: 'role_producer', value: 'producer' },
@@ -24,6 +26,17 @@ const roles = [
 
 export default function SignupPage() {
   const { t } = useI18n();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Registration Submitted",
+      description: "Your account is pending admin approval. You will be notified upon activation.",
+    });
+    router.push('/login');
+  };
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-14rem)] bg-background px-4 py-12">
@@ -35,7 +48,7 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
+          <form onSubmit={handleSignup} className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
@@ -78,12 +91,12 @@ export default function SignupPage() {
             </div>
 
             <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-              Create an account
+              Submit for Approval
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" type="button">
               Sign up with Google
             </Button>
-          </div>
+          </form>
           <div className="mt-4 text-center text-sm">
             Already have an account?{' '}
             <Link href="/login" className="underline">
