@@ -12,7 +12,7 @@ interface I18nContextType {
   setLanguage: (lang: Language) => void;
   currency: Currency;
   setCurrency: (currency: Currency) => void;
-  t: (key: keyof Translations, options?: { [key: string]: string | number }) => string;
+  t: (key: keyof Translations | string, fallback?: string | { [key: string]: string | number }) => string;
   formatCurrency: (value: number) => string;
 }
 
@@ -27,13 +27,17 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<Language>('id');
   const [currency, setCurrency] = useState<Currency>('idr');
 
-  const t = useCallback((key: keyof Translations, options?: { [key: string]: string | number }) => {
-    let translation = translations[language][key] || translations['en'][key] || key;
-    if (options) {
+  const t = useCallback((key: keyof Translations | string, options?: string | { [key: string]: string | number }) => {
+    let translation = translations[language][key as keyof Translations] || translations['en'][key as keyof Translations] || key;
+    
+    if (typeof options === 'object' && options !== null) {
       Object.keys(options).forEach(optKey => {
         translation = translation.replace(`{{${optKey}}}`, String(options[optKey]));
       });
+    } else if (typeof options === 'string') {
+      translation = translation || options;
     }
+    
     return translation;
   }, [language]);
 

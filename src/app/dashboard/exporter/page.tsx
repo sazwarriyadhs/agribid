@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { UploadCloud, PackageCheck, List } from "lucide-react"
 import { useI18n } from "@/context/i18n";
+import Link from 'next/link';
 
 const exportShipments = [
     { id: 'EXP-001', product: 'Kopi Arabika Gayo', product_id: 'Kopi Arabika Gayo', destination: 'USA', destination_id: 'AS', status: 'In Transit', status_id: 'Dalam Perjalanan' },
@@ -37,7 +38,7 @@ export default function ExporterDashboardPage() {
 
     const getStatusText = (status: string) => {
         const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, { defaultValue: status });
+        return t(key as any, status);
     }
 
     return (
@@ -49,16 +50,19 @@ export default function ExporterDashboardPage() {
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle className="font-headline text-2xl">Export Management</CardTitle>
-                        <CardDescription>Oversee your international shipments and documents.</CardDescription>
+                        <CardTitle className="font-headline text-2xl">{t('my_shipments')}</CardTitle>
+                        <CardDescription>{t('exporter_dashboard_desc')}</CardDescription>
                     </div>
                      <div className="flex gap-2">
                          <Button variant="outline"><List className="mr-2"/>{t('browse_export_commodities')}</Button>
-                         <Button><UploadCloud className="mr-2"/>{t('upload_documents')}</Button>
+                         <Button asChild>
+                            <Link href="/export-partner">
+                                <UploadCloud className="mr-2"/>{t('upload_documents')}
+                            </Link>
+                         </Button>
                     </div>
                 </CardHeader>
                 <CardContent>
-                     <h3 className="text-lg font-semibold mb-2">{t('my_shipments')}</h3>
                      <Table>
                         <TableHeader>
                             <TableRow>
@@ -73,7 +77,7 @@ export default function ExporterDashboardPage() {
                                 <TableRow key={ship.id}>
                                     <TableCell className="font-medium">{language === 'id' ? ship.product_id : ship.product}</TableCell>
                                     <TableCell>{language === 'id' ? ship.destination_id : ship.destination}</TableCell>
-                                    <TableCell><Badge variant={getStatusVariant(ship.status)}>{getStatusText(ship.status)}</Badge></TableCell>
+                                    <TableCell><Badge variant={getStatusVariant(ship.status)}>{getStatusText(language === 'id' ? ship.status_id : ship.status)}</Badge></TableCell>
                                     <TableCell className="text-right">
                                         <Button variant="ghost" size="sm"><PackageCheck className="mr-2"/>{t('track')}</Button>
                                     </TableCell>

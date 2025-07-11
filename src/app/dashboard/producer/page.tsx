@@ -10,9 +10,9 @@ import { useI18n } from "@/context/i18n";
 import Link from "next/link";
 
 const producerProducts = [
-  { id: 'PROD-001', name: 'Kopi Arabika Gayo', name_id: 'Kopi Arabika Gayo', status: 'Active', status_id: 'Aktif', stock: '10 Ton' },
-  { id: 'PROD-002', name: 'Udang Windu Super', name_id: 'Udang Windu Super', status: 'Ended', status_id: 'Selesai', stock: '5 Ton' },
-  { id: 'PROD-003', name: 'Kayu Jati Grade A', name_id: 'Kayu Jati Grade A', status: 'Pending', status_id: 'Menunggu', stock: '20 m³' },
+  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton' },
+  { id: '2', name: 'Fresh Atlantic Salmon', name_id: 'Salmon Atlantik Segar', status: 'Ended', status_id: 'Selesai', stock: '5 Ton' },
+  { id: '3', name: 'Palm Oil Kernels', name_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 m³' },
 ];
 
 export default function ProducerDashboardPage() {
@@ -39,7 +39,7 @@ export default function ProducerDashboardPage() {
 
     const getStatusText = (status: string) => {
         const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, { defaultValue: status });
+        return t(key as any, status);
     }
 
     return (
@@ -52,7 +52,7 @@ export default function ProducerDashboardPage() {
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                         <CardTitle className="font-headline text-2xl">My Products</CardTitle>
-                        <CardDescription>View and manage your product listings and auctions.</CardDescription>
+                        <CardDescription>View and manage your product listings for auction.</CardDescription>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline"><BarChart2 className="mr-2"/>{t('view_statistics')}</Button>
@@ -77,10 +77,14 @@ export default function ProducerDashboardPage() {
                     {producerProducts.map((prod) => (
                         <TableRow key={prod.id}>
                         <TableCell className="font-medium">{language === 'id' ? prod.name_id : prod.name}</TableCell>
-                        <TableCell><Badge variant={getStatusVariant(prod.status)}>{getStatusText(prod.status)}</Badge></TableCell>
+                        <TableCell><Badge variant={getStatusVariant(prod.status)}>{getStatusText(language === 'id' ? prod.status_id : prod.status)}</Badge></TableCell>
                         <TableCell>{prod.stock}</TableCell>
                         <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">{t('manage')}</Button>
+                             <Button asChild variant="ghost" size="sm">
+                                <Link href={`/auctions/${prod.id}`}>
+                                    {t('manage')}
+                                </Link>
+                             </Button>
                         </TableCell>
                         </TableRow>
                     ))}

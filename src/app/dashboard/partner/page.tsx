@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { UserCheck, Calendar } from "lucide-react"
 import { useI18n } from "@/context/i18n";
+import Link from 'next/link';
 
 const verificationRequests = [
     { id: 'VER-001', producer: 'Jaya Farm', producer_id: 'Jaya Farm', date: '2024-07-15', status: 'Pending', status_id: 'Menunggu' },
@@ -14,7 +15,7 @@ const verificationRequests = [
 ]
 
 export default function PartnerDashboardPage() {
-    const { t } = useI18n();
+    const { t, language } = useI18n();
 
     const getStatusVariant = (status: string) => {
         switch (status.toLowerCase()) {
@@ -37,7 +38,7 @@ export default function PartnerDashboardPage() {
 
     const getStatusText = (status: string) => {
         const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, { defaultValue: status });
+        return t(key as any, status);
     }
 
     return (
@@ -48,12 +49,11 @@ export default function PartnerDashboardPage() {
             </header>
             <Card>
                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl">Partner Portal</CardTitle>
-                    <CardDescription>Manage your activities and collaborations.</CardDescription>
+                    <CardTitle className="font-headline text-2xl">{t('producer_verification_requests')}</CardTitle>
+                    <CardDescription>{t('partner_dashboard_desc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">{t('producer_verification_requests')}</h3>
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -66,9 +66,9 @@ export default function PartnerDashboardPage() {
                             <TableBody>
                                 {verificationRequests.map((req) => (
                                 <TableRow key={req.id}>
-                                        <TableCell className="font-medium">{req.producer}</TableCell>
+                                        <TableCell className="font-medium">{language === 'id' ? req.producer_id : req.producer}</TableCell>
                                         <TableCell>{req.date}</TableCell>
-                                        <TableCell><Badge variant={getStatusVariant(req.status)}>{getStatusText(req.status)}</Badge></TableCell>
+                                        <TableCell><Badge variant={getStatusVariant(req.status)}>{getStatusText(language === 'id' ? req.status_id : req.status)}</Badge></TableCell>
                                         <TableCell className="text-right">
                                             <Button variant="outline" size="sm"><UserCheck className="mr-2"/>{t('review')}</Button>
                                         </TableCell>
@@ -78,7 +78,7 @@ export default function PartnerDashboardPage() {
                         </Table>
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">{t('mentoring_schedule')}</h3>
+                        <h3 className="text-lg font-semibold mb-2 mt-4">{t('mentoring_schedule')}</h3>
                         <Card className="flex items-center justify-between p-4">
                             <p>{t('mentoring_schedule_desc')}</p>
                             <Button><Calendar className="mr-2"/>{t('view_schedule')}</Button>
