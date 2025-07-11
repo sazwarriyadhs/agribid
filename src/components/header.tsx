@@ -34,7 +34,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center px-4 md:px-6">
         <Link href="/" className="mr-6 flex items-center">
-          <AgriBidLogo className="h-8 w-8" />
+          <AgriBidLogo className="h-10 w-10" />
           <span className="ml-2 text-lg font-bold font-headline">AgriBid</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">

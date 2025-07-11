@@ -39,7 +39,7 @@ export function AppFooter() {
         <div className="grid gap-8 md:grid-cols-4">
           <div className="flex flex-col gap-2">
             <Link href="/" className="flex items-center gap-2 mb-2">
-              <AgriBidLogo className="h-8 w-8" />
+              <AgriBidLogo className="h-10 w-10" />
               <span className="text-xl font-bold font-headline">AgriBid</span>
             </Link>
             <p className="text-sm text-muted-foreground">{t('footer_tagline')}</p>
