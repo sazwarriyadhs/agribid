@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tractor, Wheat, Fish, Handshake, Search, Gavel } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
+import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
 
 const featuredAuctions = [
   {
@@ -162,8 +163,10 @@ export default function Home() {
       </section>
 
       <FeaturedCommodities />
+      
+      <FeaturedProcessedProducts />
 
-      <section className="py-16 md:py-24 bg-secondary/50">
+      <section className="py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
            <h2 className="text-3xl font-bold text-center font-headline">{t('how_it_works_title')}</h2>
            <p className="text-center text-muted-foreground mt-2 mb-12">{t('how_it_works_subtitle')}</p>
@@ -187,7 +190,7 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-16 md:py-24 bg-secondary/50">
         <div className="container px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline">{t('trusted_partners_title')}</h2>
           <p className="text-center text-muted-foreground mt-2 mb-12">{t('trusted_partners_subtitle')}</p>
