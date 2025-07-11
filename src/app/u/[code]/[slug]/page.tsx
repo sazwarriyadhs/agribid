@@ -21,7 +21,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
 import { notFound } from 'next/navigation';
-import { IdCard } from 'lucide-react';
 
 
 const bidHistory = [
@@ -89,12 +88,6 @@ export default function ProfilePage({ params }: { params: { code: string, slug: 
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             <Button className="w-full">{t('edit_profile')}</Button>
-            <Button asChild variant="outline" className="w-full">
-                <Link href="/membership-card">
-                    <IdCard className="mr-2" />
-                    {t('membership_card')}
-                </Link>
-            </Button>
           </CardContent>
         </Card>
         <div className="w-full md:w-2/3">
