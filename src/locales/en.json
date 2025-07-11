@@ -203,5 +203,16 @@
   "status_outbid": "Outbid",
   "status_verified": "Verified",
   "status_in_transit": "In Transit",
-  "status_delivered": "Delivered"
+  "status_delivered": "Delivered",
+  "membership_card": "Membership Card",
+  "membership_card_title": "Your Digital Membership Card",
+  "membership_card_subtitle": "This card is proof of your verified membership on AgriBid.",
+  "download_as_pdf": "Download as PDF",
+  "membership_id": "Membership ID",
+  "valid_until": "Valid until",
+  "regulations_title": "Regulations",
+  "regulation_1": "This card is personal and non-transferable.",
+  "regulation_2": "Members must comply with the terms and conditions of AgriBid Indonesia.",
+  "regulation_3": "The card must be presented upon request for verification.",
+  "regulation_4": "Misuse of the card will result in membership revocation."
 }
