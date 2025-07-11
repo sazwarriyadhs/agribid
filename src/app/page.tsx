@@ -118,7 +118,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[60vh] md:h-[70vh] text-white">
+      <section className="relative w-full h-[80vh] md:h-[90vh] text-white">
         <Carousel 
             opts={{ loop: true }}
             plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -280,3 +280,4 @@ export default function Home() {
   );
 
     
+
