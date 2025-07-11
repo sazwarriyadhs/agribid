@@ -5,7 +5,7 @@ import { useI18n } from '@/context/i18n';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog';
 import { AgriBidLogo } from './icons';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Download, QrCode } from 'lucide-react';
@@ -42,6 +42,7 @@ export function MembershipBenefits() {
                             </div>
                         </DialogTrigger>
                         <DialogContent className="max-w-4xl bg-transparent border-none shadow-none">
+                             <DialogTitle className="sr-only">{t('membership_card')}</DialogTitle>
                             <div className="grid md:grid-cols-2 gap-8 justify-items-center">
                                 {/* Front Card */}
                                 <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden">
