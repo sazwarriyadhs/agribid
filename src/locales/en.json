@@ -214,5 +214,16 @@
   "regulation_1": "This card is personal and non-transferable.",
   "regulation_2": "Members must comply with the terms and conditions of AgriBid Indonesia.",
   "regulation_3": "The card must be presented upon request for verification.",
-  "regulation_4": "Misuse of the card will result in membership revocation."
+  "regulation_4": "Misuse of the card will result in membership revocation.",
+  "membership_benefits_title": "Benefits of Being an AgriBid Member",
+  "membership_benefits_subtitle": "Unlock exclusive features and gain a competitive edge in the marketplace.",
+  "benefit_exclusive_auctions_title": "Exclusive Auctions",
+  "benefit_exclusive_auctions_desc": "Get access to member-only auctions with premium commodities.",
+  "benefit_verified_network_title": "Verified Network",
+  "benefit_verified_network_desc": "Transact with confidence within a trusted and verified community.",
+  "benefit_priority_support_title": "Priority Support",
+  "benefit_priority_support_desc": "Receive faster assistance from our dedicated support team.",
+  "benefit_membership_card_title": "Digital Membership",
+  "benefit_membership_card_desc": "Get a digital card as proof of your verified status in the AgriBid ecosystem.",
+  "join_now": "Join Now"
 }

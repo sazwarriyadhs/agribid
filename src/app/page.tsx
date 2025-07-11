@@ -14,6 +14,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Autoplay from "embla-carousel-autoplay";
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { MembershipBenefits } from '@/components/membership-benefits';
 
 
 const heroSlides = [
@@ -240,6 +241,8 @@ export default function Home() {
            </div>
         </div>
       </section>
+
+      <MembershipBenefits />
       
       <section className="py-16 md:py-24 bg-secondary/50">
         <div className="container grid md:grid-cols-2 gap-12 items-center">
