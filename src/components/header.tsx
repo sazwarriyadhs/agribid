@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -116,8 +117,8 @@ export function AppHeader() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/profile"><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
-                <DropdownMenuItem><Gavel className="mr-2 h-4 w-4" /><span>{t('my_bids')}</span></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/profile"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLoginToggle}>
