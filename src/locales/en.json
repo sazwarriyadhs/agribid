@@ -11,6 +11,7 @@
   "featured_auctions": "Featured Auctions",
   "featured_auctions_subtitle": "Get in on the action with these trending auctions.",
   "current_bid": "Current Bid",
+  "highest_bid": "Highest Bid",
   "view_auction": "View Auction",
   "how_it_works_title": "How AgriBid Works",
   "how_it_works_subtitle": "A simple, transparent, and efficient process.",
@@ -157,3 +158,5 @@
   "product_submitted_title": "Product Submitted",
   "product_submitted_desc": "Your product has been successfully submitted for admin verification."
 }
+
+    

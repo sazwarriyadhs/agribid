@@ -1,3 +1,4 @@
+
 'use client'
 
 import Link from 'next/link';
@@ -5,12 +6,15 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane } from 'lucide-react';
+import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay";
+import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+
 
 const heroSlides = [
     {
@@ -41,9 +45,13 @@ const featuredAuctions = [
     name_id: 'Panen Gandum Organik',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'wheat field',
-    currentBid: 4500,
     category: 'Grains',
     category_id: 'Biji-bijian',
+    bidders: [
+        { name: 'Green Valley', bid: 4500 },
+        { name: 'Milling Co.', bid: 4450 },
+        { name: 'Farm Fresh', bid: 4400 },
+    ]
   },
   {
     id: '2',
@@ -51,9 +59,13 @@ const featuredAuctions = [
     name_id: 'Salmon Atlantik Segar',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'fresh salmon',
-    currentBid: 1200,
     category: 'Marine Fishery',
     category_id: 'Perikanan Laut',
+    bidders: [
+        { name: 'Ocean Catch', bid: 1200 },
+        { name: 'Seafood Inc.', bid: 1150 },
+        { name: 'Fishmonger', bid: 1100 },
+    ]
   },
   {
     id: '3',
@@ -61,9 +73,13 @@ const featuredAuctions = [
     name_id: 'Biji Kelapa Sawit',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'palm oil plantation',
-    currentBid: 800,
     category: 'Plantation',
     category_id: 'Perkebunan',
+    bidders: [
+        { name: 'Bio Oils', bid: 850 },
+        { name: 'Tropic Oil', bid: 800 },
+        { name: 'Palm Kernel', bid: 780 },
+    ]
   },
     {
     id: '4',
@@ -71,50 +87,14 @@ const featuredAuctions = [
     name_id: 'Kayu Jati Gelondongan',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'teak wood',
-    currentBid: 7800,
     category: 'Forestry Products',
     category_id: 'Hasil Hutan',
+    bidders: [
+        { name: 'Lumber Inc.', bid: 7800 },
+        { name: 'Wood World', bid: 7700 },
+        { name: 'Timber Co.', bid: 7650 },
+    ]
   },
-  {
-    id: '5',
-    name: 'Freshwater Catfish',
-    name_id: 'Ikan Lele Segar',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'catfish farm',
-    currentBid: 500,
-    category: 'Inland Fishery',
-    category_id: 'Perikanan Darat',
-  },
-  {
-    id: '6',
-    name: 'Granny Smith Apples',
-    name_id: 'Apel Granny Smith',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'apple orchard',
-    currentBid: 850,
-    category: 'Fruits & Vegetables',
-    category_id: 'Buah & Sayuran',
-  },
-  {
-    id: '7',
-    name: 'Grass-Fed Angus Beef',
-    name_id: 'Daging Sapi Angus',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'cattle ranch',
-    currentBid: 7800,
-    category: 'Livestock',
-    category_id: 'Ternak',
-  },
-  {
-    id: '8',
-    name: 'Natural Rubber Sheets',
-    name_id: 'Lembaran Karet Alam',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'rubber tree farm',
-    currentBid: 2100,
-    category: 'Plantation',
-    category_id: 'Perkebunan',
-  }
 ];
 
 const partners = [
@@ -127,6 +107,10 @@ const partners = [
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
   
+  const getHighestBidder = (bidders: {name: string, bid: number}[]) => {
+      return bidders.sort((a, b) => b.bid - a.bid)[0];
+  }
+
   return (
     <div className="flex flex-col">
       <section className="relative w-full h-[60vh] md:h-[70vh] text-white">
@@ -176,8 +160,12 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
           <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredAuctions.map((auction) => (
-              <Card key={auction.id} className="overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+            {featuredAuctions.map((auction) => {
+              const highestBidder = getHighestBidder(auction.bidders);
+              const otherBidders = auction.bidders.filter(b => b.name !== highestBidder.name).slice(0,2);
+
+              return (
+              <Card key={auction.id} className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 flex flex-col">
                 <CardHeader className="p-0">
                   <div className="relative h-48 w-full">
                     <Image src={auction.image} alt={language === 'id' ? auction.name_id : auction.name} data-ai-hint={auction.aiHint} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -187,9 +175,28 @@ export default function Home() {
                     <CardTitle className="text-xl font-semibold leading-snug">{language === 'id' ? auction.name_id : auction.name}</CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">{t('current_bid')}</div>
-                  <div className="text-2xl font-bold text-primary">{formatCurrency(auction.currentBid)}</div>
+                <CardContent className="flex-grow space-y-4">
+                  <div className="bg-primary/10 border-2 border-primary/20 rounded-lg p-3">
+                      <div className="flex justify-between items-center">
+                          <p className="text-xs text-primary font-semibold">{t('highest_bid')}</p>
+                          <Crown className="w-5 h-5 text-amber-500" />
+                      </div>
+                      <p className="text-2xl font-bold text-primary">{formatCurrency(highestBidder.bid)}</p>
+                      <p className="text-sm text-muted-foreground">{highestBidder.name}</p>
+                  </div>
+                  <div className="space-y-2">
+                      {otherBidders.map((bidder, i) => (
+                           <div key={i} className="flex justify-between items-center text-sm p-2 rounded-md bg-secondary/50">
+                               <div className="flex items-center gap-2 text-muted-foreground">
+                                   <Avatar className="h-6 w-6 text-xs">
+                                        <AvatarFallback>{bidder.name.charAt(0)}</AvatarFallback>
+                                   </Avatar>
+                                   <span>{bidder.name}</span>
+                               </div>
+                               <span className="font-mono text-foreground">{formatCurrency(bidder.bid)}</span>
+                           </div>
+                      ))}
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button asChild className="w-full bg-primary hover:bg-primary/90">
@@ -197,7 +204,7 @@ export default function Home() {
                   </Button>
                 </CardFooter>
               </Card>
-            ))}
+            )})}
           </div>
         </div>
       </section>
@@ -265,3 +272,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

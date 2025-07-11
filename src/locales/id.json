@@ -11,6 +11,7 @@
   "featured_auctions": "Lelang Unggulan",
   "featured_auctions_subtitle": "Ikuti aksi dengan lelang yang sedang tren ini.",
   "current_bid": "Tawaran Saat Ini",
+  "highest_bid": "Tawaran Tertinggi",
   "view_auction": "Lihat Lelang",
   "how_it_works_title": "Cara Kerja AgriBid",
   "how_it_works_subtitle": "Proses yang sederhana, transparan, dan efisien.",
@@ -157,3 +158,5 @@
   "product_submitted_title": "Produk Terkirim",
   "product_submitted_desc": "Produk Anda telah berhasil dikirim untuk verifikasi admin."
 }
+
+    
