@@ -167,6 +167,8 @@
   "role_admin": "Admin",
   "producer_dashboard_title": "Dasbor Produsen",
   "producer_dashboard_desc": "Kelola produk dan lelang Anda.",
+  "my_products": "Produk Saya",
+  "my_products_desc": "Lihat dan kelola daftar produk Anda untuk lelang.",
   "view_statistics": "Lihat Statistik",
   "create_new_auction": "Buat Lelang Baru",
   "product": "Produk",
@@ -250,3 +252,5 @@
   "suspend_user": "Tangguhkan Pengguna",
   "delete_user": "Hapus Pengguna"
 }
+
+    

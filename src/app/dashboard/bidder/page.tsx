@@ -6,42 +6,32 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Gavel, Trophy } from "lucide-react"
 import { useI18n } from "@/context/i18n";
+import Link from "next/link";
 
 const bidderHistory = [
-  { id: 'BID-001', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Winning', status_id: 'Unggul', amount: 4500 },
-  { id: 'BID-002', item: 'Fresh Atlantic Salmon', item_id: 'Salmon Atlantik Segar', status: 'Won', status_id: 'Menang', amount: 1200 },
-  { id: 'BID-003', item: 'Palm Oil Kernels', item_id: 'Biji Kelapa Sawit', status: 'Outbid', status_id: 'Kalah', amount: 850 },
+  { id: '1', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Winning', status_id: 'Unggul', amount: 4500 },
+  { id: '2', item: 'Fresh Atlantic Salmon', item_id: 'Salmon Atlantik Segar', status: 'Won', status_id: 'Menang', amount: 1200 },
+  { id: '3', item: 'Palm Oil Kernels', item_id: 'Biji Kelapa Sawit', status: 'Outbid', status_id: 'Kalah', amount: 850 },
 ];
 
 export default function BidderDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
 
     const getStatusVariant = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'active':
-            case 'winning':
-            case 'in transit':
-            case 'verified':
-                return 'default';
-            case 'ended':
-            case 'won':
-            case 'delivered':
-                return 'secondary';
-            case 'pending':
-            case 'outbid':
-                return 'destructive';
-            default: 
-                return 'outline';
-        }
+        const s = status.toLowerCase();
+        if (['active', 'winning', 'verified', 'unggul'].includes(s)) return 'default';
+        if (['ended', 'won', 'delivered', 'menang'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'kalah'].includes(s)) return 'destructive';
+        return 'outline';
     }
 
-    const getStatusText = (status: string) => {
-        const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, status);
+    const getStatusText = (bid: typeof bidderHistory[0]) => {
+        const key = `status_${bid.status.toLowerCase().replace(/ /g, '_')}`;
+        return t(key, language === 'id' ? bid.status_id : bid.status);
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 md:py-12">
+        <>
              <header className="mb-8">
                 <h1 className="text-4xl font-bold font-headline">{t('bidder_dashboard_title')}</h1>
                 <p className="text-muted-foreground">{t('bidder_dashboard_desc')}</p>
@@ -85,8 +75,12 @@ export default function BidderDashboardPage() {
                         <TableBody>
                             {bidderHistory.map((bid) => (
                                 <TableRow key={bid.id}>
-                                <TableCell className="font-medium">{language === 'id' ? bid.item_id : bid.item}</TableCell>
-                                <TableCell><Badge variant={getStatusVariant(bid.status)}>{getStatusText(language === 'id' ? bid.status_id : bid.status)}</Badge></TableCell>
+                                <TableCell className="font-medium">
+                                    <Link href={`/auctions/${bid.id}`} className="hover:underline">
+                                        {language === 'id' ? bid.item_id : bid.item}
+                                    </Link>
+                                </TableCell>
+                                <TableCell><Badge variant={getStatusVariant(language === 'id' ? bid.status_id : bid.status)}>{getStatusText(bid)}</Badge></TableCell>
                                 <TableCell className="text-right font-mono">{formatCurrency(bid.amount)}</TableCell>
                                 </TableRow>
                             ))}
@@ -94,6 +88,8 @@ export default function BidderDashboardPage() {
                     </Table>
                 </CardContent>
             </Card>
-        </div>
+        </>
     )
 }
+
+    

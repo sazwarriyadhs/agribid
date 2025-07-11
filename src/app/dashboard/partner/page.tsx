@@ -18,31 +18,20 @@ export default function PartnerDashboardPage() {
     const { t, language } = useI18n();
 
     const getStatusVariant = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'active':
-            case 'winning':
-            case 'in transit':
-            case 'verified':
-                return 'default';
-            case 'ended':
-            case 'won':
-            case 'delivered':
-                return 'secondary';
-            case 'pending':
-            case 'outbid':
-                return 'destructive';
-            default: 
-                return 'outline';
-        }
+        const s = status.toLowerCase();
+        if (['active', 'winning', 'in transit', 'verified', 'terverifikasi'].includes(s)) return 'default';
+        if (['ended', 'won', 'delivered'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'menunggu'].includes(s)) return 'destructive';
+        return 'outline';
     }
 
-    const getStatusText = (status: string) => {
-        const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, status);
+    const getStatusText = (request: typeof verificationRequests[0]) => {
+        const key = `status_${request.status.toLowerCase().replace(/ /g, '_')}`;
+        return t(key, language === 'id' ? request.status_id : request.status);
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 md:py-12">
+        <>
             <header className="mb-8">
                 <h1 className="text-4xl font-bold font-headline">{t('partner_dashboard_title')}</h1>
                 <p className="text-muted-foreground">{t('partner_dashboard_desc')}</p>
@@ -68,7 +57,7 @@ export default function PartnerDashboardPage() {
                                 <TableRow key={req.id}>
                                         <TableCell className="font-medium">{language === 'id' ? req.producer_id : req.producer}</TableCell>
                                         <TableCell>{req.date}</TableCell>
-                                        <TableCell><Badge variant={getStatusVariant(req.status)}>{getStatusText(language === 'id' ? req.status_id : req.status)}</Badge></TableCell>
+                                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? req.status_id : req.status)}>{getStatusText(req)}</Badge></TableCell>
                                         <TableCell className="text-right">
                                             <Button variant="outline" size="sm"><UserCheck className="mr-2"/>{t('review')}</Button>
                                         </TableCell>
@@ -86,6 +75,8 @@ export default function PartnerDashboardPage() {
                     </div>
                 </CardContent>
             </Card>
-        </div>
+        </>
     )
 }
+
+    

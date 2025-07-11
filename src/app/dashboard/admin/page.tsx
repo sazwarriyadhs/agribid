@@ -23,7 +23,7 @@ const initialPendingProducts = [
     { id: 'PROD-005', name: 'Frozen Tuna Loin', name_id: 'Loin Tuna Beku', producer: 'Bahari Seafood', image: 'https://placehold.co/100x100.png', category: 'Marine Fishery' },
 ];
 
-const allUsers = [
+const initialAllUsers = [
     { id: 'USR-001', name: 'John Farmer', role: 'Producer', role_id: 'Produsen', status: 'Active', status_id: 'Aktif' },
     { id: 'USR-002', name: 'Bakery Co.', role: 'Bidder', role_id: 'Penawar', status: 'Active', status_id: 'Aktif' },
     { id: 'USR-003', name: 'Agri-Finance Corp', role: 'Partner', role_id: 'Mitra', status: 'Active', status_id: 'Aktif' },
@@ -34,6 +34,7 @@ export default function AdminDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
     const [pendingProducts, setPendingProducts] = useState(initialPendingProducts);
+    const [allUsers, setAllUsers] = useState(initialAllUsers);
 
     const handleProductVerification = (productId: string, action: 'approve' | 'reject') => {
         const product = pendingProducts.find(p => p.id === productId);
@@ -41,42 +42,51 @@ export default function AdminDashboardPage() {
 
         toast({
             title: action === 'approve' ? t('product_approved') : t('product_rejected'),
-            description: `${product.name} has been ${action}.`,
+            description: `${language === 'id' ? product.name_id : product.name} has been ${action}.`,
         });
         setPendingProducts(currentProducts => currentProducts.filter(p => p.id !== productId));
     };
 
-    const getStatusVariant = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'active':
-            case 'winning':
-            case 'in transit':
-            case 'verified':
-                return 'default';
-            case 'ended':
-            case 'won':
-            case 'delivered':
-                return 'secondary';
-            case 'pending':
-            case 'outbid':
-            case 'suspended':
-                return 'destructive';
-            default: 
-                return 'outline';
+    const handleUserAction = (userId: string, action: 'suspend' | 'delete') => {
+        const user = allUsers.find(u => u.id === userId);
+        if (!user) return;
+
+        if (action === 'suspend') {
+            toast({
+                title: 'User Suspended',
+                description: `${user.name} has been suspended.`,
+            });
+            setAllUsers(users => users.map(u => u.id === userId ? { ...u, status: 'Suspended', status_id: 'Ditangguhkan' } : u));
+        } else if (action === 'delete') {
+            toast({
+                title: 'User Deleted',
+                description: `${user.name} has been deleted.`,
+                variant: 'destructive'
+            });
+            setAllUsers(users => users.filter(u => u.id !== userId));
         }
+    };
+
+    const getStatusVariant = (status: string) => {
+        const s = status.toLowerCase();
+        if (['active', 'winning', 'verified'].includes(s)) return 'default';
+        if (['ended', 'won', 'delivered'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'ditangguhkan'].includes(s)) return 'destructive';
+        return 'outline';
     }
     
     const getRoleText = (user: typeof allUsers[0]) => {
-        return language === 'id' ? user.role_id : user.role;
+        const key = `role_${user.role.toLowerCase()}`;
+        return t(key, user.role);
     }
 
-    const getStatusText = (status: string) => {
-        const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, status);
+    const getStatusText = (user: typeof allUsers[0]) => {
+        const key = `status_${user.status.toLowerCase().replace(/ /g, '_')}`;
+        return t(key, user.status);
     }
 
     return (
-        <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+        <>
             <header>
                 <h1 className="text-3xl font-bold tracking-tight">{t('admin_dashboard_title')}</h1>
                 <p className="text-muted-foreground">{t('admin_dashboard_desc')}</p>
@@ -161,7 +171,7 @@ export default function AdminDashboardPage() {
                                     <TableRow key={user.id}>
                                         <TableCell className="font-medium">{user.name}</TableCell>
                                         <TableCell>{getRoleText(user)}</TableCell>
-                                        <TableCell><Badge variant={getStatusVariant(user.status)}>{getStatusText(language === 'id' ? user.status_id : user.status)}</Badge></TableCell>
+                                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? user.status_id : user.status)}>{getStatusText(user)}</Badge></TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -172,8 +182,8 @@ export default function AdminDashboardPage() {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
-                                                    <DropdownMenuItem>{t('suspend_user')}</DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-destructive">{t('delete_user')}</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
+                                                    <DropdownMenuItem className="text-destructive" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>
@@ -184,6 +194,8 @@ export default function AdminDashboardPage() {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </>
     )
 }
+
+    

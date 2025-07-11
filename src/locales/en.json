@@ -167,6 +167,8 @@
   "role_admin": "Admin",
   "producer_dashboard_title": "Producer Dashboard",
   "producer_dashboard_desc": "Manage your products and auctions.",
+  "my_products": "My Products",
+  "my_products_desc": "View and manage your product listings for auction.",
   "view_statistics": "View Statistics",
   "create_new_auction": "Create New Auction",
   "product": "Product",
@@ -250,3 +252,5 @@
   "suspend_user": "Suspend User",
   "delete_user": "Delete User"
 }
+
+    

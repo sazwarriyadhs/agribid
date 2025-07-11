@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { PlusCircle, BarChart2 } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
 
@@ -19,49 +18,28 @@ export default function ProducerDashboardPage() {
     const { t, language } = useI18n();
 
     const getStatusVariant = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'active':
-            case 'winning':
-            case 'in transit':
-            case 'verified':
-                return 'default';
-            case 'ended':
-            case 'won':
-            case 'delivered':
-                return 'secondary';
-            case 'pending':
-            case 'outbid':
-                return 'destructive';
-            default: 
-                return 'outline';
-        }
+        const s = status.toLowerCase();
+        if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
+        if (['ended', 'won', 'delivered', 'selesai'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'menunggu'].includes(s)) return 'destructive';
+        return 'outline';
     }
 
-    const getStatusText = (status: string) => {
-        const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key as any, status);
+    const getStatusText = (product: typeof producerProducts[0]) => {
+        const key = `status_${product.status.toLowerCase().replace(/ /g, '_')}`;
+        return t(key, language === 'id' ? product.status_id : product.status);
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 md:py-12">
+        <>
             <header className="mb-8">
                 <h1 className="text-4xl font-bold font-headline">{t('producer_dashboard_title')}</h1>
                 <p className="text-muted-foreground">{t('producer_dashboard_desc')}</p>
             </header>
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <div>
-                        <CardTitle className="font-headline text-2xl">My Products</CardTitle>
-                        <CardDescription>View and manage your product listings for auction.</CardDescription>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button variant="outline"><BarChart2 className="mr-2"/>{t('view_statistics')}</Button>
-                        <Button asChild>
-                            <Link href="/sell">
-                                <PlusCircle className="mr-2"/>{t('create_new_auction')}
-                            </Link>
-                        </Button>
-                    </div>
+                <CardHeader>
+                    <CardTitle className="font-headline text-2xl">{t('my_products')}</CardTitle>
+                    <CardDescription>{t('my_products_desc')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                 <Table>
@@ -77,7 +55,7 @@ export default function ProducerDashboardPage() {
                     {producerProducts.map((prod) => (
                         <TableRow key={prod.id}>
                         <TableCell className="font-medium">{language === 'id' ? prod.name_id : prod.name}</TableCell>
-                        <TableCell><Badge variant={getStatusVariant(prod.status)}>{getStatusText(language === 'id' ? prod.status_id : prod.status)}</Badge></TableCell>
+                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? prod.status_id : prod.status)}>{getStatusText(prod)}</Badge></TableCell>
                         <TableCell>{prod.stock}</TableCell>
                         <TableCell className="text-right">
                              <Button asChild variant="ghost" size="sm">
@@ -92,6 +70,8 @@ export default function ProducerDashboardPage() {
                 </Table>
                 </CardContent>
             </Card>
-        </div>
+        </>
     )
 }
+
+    
