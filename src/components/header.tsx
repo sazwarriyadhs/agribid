@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AgriBidLogo } from './icons';
 import { Button } from '@/components/ui/button';
-import { Bell, User, LogOut, LayoutDashboard, Gavel, Settings, Globe, ChevronDown } from 'lucide-react';
+import { Bell, User, LogOut, LayoutDashboard, Gavel, Settings, Globe, ChevronDown, Plane } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -38,7 +38,10 @@ export function AppHeader() {
           <span className="ml-2 text-lg font-bold font-headline">AgriBid</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link href="#featured-auctions" className="text-muted-foreground transition-colors hover:text-foreground">{t('auctions')}</Link>
+          <Link href="/#featured-auctions" className="text-muted-foreground transition-colors hover:text-foreground">{t('auctions')}</Link>
+          <Link href="/export-partner" className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-2">
+            <Plane className="h-4 w-4"/> {t('export')}
+          </Link>
           <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">{t('about')}</Link>
           <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">{t('partners')}</Link>
         </nav>
@@ -47,7 +50,7 @@ export function AppHeader() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-1">
                   <Globe className="h-4 w-4" />
-                  <span>{language.toUpperCase()} / {currency.toUpperCase()}</span>
+                  <span className="hidden sm:inline">{language.toUpperCase()} / {currency.toUpperCase()}</span>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>

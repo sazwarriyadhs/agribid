@@ -23,6 +23,7 @@ export function AppFooter() {
   const companyLinks = [
     { href: "#", label: "About Us" },
     { href: "#", label: "Careers" },
+    { href: "/export-partner", label: "export_partner_program" },
     { href: "#", label: "Partners" },
     { href: "#", label: "Contact" },
   ];

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tractor, Wheat, Fish, Handshake, Search, Gavel } from 'lucide-react';
+import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
@@ -191,6 +191,24 @@ export default function Home() {
       </section>
       
       <section className="py-16 md:py-24 bg-secondary/50">
+        <div className="container grid md:grid-cols-2 gap-12 items-center">
+            <div className="flex flex-col items-start text-left">
+                <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <Plane className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-3xl font-bold font-headline">{t('export_feature_title')}</h2>
+                <p className="text-muted-foreground mt-4 mb-6">{t('export_feature_desc')}</p>
+                <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <Link href="/export-partner">{t('learn_more_and_apply')}</Link>
+                </Button>
+            </div>
+             <div className="relative h-80 rounded-xl overflow-hidden">
+                <Image src="https://placehold.co/600x400.png" alt={t('export_feature_title')} data-ai-hint="cargo ship port" layout="fill" className="object-cover" />
+             </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline">{t('trusted_partners_title')}</h2>
           <p className="text-center text-muted-foreground mt-2 mb-12">{t('trusted_partners_subtitle')}</p>
