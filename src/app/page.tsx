@@ -257,7 +257,7 @@ export default function Home() {
                 </Button>
             </div>
              <div className="relative h-80 rounded-xl overflow-hidden">
-                <Image src="https://placehold.co/600x400.jpg" alt={t('export_feature_title')} data-ai-hint="cargo ship port" layout="fill" className="object-cover" />
+                <Image src="/images/global.jpg" alt={t('export_feature_title')} data-ai-hint="cargo ship port" layout="fill" className="object-cover" />
              </div>
         </div>
       </section>
@@ -280,6 +280,7 @@ export default function Home() {
   );
 
     
+
 
 
 
