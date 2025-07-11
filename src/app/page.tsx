@@ -47,10 +47,11 @@ const featuredAuctions = [
     aiHint: 'wheat field',
     category: 'Grains',
     category_id: 'Biji-bijian',
+    seller: 'Green Valley Farms',
     bidders: [
-        { name: 'Green Valley', bid: 4500 },
+        { name: 'Bakery Co.', bid: 4500 },
         { name: 'Milling Co.', bid: 4450 },
-        { name: 'Farm Fresh', bid: 4400 },
+        { name: 'Artisan Breads', bid: 4400 },
     ]
   },
   {
@@ -61,10 +62,11 @@ const featuredAuctions = [
     aiHint: 'fresh salmon',
     category: 'Marine Fishery',
     category_id: 'Perikanan Laut',
+    seller: 'Ocean Fresh Exporters',
     bidders: [
-        { name: 'Ocean Catch', bid: 1200 },
-        { name: 'Seafood Inc.', bid: 1150 },
-        { name: 'Fishmonger', bid: 1100 },
+        { name: 'Seafood World', bid: 1200 },
+        { name: 'Global Fish Market', bid: 1150 },
+        { name: 'Restaurant Supply', bid: 1100 },
     ]
   },
   {
@@ -75,10 +77,11 @@ const featuredAuctions = [
     aiHint: 'palm oil plantation',
     category: 'Plantation',
     category_id: 'Perkebunan',
+    seller: 'Nusantara Palms',
     bidders: [
         { name: 'Bio Oils', bid: 850 },
         { name: 'Tropic Oil', bid: 800 },
-        { name: 'Palm Kernel', bid: 780 },
+        { name: 'Global Commodities', bid: 780 },
     ]
   },
     {
@@ -89,10 +92,11 @@ const featuredAuctions = [
     aiHint: 'teak wood',
     category: 'Forestry Products',
     category_id: 'Hasil Hutan',
+    seller: 'Java Timber',
     bidders: [
         { name: 'Lumber Inc.', bid: 7800 },
         { name: 'Wood World', bid: 7700 },
-        { name: 'Timber Co.', bid: 7650 },
+        { name: 'Furniture Makers', bid: 7650 },
     ]
   },
 ];
@@ -272,5 +276,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
