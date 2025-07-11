@@ -31,6 +31,14 @@ export function AppHeader() {
     })
   };
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    toast({
+      title: t('login_success_title'),
+      description: t('login_success_desc'),
+    });
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center px-4 md:px-6">
@@ -129,7 +137,7 @@ export function AppHeader() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" onClick={handleLogin}>
                 <Link href="/login">{t('log_in')}</Link>
               </Button>
               <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
