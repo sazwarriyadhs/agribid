@@ -228,7 +228,7 @@
   "benefit_membership_card_title": "Digital Membership",
   "benefit_membership_card_desc": "Get a digital card as proof of your verified status in the AgriBid ecosystem.",
   "join_now": "Join Now",
-  "admin_dashboard_title": "Admin Dashboard",
+  "admin_dashboard_title": "Overview",
   "admin_dashboard_desc": "Oversee and manage the entire platform.",
   "total_users": "Total Users",
   "active_auctions": "Active Auctions",
@@ -241,5 +241,12 @@
   "user_management": "User Management",
   "user_management_desc": "View, manage, and monitor all users on the platform.",
   "user": "User",
-  "role": "Role"
+  "role": "Role",
+  "navigation": "Navigation",
+  "no_pending_products": "No pending products to verify.",
+  "product_approved": "Product Approved",
+  "product_rejected": "Product Rejected",
+  "view_details": "View Details",
+  "suspend_user": "Suspend User",
+  "delete_user": "Delete User"
 }

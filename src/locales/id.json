@@ -228,7 +228,7 @@
   "benefit_membership_card_title": "Keanggotaan Digital",
   "benefit_membership_card_desc": "Dapatkan kartu digital sebagai bukti status terverifikasi Anda di ekosistem AgriBid.",
   "join_now": "Gabung Sekarang",
-  "admin_dashboard_title": "Dasbor Admin",
+  "admin_dashboard_title": "Gambaran Umum",
   "admin_dashboard_desc": "Awasi dan kelola seluruh platform.",
   "total_users": "Total Pengguna",
   "active_auctions": "Lelang Aktif",
@@ -241,5 +241,12 @@
   "user_management": "Manajemen Pengguna",
   "user_management_desc": "Lihat, kelola, dan pantau semua pengguna di platform.",
   "user": "Pengguna",
-  "role": "Peran"
+  "role": "Peran",
+  "navigation": "Navigasi",
+  "no_pending_products": "Tidak ada produk yang perlu diverifikasi.",
+  "product_approved": "Produk Disetujui",
+  "product_rejected": "Produk Ditolak",
+  "view_details": "Lihat Detail",
+  "suspend_user": "Tangguhkan Pengguna",
+  "delete_user": "Hapus Pengguna"
 }
