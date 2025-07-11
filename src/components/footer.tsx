@@ -11,22 +11,25 @@ export function AppFooter() {
   const { t } = useI18n();
 
   const categories = [
-    { href: "#", label: "Grains", label_id: "Biji-bijian" },
-    { href: "#", label: "Livestock", label_id: "Ternak" },
-    { href: "#", label: "Fruits & Vegetables", label_id: "Buah & Sayuran" },
-    { href: "#", label: "Seafood", label_id: "Makanan Laut" },
+    { href: "#", label: "Grains" },
+    { href: "#", label: "Livestock" },
+    { href: "#", label: "Fruits & Vegetables" },
+    { href: "#", label: "Plantation" },
+    { href: "#", label: "Marine Fishery" },
+    { href: "#", label: "Inland Fishery" },
+    { href: "#", label: "Forestry Products" },
   ];
 
   const companyLinks = [
-    { href: "#", label: "About Us", label_id: "Tentang Kami" },
-    { href: "#", label: "Careers", label_id: "Karier" },
-    { href: "#", label: "Partners", label_id: "Mitra" },
-    { href: "#", label: "Contact", label_id: "Kontak" },
+    { href: "#", label: "About Us" },
+    { href: "#", label: "Careers" },
+    { href: "#", label: "Partners" },
+    { href: "#", label: "Contact" },
   ];
 
   const legalLinks = [
-    { href: "#", label: "Terms of Service", label_id: "Ketentuan Layanan" },
-    { href: "#", label: "Privacy Policy", label_id: "Kebijakan Privasi" },
+    { href: "#", label: "Terms of Service" },
+    { href: "#", label: "Privacy Policy" },
   ];
 
   return (
