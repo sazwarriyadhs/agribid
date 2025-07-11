@@ -140,7 +140,7 @@ export default function Home() {
                                     {t(slide.titleKey as any)}
                                 </h1>
                                 <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/90">
-                                    {t(slide.subtitleKey as any)}
+                                    {t(subtitleKey as any)}
                                 </p>
                                 <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                                     <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -257,7 +257,7 @@ export default function Home() {
                 </Button>
             </div>
              <div className="relative h-80 rounded-xl overflow-hidden">
-                <Image src="https://placehold.co/600x400.png" alt={t('export_feature_title')} data-ai-hint="cargo ship port" layout="fill" className="object-cover" />
+                <Image src="https://placehold.co/600x400.jpg" alt={t('export_feature_title')} data-ai-hint="cargo ship port" layout="fill" className="object-cover" />
              </div>
         </div>
       </section>
@@ -280,4 +280,5 @@ export default function Home() {
   );
 
     
+
 
