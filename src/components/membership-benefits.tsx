@@ -8,7 +8,8 @@ import Image from 'next/image';
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog';
 import { AgriBidLogo } from './icons';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Download, QrCode } from 'lucide-react';
+import { QrCode } from 'lucide-react';
+import QRCode from 'qrcode.react';
 
 const cardInfo = {
     name: "JESSICA SUTRISNO",
@@ -19,6 +20,12 @@ const cardInfo = {
     avatarUrl: 'https://placehold.co/150x150.png',
     avatarFallback: 'JS'
 }
+
+const qrCodeData = JSON.stringify({
+    userId: cardInfo.id,
+    name: cardInfo.name,
+    validUntil: cardInfo.expires
+});
 
 const regulations = [
     "regulation_1",
@@ -41,7 +48,7 @@ export function MembershipBenefits() {
                                 <Image src="/images/kartu.png" alt={t('membership_benefits_title')} layout="fill" className="object-contain" />
                             </div>
                         </DialogTrigger>
-                        <DialogContent className="max-w-4xl bg-transparent border-none shadow-none">
+                        <DialogContent className="max-w-4xl bg-transparent border-none shadow-none p-0">
                              <DialogTitle className="sr-only">{t('membership_card')}</DialogTitle>
                             <div className="grid md:grid-cols-2 gap-8 justify-items-center">
                                 {/* Front Card */}
@@ -69,7 +76,9 @@ export function MembershipBenefits() {
                                         </div>
                                         <div className="flex items-end justify-between mt-auto flex-grow">
                                             <div className="text-center">
-                                                <QrCode className="h-20 w-20 mx-auto" />
+                                                <div className="bg-white p-1.5 rounded-md inline-block">
+                                                    <QRCode value={qrCodeData} size={70} />
+                                                </div>
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-sm text-muted-foreground">{t('valid_until')}</p>
