@@ -1,10 +1,10 @@
 'use client';
 import { useI18n } from '@/context/i18n';
-import { Coffee, Shrimp, Package, CakeSlice, Leaf, Component, Square } from 'lucide-react';
+import { Coffee, Fish, Package, CakeSlice, Leaf, Component, Square } from 'lucide-react';
 
 const processedProducts = [
     { key: "instant_coffee", Icon: Coffee },
-    { key: "packaged_shrimp", Icon: Shrimp },
+    { key: "packaged_shrimp", Icon: Fish },
     { key: "tapioca_flour", Icon: Package },
     { key: "taro_cake", Icon: CakeSlice },
     { key: "taro_chips", Icon: Leaf },
