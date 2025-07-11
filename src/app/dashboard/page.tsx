@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, UserCheck, Gavel, Handshake, Plane } from "lucide-react";
+import { ArrowRight, UserCheck, Gavel, Handshake, Plane, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useI18n } from "@/context/i18n";
 
@@ -12,6 +12,7 @@ const roles = [
   { href: "/dashboard/bidder", title: "role_bidder", description: "bidder_dashboard_desc", icon: Gavel },
   { href: "/dashboard/partner", title: "role_partner", description: "partner_dashboard_desc", icon: Handshake },
   { href: "/dashboard/exporter", title: "role_exporter", description: "exporter_dashboard_desc", icon: Plane },
+  { href: "/dashboard/admin", title: "role_admin", description: "admin_dashboard_desc", icon: ShieldCheck },
 ];
 
 export default function DashboardSelectorPage() {
@@ -25,7 +26,7 @@ export default function DashboardSelectorPage() {
       </header>
       <div className="grid md:grid-cols-2 gap-6">
         {roles.map((role) => (
-          <Card key={role.href}>
+          <Card key={role.href} className={role.title === 'role_admin' ? 'md:col-span-2' : ''}>
             <CardHeader>
               <div className="flex items-center gap-4">
                 <div className="bg-primary/10 p-3 rounded-full">
