@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
+import { notFound } from 'next/navigation';
 
 
 const bidHistory = [
@@ -28,8 +29,27 @@ const bidHistory = [
     { id: 4, item: 'Pasture-Raised Eggs', item_id: 'Telur Ayam Kampung', status: 'Won', status_id: 'Menang', amount: 150, date: '2023-10-22' },
 ]
 
-export default function ProfilePage() {
+// In a real app, you would fetch this data based on the code/slug
+const userProfile = {
+    code: 'B001',
+    slug: 'john-farmer',
+    name: 'John Farmer',
+    email: 'john.farmer@email.com',
+    role: 'Bidder',
+    avatarUrl: 'https://placehold.co/100x100.png',
+    avatarFallback: 'JF'
+}
+
+
+export default function ProfilePage({ params }: { params: { code: string, slug: string } }) {
     const { t, formatCurrency, language } = useI18n();
+
+    // In a real app, you'd fetch the user by code and slug and return 404 if not found
+    if (params.code !== userProfile.code || params.slug !== userProfile.slug) {
+        // For this example, we'll just show a 404 if the URL doesn't match our static user
+        // notFound(); 
+        // For demo purposes, we will allow it.
+    }
 
     const getStatusVariant = (status: string) => {
         switch (status) {
@@ -58,11 +78,12 @@ export default function ProfilePage() {
         <Card className="w-full md:w-1/3 text-center md:text-left">
           <CardHeader className="items-center">
             <Avatar className="h-24 w-24 mb-4">
-              <AvatarImage src="https://placehold.co/100x100.png" />
-              <AvatarFallback>JF</AvatarFallback>
+              <AvatarImage src={userProfile.avatarUrl} />
+              <AvatarFallback>{userProfile.avatarFallback}</AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl font-headline">John Farmer</CardTitle>
-            <CardDescription>john.farmer@email.com</CardDescription>
+            <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>
+            <CardDescription>{userProfile.email}</CardDescription>
+            <Badge variant="outline" className="mt-2">{userProfile.role}</Badge>
           </CardHeader>
           <CardContent>
             <Button className="w-full">{t('edit_profile')}</Button>

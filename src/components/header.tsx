@@ -31,13 +31,11 @@ export function AppHeader() {
     })
   };
 
+  // This is a simulation function. In a real app, this would not exist.
   const handleLogin = () => {
     setIsLoggedIn(true);
-    toast({
-      title: t('login_success_title'),
-      description: t('login_success_desc'),
-    });
   };
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -126,7 +124,7 @@ export function AppHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild><Link href="/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/profile"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/u/B001/john-farmer"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
