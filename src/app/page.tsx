@@ -14,19 +14,19 @@ import Autoplay from "embla-carousel-autoplay";
 
 const heroSlides = [
     {
-        src: 'https://placehold.co/1920x1080.png',
+        src: '/images/hero1.jpeg',
         aiHint: 'farm sunset',
         titleKey: 'hero_title',
         subtitleKey: 'hero_subtitle'
     },
     {
-        src: 'https://placehold.co/1920x1080.png',
+        src: '/images/hero2.jpeg',
         aiHint: 'rice paddy',
         titleKey: 'hero_title_2',
         subtitleKey: 'hero_subtitle_2'
     },
     {
-        src: 'https://placehold.co/1920x1080.png',
+        src: '/images/hero3.jpeg',
         aiHint: 'fishing boat',
         titleKey: 'hero_title_3',
         subtitleKey: 'hero_subtitle_3'
