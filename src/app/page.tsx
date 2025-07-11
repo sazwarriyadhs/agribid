@@ -158,7 +158,7 @@ export default function Home() {
                                     <Link href="#featured-auctions">{t('browse_auctions')}</Link>
                                     </Button>
                                     <Button asChild size="lg" variant="secondary">
-                                    <Link href="/signup">{t('become_a_seller')}</Link>
+                                    <Link href="/sell">{t('become_a_seller')}</Link>
                                     </Button>
                                 </div>
                             </div>

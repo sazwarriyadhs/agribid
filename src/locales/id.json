@@ -1,3 +1,4 @@
+
 {
   "hero_title": "Pasar Digital untuk Produk Segar",
   "hero_subtitle": "Menghubungkan petani langsung dengan pelaku bisnis. Ajukan tawaran untuk barang-barang pertanian berkualitas dan segar dalam lelang waktu-nyata.",
@@ -131,5 +132,28 @@
   "email_address": "Alamat Email",
   "products_to_export": "Produk yang Ingin Diekspor",
   "products_to_export_placeholder": "cth. Biji Kopi Arabika, Udang Beku",
-  "submit_application": "Kirim Pendaftaran"
+  "submit_application": "Kirim Pendaftaran",
+  "sell_your_product_title": "Jual Produk Anda",
+  "sell_your_product_desc": "Isi detail di bawah ini untuk membuat daftar lelang baru.",
+  "product_name": "Nama Produk",
+  "product_name_placeholder": "cth. Panen Gandum Organik - 10 Ton",
+  "category": "Kategori",
+  "select_category_placeholder": "Pilih sebuah kategori",
+  "description": "Deskripsi",
+  "description_placeholder": "Jelaskan produk Anda secara detail...",
+  "product_photo": "Foto Produk",
+  "drag_and_drop_or": "Seret & lepas atau",
+  "browse_files": "Cari File",
+  "suggested_starting_bid": "Saran Harga Awal",
+  "click_suggest_button": "Klik tombol saran harga...",
+  "suggest_price_with_ai": "Sarankan Harga dengan AI",
+  "submit_for_verification": "Kirim untuk Verifikasi",
+  "admin_verification_note": "Produk Anda akan ditinjau oleh admin sebelum ditampilkan di lelang.",
+  "error": "Kesalahan",
+  "fill_all_fields_for_suggestion": "Harap isi semua kolom (nama, deskripsi, kategori, dan gambar) untuk mendapatkan saran harga.",
+  "price_suggestion_success_title": "Harga Disarankan",
+  "price_suggestion_success_desc": "AI telah berhasil menyarankan harga awal.",
+  "price_suggestion_error_desc": "Gagal mendapatkan saran harga dari AI. Silakan coba lagi.",
+  "product_submitted_title": "Produk Terkirim",
+  "product_submitted_desc": "Produk Anda telah berhasil dikirim untuk verifikasi admin."
 }

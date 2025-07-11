@@ -1,3 +1,4 @@
+
 {
   "hero_title": "The Digital Marketplace for Fresh Produce",
   "hero_subtitle": "Connecting cultivators directly with businesses. Bid on fresh, quality agricultural goods in real-time auctions.",
@@ -131,5 +132,28 @@
   "email_address": "Email Address",
   "products_to_export": "Products You Want to Export",
   "products_to_export_placeholder": "e.g. Arabica Coffee Beans, Frozen Shrimp",
-  "submit_application": "Submit Application"
+  "submit_application": "Submit Application",
+  "sell_your_product_title": "Sell Your Product",
+  "sell_your_product_desc": "Fill in the details below to create a new auction listing.",
+  "product_name": "Product Name",
+  "product_name_placeholder": "e.g. Organic Wheat Harvest - 10 Tons",
+  "category": "Category",
+  "select_category_placeholder": "Select a category",
+  "description": "Description",
+  "description_placeholder": "Describe your product in detail...",
+  "product_photo": "Product Photo",
+  "drag_and_drop_or": "Drag and drop or",
+  "browse_files": "Browse Files",
+  "suggested_starting_bid": "Suggested Starting Bid",
+  "click_suggest_button": "Click the suggest button...",
+  "suggest_price_with_ai": "Suggest Price with AI",
+  "submit_for_verification": "Submit for Verification",
+  "admin_verification_note": "Your product will be reviewed by an admin before being listed for auction.",
+  "error": "Error",
+  "fill_all_fields_for_suggestion": "Please fill all fields (name, description, category, and image) to get a price suggestion.",
+  "price_suggestion_success_title": "Price Suggested",
+  "price_suggestion_success_desc": "The AI has successfully suggested a starting price.",
+  "price_suggestion_error_desc": "Failed to get price suggestion from AI. Please try again.",
+  "product_submitted_title": "Product Submitted",
+  "product_submitted_desc": "Your product has been successfully submitted for admin verification."
 }
