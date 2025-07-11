@@ -1,11 +1,34 @@
+'use client'
 import Link from 'next/link';
 import { AgriBidLogo } from './icons';
+import { useI18n } from '@/context/i18n';
 
 function SocialIcon({ children }: { children: React.ReactNode }) {
   return <div className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 cursor-pointer transition-colors">{children}</div>;
 }
 
 export function AppFooter() {
+  const { t } = useI18n();
+
+  const categories = [
+    { href: "#", label: "Grains", label_id: "Biji-bijian" },
+    { href: "#", label: "Livestock", label_id: "Ternak" },
+    { href: "#", label: "Fruits & Vegetables", label_id: "Buah & Sayuran" },
+    { href: "#", label: "Seafood", label_id: "Makanan Laut" },
+  ];
+
+  const companyLinks = [
+    { href: "#", label: "About Us", label_id: "Tentang Kami" },
+    { href: "#", label: "Careers", label_id: "Karier" },
+    { href: "#", label: "Partners", label_id: "Mitra" },
+    { href: "#", label: "Contact", label_id: "Kontak" },
+  ];
+
+  const legalLinks = [
+    { href: "#", label: "Terms of Service", label_id: "Ketentuan Layanan" },
+    { href: "#", label: "Privacy Policy", label_id: "Kebijakan Privasi" },
+  ];
+
   return (
     <footer className="bg-secondary/70 border-t">
       <div className="container px-4 md:px-6 py-8">
@@ -15,38 +38,37 @@ export function AppFooter() {
               <AgriBidLogo className="h-8 w-8" />
               <span className="text-xl font-bold font-headline">AgriBid</span>
             </Link>
-            <p className="text-sm text-muted-foreground">The future of agricultural trade, today.</p>
+            <p className="text-sm text-muted-foreground">{t('footer_tagline')}</p>
           </div>
           <div>
-            <h4 className="font-semibold mb-3 font-headline">Marketplace</h4>
+            <h4 className="font-semibold mb-3 font-headline">{t('marketplace')}</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Grains</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Livestock</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Fruits & Vegetables</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Seafood</Link></li>
+              {categories.map((cat, i) => (
+                <li key={i}><Link href={cat.href} className="text-muted-foreground hover:text-primary">{t(cat.label.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'))}</Link></li>
+              ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-3 font-headline">Company</h4>
+            <h4 className="font-semibold mb-3 font-headline">{t('company')}</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">About Us</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Careers</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Partners</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Contact</Link></li>
+              {companyLinks.map((link, i) => (
+                 <li key={i}><Link href={link.href} className="text-muted-foreground hover:text-primary">{t(link.label.toLowerCase().replace(/ /g, '_'))}</Link></li>
+              ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-3 font-headline">Legal</h4>
+            <h4 className="font-semibold mb-3 font-headline">{t('legal')}</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Terms of Service</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-primary">Privacy Policy</Link></li>
+              {legalLinks.map((link, i) => (
+                 <li key={i}><Link href={link.href} className="text-muted-foreground hover:text-primary">{t(link.label.toLowerCase().replace(/ /g, '_'))}</Link></li>
+              ))}
             </ul>
           </div>
         </div>
         <div className="mt-8 border-t pt-6 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} AgriBid Inc. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} AgriBid Inc. {t('all_rights_reserved')}</p>
           <div className="flex items-center gap-4 mt-4 sm:mt-0">
-            <p className="text-sm text-muted-foreground">Follow us</p>
+            <p className="text-sm text-muted-foreground">{t('follow_us')}</p>
             <XIcon />
             <FacebookIcon />
             <LinkedInIcon />

@@ -1,42 +1,53 @@
+'use client'
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tractor, Wheat, Fish, Handshake, Search, Gavel } from 'lucide-react';
+import { useI18n } from '@/context/i18n';
 
 const featuredAuctions = [
   {
     id: '1',
     name: 'Organic Wheat Harvest',
+    name_id: 'Panen Gandum Organik',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'wheat field',
     currentBid: 4500,
     category: 'Grains',
+    category_id: 'Biji-bijian',
   },
   {
     id: '2',
     name: 'Fresh Atlantic Salmon',
+    name_id: 'Salmon Atlantik Segar',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'fresh salmon',
     currentBid: 1200,
     category: 'Seafood',
+    category_id: 'Makanan Laut',
   },
   {
     id: '3',
     name: 'Granny Smith Apples',
+    name_id: 'Apel Granny Smith',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'apple orchard',
     currentBid: 800,
     category: 'Fruits',
+    category_id: 'Buah-buahan',
   },
     {
     id: '4',
     name: 'Grass-Fed Angus Beef',
+    name_id: 'Daging Sapi Angus',
     image: 'https://placehold.co/600x400.png',
     aiHint: 'cattle ranch',
     currentBid: 7800,
     category: 'Livestock',
+    category_id: 'Ternak',
   },
 ];
 
@@ -48,6 +59,8 @@ const partners = [
 ]
 
 export default function Home() {
+  const { t, formatCurrency, language } = useI18n();
+  
   return (
     <div className="flex flex-col">
       <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-center text-white">
@@ -60,17 +73,17 @@ export default function Home() {
         />
         <div className="container px-4 md:px-6 animate-fade-in-up">
           <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight">
-            The Digital Marketplace for Fresh Produce
+            {t('hero_title')}
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/90">
-            Connecting cultivators directly with businesses. Bid on fresh, quality agricultural goods in real-time auctions.
+            {t('hero_subtitle')}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="#featured-auctions">Browse Auctions</Link>
+              <Link href="#featured-auctions">{t('browse_auctions')}</Link>
             </Button>
             <Button asChild size="lg" variant="secondary">
-              <Link href="/signup">Become a Seller</Link>
+              <Link href="/signup">{t('become_a_seller')}</Link>
             </Button>
           </div>
         </div>
@@ -78,27 +91,27 @@ export default function Home() {
 
       <section id="featured-auctions" className="py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">Featured Auctions</h2>
-          <p className="text-center text-muted-foreground mt-2 mb-12">Get in on the action with these trending auctions.</p>
+          <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
+          <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredAuctions.map((auction) => (
               <Card key={auction.id} className="overflow-hidden group hover:shadow-xl transition-shadow duration-300">
                 <CardHeader className="p-0">
                   <div className="relative h-48 w-full">
-                    <Image src={auction.image} alt={auction.name} data-ai-hint={auction.aiHint} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
-                    <Badge className="absolute top-2 right-2 bg-primary/80 backdrop-blur-sm">{auction.category}</Badge>
+                    <Image src={auction.image} alt={language === 'id' ? auction.name_id : auction.name} data-ai-hint={auction.aiHint} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <Badge className="absolute top-2 right-2 bg-primary/80 backdrop-blur-sm">{language === 'id' ? auction.category_id : auction.category}</Badge>
                   </div>
                   <div className="p-6 pb-2">
-                    <CardTitle className="text-xl font-semibold leading-snug">{auction.name}</CardTitle>
+                    <CardTitle className="text-xl font-semibold leading-snug">{language === 'id' ? auction.name_id : auction.name}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-sm text-muted-foreground">Current Bid</div>
-                  <div className="text-2xl font-bold text-primary">${auction.currentBid.toLocaleString()}</div>
+                  <div className="text-sm text-muted-foreground">{t('current_bid')}</div>
+                  <div className="text-2xl font-bold text-primary">{formatCurrency(auction.currentBid)}</div>
                 </CardContent>
                 <CardFooter>
                   <Button asChild className="w-full bg-primary hover:bg-primary/90">
-                    <Link href={`/auctions/${auction.id}`}>View Auction</Link>
+                    <Link href={`/auctions/${auction.id}`}>{t('view_auction')}</Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -109,23 +122,23 @@ export default function Home() {
 
       <section className="py-16 md:py-24 bg-secondary/50">
         <div className="container px-4 md:px-6">
-           <h2 className="text-3xl font-bold text-center font-headline">How AgriBid Works</h2>
-           <p className="text-center text-muted-foreground mt-2 mb-12">A simple, transparent, and efficient process.</p>
+           <h2 className="text-3xl font-bold text-center font-headline">{t('how_it_works_title')}</h2>
+           <p className="text-center text-muted-foreground mt-2 mb-12">{t('how_it_works_subtitle')}</p>
            <div className="grid md:grid-cols-3 gap-8 text-center">
              <div className="flex flex-col items-center">
                <div className="bg-primary/10 p-4 rounded-full mb-4"><Search className="h-10 w-10 text-primary" /></div>
-               <h3 className="text-xl font-semibold font-headline">Find Products</h3>
-               <p className="text-muted-foreground mt-2">Browse our diverse marketplace or search for specific goods you need.</p>
+               <h3 className="text-xl font-semibold font-headline">{t('find_products_title')}</h3>
+               <p className="text-muted-foreground mt-2">{t('find_products_desc')}</p>
              </div>
              <div className="flex flex-col items-center">
                 <div className="bg-primary/10 p-4 rounded-full mb-4"><Gavel className="h-10 w-10 text-primary" /></div>
-               <h3 className="text-xl font-semibold font-headline">Place Bids</h3>
-               <p className="text-muted-foreground mt-2">Enter our real-time auction rooms and place competitive bids on items.</p>
+               <h3 className="text-xl font-semibold font-headline">{t('place_bids_title')}</h3>
+               <p className="text-muted-foreground mt-2">{t('place_bids_desc')}</p>
              </div>
              <div className="flex flex-col items-center">
                 <div className="bg-primary/10 p-4 rounded-full mb-4"><Handshake className="h-10 w-10 text-primary" /></div>
-               <h3 className="text-xl font-semibold font-headline">Win & Ship</h3>
-               <p className="text-muted-foreground mt-2">Secure your products and arrange seamless logistics with our trusted partners.</p>
+               <h3 className="text-xl font-semibold font-headline">{t('win_ship_title')}</h3>
+               <p className="text-muted-foreground mt-2">{t('win_ship_desc')}</p>
              </div>
            </div>
         </div>
@@ -133,8 +146,8 @@ export default function Home() {
       
       <section className="py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">Our Trusted Partners</h2>
-          <p className="text-center text-muted-foreground mt-2 mb-12">A network of industry leaders supporting our marketplace.</p>
+          <h2 className="text-3xl font-bold text-center font-headline">{t('trusted_partners_title')}</h2>
+          <p className="text-center text-muted-foreground mt-2 mb-12">{t('trusted_partners_subtitle')}</p>
           <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8">
             {partners.map(p => (
                 <div key={p.name} className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">

@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AgriBidLogo } from './icons';
 import { Button } from '@/components/ui/button';
-import { Bell, User, LogOut, LayoutDashboard, Gavel, Settings } from 'lucide-react';
+import { Bell, User, LogOut, LayoutDashboard, Gavel, Settings, Globe, ChevronDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from './ui/separator';
 import { useToast } from "@/hooks/use-toast"
-
+import { useI18n } from '@/context/i18n';
 
 const notifications = [
     { title: "Outbid!", description: "You've been outbid on 'Organic Wheat Harvest'." },
@@ -19,15 +18,15 @@ const notifications = [
 ]
 
 export function AppHeader() {
-  // Mock authentication state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { toast } = useToast()
+  const { t, language, setLanguage, currency, setCurrency } = useI18n();
 
   const handleLoginToggle = () => {
     setIsLoggedIn(!isLoggedIn);
     toast({
-      title: isLoggedIn ? "Logged Out" : "Logged In",
-      description: isLoggedIn ? "You have successfully logged out." : "Welcome back to AgriBid!",
+      title: isLoggedIn ? t('logout_success_title') : t('login_success_title'),
+      description: isLoggedIn ? t('logout_success_desc') : t('login_success_desc'),
     })
   };
 
@@ -39,24 +38,47 @@ export function AppHeader() {
           <span className="ml-2 text-lg font-bold font-headline">AgriBid</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link href="#featured-auctions" className="text-muted-foreground transition-colors hover:text-foreground">Auctions</Link>
-          <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">About</Link>
-          <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">Partners</Link>
+          <Link href="#featured-auctions" className="text-muted-foreground transition-colors hover:text-foreground">{t('auctions')}</Link>
+          <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">{t('about')}</Link>
+          <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">{t('partners')}</Link>
         </nav>
-        <div className="flex flex-1 items-center justify-end gap-4">
+        <div className="flex flex-1 items-center justify-end gap-2">
+           <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1">
+                  <Globe className="h-4 w-4" />
+                  <span>{language.toUpperCase()} / {currency.toUpperCase()}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuLabel>{t('change_language')}</DropdownMenuLabel>
+                <DropdownMenuRadioGroup value={language} onValueChange={(value) => setLanguage(value as 'id' | 'en')}>
+                    <DropdownMenuRadioItem value="id">Bahasa Indonesia (ID)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="en">English (EN)</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>{t('change_currency')}</DropdownMenuLabel>
+                <DropdownMenuRadioGroup value={currency} onValueChange={(value) => setCurrency(value as 'idr' | 'usd')}>
+                    <DropdownMenuRadioItem value="idr">Rupiah (IDR)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="usd">US Dollar (USD)</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Bell className="h-5 w-5" />
-                <span className="sr-only">Toggle notifications</span>
+                <span className="sr-only">{t('toggle_notifications')}</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80">
                 <div className="grid gap-4">
                     <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Notifications</h4>
+                        <h4 className="font-medium leading-none">{t('notifications')}</h4>
                         <p className="text-sm text-muted-foreground">
-                            You have {notifications.length} unread messages.
+                            {t('unread_messages', { count: notifications.length })}
                         </p>
                     </div>
                     <div className="grid gap-2">
@@ -91,23 +113,23 @@ export function AppHeader() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/profile"><LayoutDashboard className="mr-2 h-4 w-4" /><span>Profile</span></Link></DropdownMenuItem>
-                <DropdownMenuItem><Gavel className="mr-2 h-4 w-4" /><span>My Bids</span></DropdownMenuItem>
-                <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>Settings</span></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/profile"><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem><Gavel className="mr-2 h-4 w-4" /><span>{t('my_bids')}</span></DropdownMenuItem>
+                <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLoginToggle}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <span>{t('log_out')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
               <Button asChild variant="ghost">
-                <Link href="/login">Log In</Link>
+                <Link href="/login">{t('log_in')}</Link>
               </Button>
               <Button asChild onClick={handleLoginToggle} className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                 <Link href="/signup">Sign Up</Link>
+                 <Link href="/signup">{t('sign_up')}</Link>
               </Button>
             </div>
           )}

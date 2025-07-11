@@ -8,31 +8,38 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Gavel, Heart, Info, Timer } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { useI18n } from '@/context/i18n'
 
 const auctionItem = {
   id: '1',
   name: 'Organic Wheat Harvest - 10 Tons',
+  name_id: 'Panen Gandum Organik - 10 Ton',
   image: 'https://placehold.co/800x600.png',
   aiHint: 'wheat harvest',
   seller: 'Green Valley Farms',
+  seller_id: 'Green Valley Farms',
   currentBid: 4500,
   startingBid: 1000,
   bidIncrement: 100,
   endDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
   description: 'Premium quality organic hard red winter wheat, harvested this season. Perfect for artisan breads and high-quality flour production. Protein content: 14.5%. Moisture: 11%.',
+  description_id: 'Gandum musim dingin merah keras organik kualitas premium, dipanen musim ini. Sempurna untuk roti artisan dan produksi tepung berkualitas tinggi. Kadar protein: 14,5%. Kelembaban: 11%.',
   origin: 'Kansas, USA',
+  origin_id: 'Kansas, AS',
   shipping: 'FOB (Freight on Board). Buyer arranges shipping from our facility.',
+  shipping_id: 'FOB (Freight on Board). Pembeli mengatur pengiriman dari fasilitas kami.',
 }
 
 const bidHistory = [
-  { user: 'Bakery Co.', avatar: 'B', bid: 4500, time: '2 minutes ago' },
-  { user: 'Mill & Co.', avatar: 'M', bid: 4400, time: '15 minutes ago' },
-  { user: 'Artisan Breads', avatar: 'A', bid: 4300, time: '1 hour ago' },
-  { user: 'Global Grains', avatar: 'G', bid: 4000, time: '3 hours ago' },
+  { user: 'Bakery Co.', avatar: 'B', bid: 4500, time: '2 minutes ago', time_id: '2 menit yang lalu' },
+  { user: 'Mill & Co.', avatar: 'M', bid: 4400, time: '15 minutes ago', time_id: '15 menit yang lalu' },
+  { user: 'Artisan Breads', avatar: 'A', bid: 4300, time: '1 hour ago', time_id: '1 jam yang lalu' },
+  { user: 'Global Grains', avatar: 'G', bid: 4000, time: '3 hours ago', time_id: '3 jam yang lalu' },
 ]
 
 export default function AuctionPage({ params }: { params: { id: string } }) {
   const [timeLeft, setTimeLeft] = useState('');
+  const { t, formatCurrency, language } = useI18n();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -41,7 +48,7 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
       
       if (distance < 0) {
         clearInterval(timer);
-        setTimeLeft("Auction Ended");
+        setTimeLeft(t('auction_ended'));
         return;
       }
 
@@ -50,11 +57,15 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
       
-      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      if (language === 'id') {
+        setTimeLeft(`${days}h ${hours}j ${minutes}m ${seconds}d`);
+      } else {
+        setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [t, language]);
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
@@ -63,7 +74,7 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
             <div className="aspect-video overflow-hidden rounded-xl border">
                 <Image
                     src={auctionItem.image}
-                    alt={auctionItem.name}
+                    alt={language === 'id' ? auctionItem.name_id : auctionItem.name}
                     data-ai-hint={auctionItem.aiHint}
                     width={800}
                     height={600}
@@ -74,48 +85,48 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
         <div>
             <Card className="shadow-lg">
                 <CardHeader>
-                    <CardTitle className="text-3xl font-bold font-headline">{auctionItem.name}</CardTitle>
-                    <CardDescription>Sold by <span className="font-medium text-primary">{auctionItem.seller}</span></CardDescription>
+                    <CardTitle className="text-3xl font-bold font-headline">{language === 'id' ? auctionItem.name_id : auctionItem.name}</CardTitle>
+                    <CardDescription>{t('sold_by')} <span className="font-medium text-primary">{language === 'id' ? auctionItem.seller_id : auctionItem.seller}</span></CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="flex justify-between items-center bg-primary/10 p-4 rounded-lg">
                         <div>
-                            <p className="text-sm text-muted-foreground">Current Bid</p>
-                            <p className="text-4xl font-bold text-primary">${auctionItem.currentBid.toLocaleString()}</p>
+                            <p className="text-sm text-muted-foreground">{t('current_bid')}</p>
+                            <p className="text-4xl font-bold text-primary">{formatCurrency(auctionItem.currentBid)}</p>
                         </div>
                         <div className="text-right">
-                             <p className="text-sm text-muted-foreground flex items-center justify-end gap-2"><Timer className="w-4 h-4"/> Time Left</p>
+                             <p className="text-sm text-muted-foreground flex items-center justify-end gap-2"><Timer className="w-4 h-4"/> {t('time_left')}</p>
                              <p className="text-2xl font-bold text-accent">{timeLeft || "Loading..."}</p>
                         </div>
                     </div>
                     <form className="grid sm:grid-cols-3 gap-3">
                         <Input 
                             type="number" 
-                            placeholder={`$${auctionItem.currentBid + auctionItem.bidIncrement} or more`} 
+                            placeholder={`${formatCurrency(auctionItem.currentBid + auctionItem.bidIncrement)} or more`} 
                             className="sm:col-span-2 text-lg h-12"
                             min={auctionItem.currentBid + auctionItem.bidIncrement}
                             step={auctionItem.bidIncrement}
                         />
                         <Button size="lg" className="w-full h-12 text-lg">
                             <Gavel className="mr-2 h-5 w-5" />
-                            Place Bid
+                            {t('place_bid')}
                         </Button>
                     </form>
                     <div className="text-xs text-muted-foreground text-center">
-                        Minimum bid increment: ${auctionItem.bidIncrement}. All bids are final.
+                        {t('min_bid_increment')}: {formatCurrency(auctionItem.bidIncrement)}. {t('all_bids_final')}
                     </div>
                 </CardContent>
                 <CardFooter>
                      <Button variant="outline" className="w-full">
-                        <Heart className="mr-2 h-4 w-4" /> Add to Watchlist
+                        <Heart className="mr-2 h-4 w-4" /> {t('add_to_watchlist')}
                     </Button>
                 </CardFooter>
             </Card>
 
             <Tabs defaultValue="history" className="mt-8">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="history"><Gavel className="mr-2 h-4 w-4" />Bid History</TabsTrigger>
-                    <TabsTrigger value="details"><Info className="mr-2 h-4 w-4" />Details</TabsTrigger>
+                    <TabsTrigger value="history"><Gavel className="mr-2 h-4 w-4" />{t('bid_history')}</TabsTrigger>
+                    <TabsTrigger value="details"><Info className="mr-2 h-4 w-4" />{t('details')}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="history">
                     <Card>
@@ -123,9 +134,9 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Bidder</TableHead>
-                                        <TableHead className="text-right">Amount</TableHead>
-                                        <TableHead className="text-right">Time</TableHead>
+                                        <TableHead>{t('bidder')}</TableHead>
+                                        <TableHead className="text-right">{t('amount')}</TableHead>
+                                        <TableHead className="text-right">{t('time')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -138,8 +149,8 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                                                 </Avatar>
                                                 {bid.user}
                                             </TableCell>
-                                            <TableCell className="text-right font-mono">${bid.bid.toLocaleString()}</TableCell>
-                                            <TableCell className="text-right text-muted-foreground">{bid.time}</TableCell>
+                                            <TableCell className="text-right font-mono">{formatCurrency(bid.bid)}</TableCell>
+                                            <TableCell className="text-right text-muted-foreground">{language === 'id' ? bid.time_id : bid.time}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -150,22 +161,22 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                 <TabsContent value="details">
                      <Card>
                         <CardContent className="pt-6 space-y-4 text-sm">
-                            <p>{auctionItem.description}</p>
+                            <p>{language === 'id' ? auctionItem.description_id : auctionItem.description}</p>
                             <div className="grid grid-cols-2 gap-4 border-t pt-4">
                                 <div>
-                                    <p className="font-medium text-muted-foreground">Origin</p>
-                                    <p>{auctionItem.origin}</p>
+                                    <p className="font-medium text-muted-foreground">{t('origin')}</p>
+                                    <p>{language === 'id' ? auctionItem.origin_id : auctionItem.origin}</p>
                                 </div>
                                  <div>
-                                    <p className="font-medium text-muted-foreground">Starting Bid</p>
-                                    <p>${auctionItem.startingBid.toLocaleString()}</p>
+                                    <p className="font-medium text-muted-foreground">{t('starting_bid')}</p>
+                                    <p>{formatCurrency(auctionItem.startingBid)}</p>
                                 </div>
                                 <div>
-                                    <p className="font-medium text-muted-foreground">Shipping Terms</p>
-                                    <p>{auctionItem.shipping}</p>
+                                    <p className="font-medium text-muted-foreground">{t('shipping_terms')}</p>
+                                    <p>{language === 'id' ? auctionItem.shipping_id : auctionItem.shipping}</p>
                                 </div>
                                  <div>
-                                    <p className="font-medium text-muted-foreground">Auction ID</p>
+                                    <p className="font-medium text-muted-foreground">{t('auction_id')}</p>
                                     <p>#{params.id}</p>
                                 </div>
                             </div>
