@@ -9,6 +9,30 @@ import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane } from 'lucide-re
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import Autoplay from "embla-carousel-autoplay";
+
+const heroSlides = [
+    {
+        src: 'https://placehold.co/1920x1080.png',
+        aiHint: 'farm sunset',
+        titleKey: 'hero_title',
+        subtitleKey: 'hero_subtitle'
+    },
+    {
+        src: 'https://placehold.co/1920x1080.png',
+        aiHint: 'rice paddy',
+        titleKey: 'hero_title_2',
+        subtitleKey: 'hero_subtitle_2'
+    },
+    {
+        src: 'https://placehold.co/1920x1080.png',
+        aiHint: 'fishing boat',
+        titleKey: 'hero_title_3',
+        subtitleKey: 'hero_subtitle_3'
+    }
+];
+
 
 const featuredAuctions = [
   {
@@ -105,30 +129,46 @@ export default function Home() {
   
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-center text-white">
-        <Image
-          src="https://placehold.co/1920x1080.png"
-          alt="Lush green field at sunset"
-          data-ai-hint="farm sunset"
-          fill
-          className="object-cover -z-10 brightness-50"
-        />
-        <div className="container px-4 md:px-6 animate-fade-in-up">
-          <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight">
-            {t('hero_title')}
-          </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/90">
-            {t('hero_subtitle')}
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="#featured-auctions">{t('browse_auctions')}</Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/signup">{t('become_a_seller')}</Link>
-            </Button>
-          </div>
-        </div>
+      <section className="relative w-full h-[60vh] md:h-[70vh] text-white">
+        <Carousel 
+            opts={{ loop: true }}
+            plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
+            className="w-full h-full"
+        >
+            <CarouselContent className="h-full">
+                {heroSlides.map((slide, index) => (
+                    <CarouselItem key={index} className="h-full">
+                        <div className="relative w-full h-full flex items-center justify-center text-center">
+                            <Image
+                                src={slide.src}
+                                alt={t(slide.titleKey as any)}
+                                data-ai-hint={slide.aiHint}
+                                fill
+                                className="object-cover -z-10 brightness-50"
+                            />
+                            <div className="container px-4 md:px-6 animate-fade-in-up">
+                                <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight">
+                                    {t(slide.titleKey as any)}
+                                </h1>
+                                <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/90">
+                                    {t(slide.subtitleKey as any)}
+                                </p>
+                                <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                                    <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                                    <Link href="#featured-auctions">{t('browse_auctions')}</Link>
+                                    </Button>
+                                    <Button asChild size="lg" variant="secondary">
+                                    <Link href="/signup">{t('become_a_seller')}</Link>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+        </Carousel>
       </section>
 
       <section id="featured-auctions" className="py-16 md:py-24 bg-background">
