@@ -5,7 +5,7 @@ export function AgriBidLogo({ className, ...props }: React.HTMLAttributes<HTMLDi
   return (
     <div
       className={cn(
-        'relative flex flex-col items-center justify-center',
+        'relative flex items-center justify-center',
         className
       )}
       {...props}
@@ -14,13 +14,13 @@ export function AgriBidLogo({ className, ...props }: React.HTMLAttributes<HTMLDi
          <Image
             src="/images/logo.png"
             alt="AgriBid Logo"
-            width={48}
-            height={48}
+            width={40}
+            height={40}
             className="object-contain"
           />
           <div className="flex flex-col">
-            <span className="text-2xl font-bold text-primary">AgriBid</span>
-            <span className="text-sm font-semibold text-primary/80 tracking-widest -mt-1">INDONESIA</span>
+            <span className="text-xl font-bold text-primary">AgriBid</span>
+            <span className="text-xs font-semibold text-primary/80 tracking-widest -mt-1">INDONESIA</span>
           </div>
       </div>
     </div>
