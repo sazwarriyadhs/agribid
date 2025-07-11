@@ -12,8 +12,8 @@ export function MembershipBenefits() {
     return (
         <section className="py-16 md:py-24 bg-secondary/50">
             <div className="container grid md:grid-cols-2 gap-12 items-center">
-                <div className="relative h-96 rounded-xl overflow-hidden shadow-xl order-last md:order-first">
-                   <Image src="/images/kartu.png" alt={t('membership_benefits_title')} data-ai-hint="membership card" layout="fill" className="object-cover" />
+                <div className="relative h-80 rounded-xl overflow-hidden shadow-xl order-last md:order-first">
+                   <Image src="https://placehold.co/600x400.png" alt={t('membership_benefits_title')} data-ai-hint="membership card" layout="fill" className="object-cover" />
                 </div>
                 <div className="flex flex-col items-start text-left">
                     <h2 className="text-3xl font-bold font-headline">{t('membership_benefits_title')}</h2>
