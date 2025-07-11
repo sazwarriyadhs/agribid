@@ -118,7 +118,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[80vh] md:h-[90vh] text-white">
+      <section className="relative w-full h-[90vh] text-white">
         <Carousel 
             opts={{ loop: true }}
             plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -140,7 +140,7 @@ export default function Home() {
                                     {t(slide.titleKey as any)}
                                 </h1>
                                 <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/90">
-                                    {t(subtitleKey as any)}
+                                    {t(slide.subtitleKey as any)}
                                 </p>
                                 <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                                     <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -280,5 +280,6 @@ export default function Home() {
   );
 
     
+
 
 
