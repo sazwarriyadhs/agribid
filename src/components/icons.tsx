@@ -1,9 +1,22 @@
-import { Leaf } from "lucide-react";
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
-export function AgriBidLogo(props: React.SVGProps<SVGSVGElement>) {
+export function AgriBidLogo({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex items-center justify-center bg-primary/20 text-primary rounded-lg p-1">
-      <Leaf {...props} />
+    <div
+      className={cn(
+        'relative flex items-center justify-center',
+        className
+      )}
+      {...props}
+    >
+      <Image
+        src="/images/logo.png"
+        alt="AgriBid Logo"
+        width={32}
+        height={32}
+        className="object-contain"
+      />
     </div>
   );
 }
