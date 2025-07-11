@@ -40,14 +40,16 @@ export default function LoginPage() {
     // For this demo, we'll assume the QR code contains a valid user identifier.
     try {
         const qrData = JSON.parse(data);
-        if (qrData.userId === 'DP248017356') {
+        // Simple validation: check if required fields exist
+        if (qrData.userId && qrData.name && qrData.code && qrData.slug) {
              toast({
                 title: t('login_success_title'),
                 description: `Welcome back, ${qrData.name}!`,
             });
-            router.push('/dashboard');
+            // Redirect to the user's public profile page
+            router.push(`/u/${qrData.code}/${qrData.slug}`);
         } else {
-            throw new Error('Invalid QR code');
+            throw new Error('Invalid QR code data');
         }
     } catch (error) {
         toast({

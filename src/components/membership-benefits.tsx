@@ -16,6 +16,8 @@ const cardInfo = {
     role: "Producer",
     role_id: "Produsen",
     id: "DP248017356",
+    code: "P001", // Producer code
+    slug: "jessica-sutrisno", // URL-friendly slug
     expires: "30/04/2025",
     avatarUrl: 'https://placehold.co/150x150.png',
     avatarFallback: 'JS'
@@ -24,7 +26,10 @@ const cardInfo = {
 const qrCodeData = JSON.stringify({
     userId: cardInfo.id,
     name: cardInfo.name,
-    validUntil: cardInfo.expires
+    validUntil: cardInfo.expires,
+    code: cardInfo.code,
+    slug: cardInfo.slug,
+    role: cardInfo.role
 });
 
 const regulations = [
