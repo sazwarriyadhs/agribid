@@ -73,5 +73,17 @@
   "login_success_title": "Logged In",
   "login_success_desc": "Welcome back to AgriBid!",
   "logout_success_title": "Logged Out",
-  "logout_success_desc": "You have successfully logged out."
+  "logout_success_desc": "You have successfully logged out.",
+  "featured_commodities_title": "Featured Agricultural Commodities",
+  "featured_commodities_subtitle": "Explore Indonesia's leading agricultural products.",
+  "rice": "Rice",
+  "palm_oil": "Palm Oil",
+  "coffee": "Coffee",
+  "cocoa": "Cocoa",
+  "rubber": "Rubber",
+  "spices": "Spices",
+  "tropical_fruits": "Tropical Fruits",
+  "cassava": "Cassava",
+  "sweet_potato": "Sweet Potato",
+  "corn": "Corn"
 }

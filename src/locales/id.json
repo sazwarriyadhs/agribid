@@ -73,5 +73,17 @@
   "login_success_title": "Berhasil Masuk",
   "login_success_desc": "Selamat datang kembali di AgriBid!",
   "logout_success_title": "Berhasil Keluar",
-  "logout_success_desc": "Anda telah berhasil keluar."
+  "logout_success_desc": "Anda telah berhasil keluar.",
+  "featured_commodities_title": "Komoditas Pertanian Unggulan",
+  "featured_commodities_subtitle": "Jelajahi produk-produk pertanian terkemuka di Indonesia.",
+  "rice": "Padi",
+  "palm_oil": "Kelapa Sawit",
+  "coffee": "Kopi",
+  "cocoa": "Kakao",
+  "rubber": "Karet",
+  "spices": "Rempah-rempah",
+  "tropical_fruits": "Buah Tropis",
+  "cassava": "Ubi Kayu",
+  "sweet_potato": "Ubi Jalar",
+  "corn": "Jagung"
 }

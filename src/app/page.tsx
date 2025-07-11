@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Badge } from '@/components/ui/badge';
 import { Tractor, Wheat, Fish, Handshake, Search, Gavel } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
+import { FeaturedCommodities } from '@/components/featured-commodities';
 
 const featuredAuctions = [
   {
@@ -159,6 +160,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <FeaturedCommodities />
 
       <section className="py-16 md:py-24 bg-secondary/50">
         <div className="container px-4 md:px-6">
