@@ -42,7 +42,7 @@ const prompt = ai.definePrompt({
 
 Analyze the product name, description, category, and photo to determine a fair market value. Consider factors like quality, quantity (if mentioned), type, and visual appearance.
 
-Provide the price in USD, as a number only.
+Provide your response in the requested JSON format, including both the suggested price and your reasoning.
 
 Product Name: {{{productName}}}
 Category: {{{category}}}
