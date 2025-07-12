@@ -28,24 +28,23 @@ interface NavItem {
 const roleNavigations: Record<string, NavItem[]> = {
   admin: [
     { href: "/dashboard/admin", label: "admin_dashboard_title", icon: Home },
-    // { href: "/dashboard/admin/users", label: "user_management", icon: Users },
-    // { href: "/dashboard/admin/products", label: "pending_product_verifications", icon: Package },
-    // { href: "/dashboard/admin/auctions", label: "active_auctions", icon: Gavel },
-    // { href: "/dashboard/admin/settings", label: "settings", icon: Settings }
+    { href: "/dashboard/admin", label: "user_management", icon: Users },
+    { href: "/dashboard/admin", label: "pending_product_verifications", icon: Package },
+    { href: "/dashboard/admin", label: "active_auctions", icon: Gavel },
   ],
   producer: [
       { href: "/dashboard/producer", label: "my_products", icon: Package },
       { href: "/sell", label: "create_new_auction", icon: Gavel },
-      // { href: "/dashboard/producer/stats", label: "view_statistics", icon: BarChart2 },
+      { href: "/dashboard/producer", label: "view_statistics", icon: BarChart2 },
   ],
   bidder: [
       { href: "/dashboard/bidder", label: "bidder_dashboard_title", icon: Gavel },
-      // { href: "/dashboard/bidder/history", label: "bid_history", icon: List },
-      { href: "/u/B001/john-farmer", label: "profile", icon: Users },
+      { href: "/dashboard/bidder", label: "bid_history", icon: List },
+      { href: "/u/P001/jessica-sutrisno", label: "profile", icon: Users },
   ],
   partner: [
       { href: "/dashboard/partner", label: "producer_verification_requests", icon: Handshake },
-      // { href: "/dashboard/partner/schedule", label: "mentoring_schedule", icon: Gavel },
+      { href: "/dashboard/partner", label: "mentoring_schedule", icon: Gavel },
   ],
   exporter: [
       { href: "/dashboard/exporter", label: "my_shipments", icon: Plane },
