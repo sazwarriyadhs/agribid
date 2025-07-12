@@ -92,6 +92,7 @@
   "cassava": "Cassava",
   "sweet_potato": "Sweet Potato",
   "corn": "Corn",
+  "shrimp": "Shrimp",
   "featured_processed_products_title": "Featured Processed Food Products",
   "featured_processed_products_subtitle": "Discover leading processed food products from Indonesia.",
   "instant_coffee": "Instant Coffee",
@@ -293,5 +294,11 @@
   "mentored_producers_desc": "Educate and manage up to 10 producers under your guidance.",
   "successful_auctions": "Successful Auctions",
   "educate_manage": "Educate & Manage",
-  "my_shipments_desc": "Track and manage your ongoing and completed export shipments."
+  "my_shipments_desc": "Track and manage your ongoing and completed export shipments.",
+  "global_demand_title": "Global Market Demand",
+  "global_demand_subtitle": "Real-time insights into the global demand for Indonesian commodities.",
+  "high_demand": "High Demand",
+  "stable_demand": "Stable Demand",
+  "growing_demand": "Growing Demand",
+  "top_destinations": "Top Destinations"
 }

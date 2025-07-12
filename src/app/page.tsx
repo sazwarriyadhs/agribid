@@ -15,6 +15,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
+import { GlobalDemand } from '@/components/global-demand';
 
 
 const heroSlides = [
@@ -217,6 +218,8 @@ export default function Home() {
       <FeaturedCommodities />
       
       <FeaturedProcessedProducts />
+      
+      <GlobalDemand />
 
       <section className="py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
@@ -280,6 +283,7 @@ export default function Home() {
   );
 
     
+
 
 
 

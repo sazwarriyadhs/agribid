@@ -92,6 +92,7 @@
   "cassava": "Ubi Kayu",
   "sweet_potato": "Ubi Jalar",
   "corn": "Jagung",
+  "shrimp": "Udang",
   "featured_processed_products_title": "Produk Olahan Pangan Unggulan",
   "featured_processed_products_subtitle": "Temukan produk-produk pangan olahan terkemuka dari Indonesia.",
   "instant_coffee": "Kopi Instan",
@@ -293,5 +294,11 @@
   "mentored_producers_desc": "Edukasi dan kelola hingga 10 produsen di bawah bimbingan Anda.",
   "successful_auctions": "Lelang Berhasil",
   "educate_manage": "Edukasi & Kelola",
-  "my_shipments_desc": "Lacak dan kelola pengiriman ekspor Anda yang sedang berjalan dan yang sudah selesai."
+  "my_shipments_desc": "Lacak dan kelola pengiriman ekspor Anda yang sedang berjalan dan yang sudah selesai.",
+  "global_demand_title": "Permintaan Pasar Global",
+  "global_demand_subtitle": "Wawasan real-time tentang permintaan global untuk komoditas Indonesia.",
+  "high_demand": "Permintaan Tinggi",
+  "stable_demand": "Permintaan Stabil",
+  "growing_demand": "Permintaan Tumbuh",
+  "top_destinations": "Tujuan Utama"
 }
