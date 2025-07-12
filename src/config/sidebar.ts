@@ -14,7 +14,6 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
   producer: [ 
     { name: "Dashboard", path: "/dashboard/producer", icon: Home, labelKey: 'dashboard' },
     { name: "Create New Auction", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
-    { name: "My Products", path: "/dashboard/producer", icon: FileClock, labelKey: 'my_products' },
     { name: "Notifications", path: "#", icon: Bell, labelKey: 'notifications' },
   ],
   bidder: [
