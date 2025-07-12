@@ -14,39 +14,42 @@ import {
 } from '@/components/ui/sidebar';
 import { useI18n } from '@/context/i18n';
 import { AgriBidLogo } from '@/components/icons';
-import { Home, Users, Package, Gavel, Handshake, Plane, BarChart2, UploadCloud } from 'lucide-react';
+import { Home, Users, Package, Gavel, Handshake, Plane, BarChart2, UploadCloud, ShieldCheck, FilePlus, FileClock, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
 
 interface NavItem {
-  href: string;
-  label: string;
+  name: string;
+  path: string;
   icon: LucideIcon;
+  labelKey?: keyof ReturnType<typeof useI18n>['t'] | string;
 }
 
-const roleNavigations: Record<string, NavItem[]> = {
+const sidebarByRole: Record<string, NavItem[]> = {
+  producer: [ // Mapped from 'seller'
+    { name: "Dashboard", path: "/dashboard/producer", icon: Home, labelKey: 'dashboard' },
+    { name: "Unggah Produk", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
+    { name: "Riwayat Produk", path: "/dashboard/producer", icon: FileClock, labelKey: 'my_products' },
+    { name: "Notifikasi", path: "#", icon: Bell, labelKey: 'notifications' },
+  ],
+  bidder: [ // Mapped from 'buyer'
+    { name: "Dashboard", path: "/dashboard/bidder", icon: Home, labelKey: 'dashboard' },
+    { name: "Lelang Aktif", path: "/#featured-auctions", icon: Gavel, labelKey: 'auctions' },
+    { name: "Penawaran Saya", path: "/dashboard/bidder", icon: BarChart2, labelKey: 'my_bids' },
+  ],
   admin: [
-    { href: "/dashboard/admin", label: "admin_dashboard_title", icon: Home },
-    { href: "/dashboard/admin", label: "user_management", icon: Users },
-    { href: "/dashboard/admin", label: "pending_product_verifications", icon: Package },
-  ],
-  producer: [
-      { href: "/dashboard/producer", label: "my_products", icon: Package },
-      { href: "/sell", label: "create_new_auction", icon: Gavel },
-      { href: "/dashboard/producer", label: "view_statistics", icon: BarChart2 },
-  ],
-  bidder: [
-      { href: "/dashboard/bidder", label: "bidder_dashboard_title", icon: Gavel },
-      { href: "/u/P001/jessica-sutrisno", label: "profile", icon: Users },
+    { name: "Verifikasi Produk", path: "/dashboard/admin", icon: ShieldCheck, labelKey: 'pending_product_verifications' },
+    { name: "Kelola User", path: "/dashboard/admin", icon: Users, labelKey: 'user_management' },
+    { name: "Kelola Lelang", path: "/dashboard/admin", icon: Gavel, labelKey: 'active_auctions' },
   ],
   partner: [
-      { href: "/dashboard/partner", label: "producer_verification_requests", icon: Handshake },
-      { href: "/dashboard/partner", label: "mentoring_schedule", icon: Gavel },
+      { name: "Permintaan Verifikasi", path: "/dashboard/partner", icon: Handshake, labelKey: 'producer_verification_requests' },
+      { name: "Jadwal Mentoring", path: "/dashboard/partner", icon: Gavel, labelKey: 'mentoring_schedule' },
   ],
   exporter: [
-      { href: "/dashboard/exporter", label: "my_shipments", icon: Plane },
-      { href: "/export-partner", label: "upload_documents", icon: UploadCloud },
+      { name: "Pengiriman Saya", path: "/dashboard/exporter", icon: Plane, labelKey: 'my_shipments' },
+      { name: "Unggah Dokumen", path: "/export-partner", icon: UploadCloud, labelKey: 'upload_documents' },
   ]
 };
 
@@ -56,8 +59,9 @@ function DashboardSidebar() {
     const pathname = usePathname();
     
     const pathSegments = pathname.split('/');
-    const role = pathSegments[2] in roleNavigations ? pathSegments[2] : 'bidder';
-    const menuItems = roleNavigations[role] || roleNavigations['bidder'];
+    const role = pathSegments[2] in sidebarByRole ? pathSegments[2] : 'bidder';
+    // Fallback to bidder if role not found
+    const menuItems = sidebarByRole[role] || sidebarByRole['bidder'];
 
     return (
         <Sidebar>
@@ -69,20 +73,22 @@ function DashboardSidebar() {
             <SidebarContent>
                 <SidebarMenu>
                     <SidebarGroupLabel>{t('navigation')}</SidebarGroupLabel>
-                    {menuItems.map(item => (
-                         <SidebarMenuItem key={item.href}>
+                    {menuItems.map(item => {
+                        const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
+                        return (
+                         <SidebarMenuItem key={item.path}>
                              <SidebarMenuButton 
                                 asChild
-                                isActive={pathname === item.href} 
-                                tooltip={{children: t(item.label as any)}}
+                                isActive={pathname === item.path} 
+                                tooltip={{children: label}}
                             >
-                                 <Link href={item.href}>
+                                 <Link href={item.path}>
                                     <item.icon />
-                                    <span>{t(item.label as any, item.label)}</span>
+                                    <span>{label}</span>
                                 </Link>
                              </SidebarMenuButton>
                          </SidebarMenuItem>
-                    ))}
+                    )})}
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>
