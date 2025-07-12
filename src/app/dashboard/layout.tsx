@@ -2,15 +2,15 @@
 'use client';
 
 import {
-  Sidebar,
+  Sidebar as SidebarComponent,
   SidebarContent,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarGroupLabel,
   SidebarProvider,
+  SidebarMenuButton,
 } from '@/components/ui/sidebar';
 import { useI18n } from '@/context/i18n';
 import { AgriBidLogo } from '@/components/icons';
@@ -18,59 +18,24 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth';
 import { sidebarByRole, NavItem } from '@/config/sidebar';
-import { Users, ShieldCheck, Gavel } from 'lucide-react';
+import type { Role } from '@/config/sidebar';
 
-
-function AdminSidebar() {
-    const { t } = useI18n();
-    const pathname = usePathname();
-    const menuItems = sidebarByRole.admin;
-
-    return (
-        <Sidebar>
-            <SidebarHeader>
-                <Link href="/" className="flex items-center justify-center p-2">
-                    <AgriBidLogo className="h-10" />
-                </Link>
-            </SidebarHeader>
-            <SidebarContent>
-                <SidebarMenu>
-                    <SidebarGroupLabel>{t('admin_dashboard_title', 'Admin Menu')}</SidebarGroupLabel>
-                    {menuItems.map((item: NavItem) => {
-                        const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
-                        const isActive = pathname === item.path;
-                        return (
-                            <SidebarMenuItem key={item.path}>
-                                <SidebarMenuButton 
-                                    asChild
-                                    isActive={isActive} 
-                                    tooltip={{children: label}}
-                                >
-                                    <Link href={item.path}>
-                                        <item.icon />
-                                        <span>{label}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        )
-                    })}
-                </SidebarMenu>
-            </SidebarContent>
-        </Sidebar>
-    );
-}
-
-function DefaultSidebar() {
+function Sidebar() {
     const { t } = useI18n();
     const pathname = usePathname();
     const { user } = useAuth();
     
     // Default to 'bidder' if no user is logged in, or if the role is not in the config.
-    const role = (user?.role && user.role in sidebarByRole) ? user.role : 'bidder';
-    const menuItems = sidebarByRole[role] || sidebarByRole['bidder'];
+    const role: Role = (user?.role && user.role in sidebarByRole) ? user.role : 'bidder';
+    const menuItems = sidebarByRole[role] || [];
+
+    const getRoleTitle = (role: Role) => {
+        const key = `role_${role}`;
+        return t(key, role.charAt(0).toUpperCase() + role.slice(1));
+    }
 
     return (
-        <Sidebar>
+        <SidebarComponent>
             <SidebarHeader>
                  <Link href="/" className="flex items-center justify-center p-2">
                     <AgriBidLogo className="h-10" />
@@ -78,12 +43,16 @@ function DefaultSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarMenu>
-                    <SidebarGroupLabel>{t('navigation')}</SidebarGroupLabel>
+                    <SidebarGroupLabel>{getRoleTitle(role)} {t('navigation')}</SidebarGroupLabel>
                     {menuItems.map((item: NavItem) => {
                         const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
                         const isActive = pathname === item.path || (item.path !== '/dashboard' && pathname.startsWith(item.path));
+                        
+                        // Create a unique key using path and name
+                        const uniqueKey = `${item.path}-${item.name}`;
+
                         return (
-                         <SidebarMenuItem key={item.path}>
+                         <SidebarMenuItem key={uniqueKey}>
                              <SidebarMenuButton 
                                 asChild
                                 isActive={isActive} 
@@ -98,7 +67,7 @@ function DefaultSidebar() {
                     )})}
                 </SidebarMenu>
             </SidebarContent>
-        </Sidebar>
+        </SidebarComponent>
     )
 }
 
@@ -108,14 +77,11 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useAuth();
 
   return (
     <SidebarProvider>
-        <div className="flex">
-            {/* DYNAMIC LAYOUT: Show a different sidebar for admins */}
-            {user?.role === 'admin' ? <AdminSidebar /> : <DefaultSidebar />}
-            
+        <div className="flex min-h-screen">
+            <Sidebar />
             <SidebarInset>
                 <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
                     {children}
