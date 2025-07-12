@@ -45,12 +45,9 @@ const userProfile = {
 export default function ProfilePage({ params }: { params: { code: string, slug: string } }) {
     const { t, formatCurrency, language } = useI18n();
 
-    // In a real app, you'd fetch the user by code and slug and return 404 if not found
-    if (params.code !== userProfile.code || params.slug !== userProfile.slug) {
-        // For this example, we'll just show a 404 if the URL doesn't match our static user
-        // notFound(); 
-        // For demo purposes, we will allow it.
-    }
+    // In a real app, you'd fetch the user by code and slug and return 404 if not found.
+    // The check is removed to resolve a Next.js warning about direct param access.
+    // For demo purposes, we will allow any code/slug to render this static profile.
 
     const getStatusVariant = (status: string) => {
         switch (status) {
