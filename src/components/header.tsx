@@ -1,7 +1,6 @@
-
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { AgriBidLogo } from './icons';
 import { Button } from '@/components/ui/button';
@@ -11,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from "@/hooks/use-toast"
 import { useI18n } from '@/context/i18n';
+import { useAuth } from '@/context/auth';
 
 const notifications = [
     { title: "Outbid!", description: "You've been outbid on 'Organic Wheat Harvest'." },
@@ -19,24 +19,17 @@ const notifications = [
 ]
 
 export function AppHeader() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would be managed by a global auth context in a real app
   const { toast } = useToast()
   const { t, language, setLanguage, currency, setCurrency } = useI18n();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    logout();
     toast({
       title: t('logout_success_title'),
       description: t('logout_success_desc'),
     })
   };
-
-  // This is a simulation function. It's triggered by the login button for demo purposes.
-  // In a real app, the login page would set the auth state.
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -105,25 +98,25 @@ export function AppHeader() {
                 </div>
             </PopoverContent>
           </Popover>
-          {isLoggedIn ? (
+          {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" />
-                    <AvatarFallback>U</AvatarFallback>
+                    <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">John Farmer</p>
-                    <p className="text-xs leading-none text-muted-foreground">john.farmer@email.com</p>
+                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild><Link href="/dashboard/bidder"><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href={`/dashboard/${user.role}`}><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem asChild><Link href="/u/P001/jessica-sutrisno"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />

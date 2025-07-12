@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -12,17 +11,20 @@ import { Input } from '@/components/ui/input';
 import { QrCode } from 'lucide-react';
 import { useState } from 'react';
 import { QrScannerDialog } from '@/components/qr-scanner-dialog';
+import { useAuth } from '@/context/auth';
 
 
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
   const { t } = useI18n();
+  const { login } = useAuth();
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [email, setEmail] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    login(email);
     
     // Determine redirect path based on email
     let path = '/dashboard/bidder'; // Default path
@@ -53,6 +55,8 @@ export default function LoginPage() {
                 title: t('login_success_title'),
                 description: `Welcome back, ${qrData.name}!`,
             });
+            // Also log the user in
+            login(`${qrData.role.toLowerCase()}@agribid.com`);
             router.push(`/u/${qrData.code}/${qrData.slug}`);
         } else {
             throw new Error('Invalid QR code data');

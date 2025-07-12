@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -14,53 +13,24 @@ import {
 } from '@/components/ui/sidebar';
 import { useI18n } from '@/context/i18n';
 import { AgriBidLogo } from '@/components/icons';
-import { Home, Users, Package, Gavel, Handshake, Plane, BarChart2, UploadCloud, ShieldCheck, FilePlus, FileClock, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { LucideIcon } from 'lucide-react';
-
-interface NavItem {
-  name: string;
-  path: string;
-  icon: LucideIcon;
-  labelKey?: keyof ReturnType<typeof useI18n>['t'] | string;
-}
-
-const sidebarByRole: Record<string, NavItem[]> = {
-  producer: [ // Mapped from 'seller'
-    { name: "Dashboard", path: "/dashboard/producer", icon: Home, labelKey: 'dashboard' },
-    { name: "Unggah Produk", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
-    { name: "Riwayat Produk", path: "/dashboard/producer", icon: FileClock, labelKey: 'my_products' },
-    { name: "Notifikasi", path: "#", icon: Bell, labelKey: 'notifications' },
-  ],
-  bidder: [ // Mapped from 'buyer'
-    { name: "Dashboard", path: "/dashboard/bidder", icon: Home, labelKey: 'dashboard' },
-    { name: "Lelang Aktif", path: "/#featured-auctions", icon: Gavel, labelKey: 'auctions' },
-    { name: "Penawaran Saya", path: "/dashboard/bidder", icon: BarChart2, labelKey: 'my_bids' },
-  ],
-  admin: [
-    { name: "Verifikasi Produk", path: "/dashboard/admin", icon: ShieldCheck, labelKey: 'pending_product_verifications' },
-    { name: "Kelola User", path: "/dashboard/admin", icon: Users, labelKey: 'user_management' },
-    { name: "Kelola Lelang", path: "/dashboard/admin", icon: Gavel, labelKey: 'active_auctions' },
-  ],
-  partner: [
-      { name: "Permintaan Verifikasi", path: "/dashboard/partner", icon: Handshake, labelKey: 'producer_verification_requests' },
-      { name: "Jadwal Mentoring", path: "/dashboard/partner", icon: Gavel, labelKey: 'mentoring_schedule' },
-  ],
-  exporter: [
-      { name: "Pengiriman Saya", path: "/dashboard/exporter", icon: Plane, labelKey: 'my_shipments' },
-      { name: "Unggah Dokumen", path: "/export-partner", icon: UploadCloud, labelKey: 'upload_documents' },
-  ]
-};
+import { useAuth } from '@/context/auth';
+import { sidebarByRole, NavItem } from '@/config/sidebar';
 
 
 function DashboardSidebar() {
     const { t } = useI18n();
     const pathname = usePathname();
+    const { user } = useAuth();
     
+    // Use the role from auth context, fallback to detecting from URL if not logged in, default to 'bidder'
+    const roleFromAuth = user?.role;
     const pathSegments = pathname.split('/');
-    const role = pathSegments[2] in sidebarByRole ? pathSegments[2] : 'bidder';
-    // Fallback to bidder if role not found
+    const roleFromUrl = pathSegments[2] as keyof typeof sidebarByRole;
+    
+    const role = roleFromAuth || (roleFromUrl in sidebarByRole ? roleFromUrl : 'bidder');
+    
     const menuItems = sidebarByRole[role] || sidebarByRole['bidder'];
 
     return (
@@ -73,13 +43,14 @@ function DashboardSidebar() {
             <SidebarContent>
                 <SidebarMenu>
                     <SidebarGroupLabel>{t('navigation')}</SidebarGroupLabel>
-                    {menuItems.map(item => {
+                    {menuItems.map((item: NavItem) => {
                         const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
+                        const isActive = pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path));
                         return (
                          <SidebarMenuItem key={item.path}>
                              <SidebarMenuButton 
                                 asChild
-                                isActive={pathname === item.path} 
+                                isActive={isActive} 
                                 tooltip={{children: label}}
                             >
                                  <Link href={item.path}>

@@ -7,6 +7,7 @@ import { AppHeader } from '@/components/header';
 import { AppFooter } from '@/components/footer';
 import { Toaster } from "@/components/ui/toaster";
 import { I18nProvider } from '@/context/i18n';
+import { AuthProvider } from '@/context/auth';
 import { SplashScreen } from '@/components/splash-screen';
 
 /*
@@ -43,14 +44,16 @@ export default function RootLayout({
         {loading ? (
           <SplashScreen />
         ) : (
-          <I18nProvider>
-            <div className="flex flex-col min-h-screen">
-              <AppHeader />
-              <main className="flex-grow">{children}</main>
-              <AppFooter />
-            </div>
-            <Toaster />
-          </I18nProvider>
+          <AuthProvider>
+            <I18nProvider>
+              <div className="flex flex-col min-h-screen">
+                <AppHeader />
+                <main className="flex-grow">{children}</main>
+                <AppFooter />
+              </div>
+              <Toaster />
+            </I18nProvider>
+          </AuthProvider>
         )}
       </body>
     </html>
