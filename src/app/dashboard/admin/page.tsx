@@ -24,10 +24,10 @@ const initialPendingProducts = [
 ];
 
 const initialAllUsers = [
-    { id: 'USR-001', name: 'John Farmer', role: 'Producer', role_id: 'Produsen', status: 'Active', status_id: 'Aktif' },
-    { id: 'USR-002', name: 'Bakery Co.', role: 'Bidder', role_id: 'Penawar', status: 'Active', status_id: 'Aktif' },
-    { id: 'USR-003', name: 'Agri-Finance Corp', role: 'Partner', role_id: 'Mitra', status: 'Active', status_id: 'Aktif' },
-    { id: 'USR-004', name: 'Global Exporters', role: 'Exporter', role_id: 'Eksportir', status: 'Suspended', status_id: 'Ditangguhkan' },
+    { id: 'USR-001', name: 'John Farmer', role: 'Producer', status: 'Active' },
+    { id: 'USR-002', name: 'Bakery Co.', role: 'Bidder', status: 'Active' },
+    { id: 'USR-003', name: 'Agri-Finance Corp', role: 'Partner', status: 'Active' },
+    { id: 'USR-004', name: 'Global Exporters', role: 'Exporter', status: 'Suspended' },
 ];
 
 export default function AdminDashboardPage() {
@@ -56,7 +56,7 @@ export default function AdminDashboardPage() {
                 title: t('suspend_user'),
                 description: `${user.name} has been suspended.`,
             });
-            setAllUsers(users => users.map(u => u.id === userId ? { ...u, status: 'Suspended', status_id: 'Ditangguhkan' } : u));
+            setAllUsers(users => users.map(u => u.id === userId ? { ...u, status: 'Suspended' } : u));
         } else if (action === 'delete') {
             toast({
                 title: t('delete_user'),
@@ -69,22 +69,19 @@ export default function AdminDashboardPage() {
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
-        if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim', 'dalam perjalanan'].includes(s)) return 'secondary';
-        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
+        if (['active'].includes(s)) return 'default';
+        if (['suspended'].includes(s)) return 'destructive';
         return 'outline';
     }
     
-    const getRoleText = (user: typeof allUsers[0]) => {
-        const key = `role_${user.role.toLowerCase()}`;
-        const translated = t(key, user.role);
-        return language === 'id' ? user.role_id : translated;
+    const getRoleText = (role: string) => {
+        const key = `role_${role.toLowerCase()}`;
+        return t(key, role);
     }
 
-    const getStatusText = (user: typeof allUsers[0]) => {
-        const key = `status_${user.status.toLowerCase().replace(/ /g, '_')}`;
-        const translated = t(key, user.status);
-        return language === 'id' ? user.status_id : translated;
+    const getStatusText = (status: string) => {
+        const key = `status_${status.toLowerCase().replace(/ /g, '_')}`;
+        return t(key, status);
     }
 
     return (
@@ -139,8 +136,8 @@ export default function AdminDashboardPage() {
                                         <TableCell>{prod.producer}</TableCell>
                                         <TableCell>{prod.category}</TableCell>
                                         <TableCell className="text-right space-x-2">
-                                            <Button variant="outline" size="sm" className="bg-green-100 text-green-800 hover:bg-green-200 border-green-300" onClick={() => handleProductVerification(prod.id, 'approve')}><Check className="mr-2 h-4 w-4"/>{t('approve')}</Button>
-                                            <Button variant="outline" size="sm" className="bg-red-100 text-red-800 hover:bg-red-200 border-red-300" onClick={() => handleProductVerification(prod.id, 'reject')}><X className="mr-2 h-4 w-4"/>{t('reject')}</Button>
+                                            <Button variant="outline" size="sm" className="bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900 border-green-300 dark:border-green-700" onClick={() => handleProductVerification(prod.id, 'approve')}><Check className="mr-2 h-4 w-4"/>{t('approve')}</Button>
+                                            <Button variant="outline" size="sm" className="bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900 border-red-300 dark:border-red-700" onClick={() => handleProductVerification(prod.id, 'reject')}><X className="mr-2 h-4 w-4"/>{t('reject')}</Button>
                                         </TableCell>
                                     </TableRow>
                                )) : (
@@ -172,8 +169,8 @@ export default function AdminDashboardPage() {
                                {allUsers.map((user) => (
                                     <TableRow key={user.id}>
                                         <TableCell className="font-medium">{user.name}</TableCell>
-                                        <TableCell>{getRoleText(user)}</TableCell>
-                                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? user.status_id : user.status)}>{getStatusText(user)}</Badge></TableCell>
+                                        <TableCell>{getRoleText(user.role)}</TableCell>
+                                        <TableCell><Badge variant={getStatusVariant(user.status)}>{getStatusText(user.status)}</Badge></TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>

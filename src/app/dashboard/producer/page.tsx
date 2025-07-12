@@ -28,8 +28,8 @@ export default function ProducerDashboardPage() {
         const product = producerProducts.find(p => p.id === productId);
         setProducerProducts(producerProducts.filter(p => p.id !== productId));
         toast({
-            title: "Product Deleted",
-            description: `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`,
+            title: t('delete_product_title', 'Product Deleted'),
+            description: t('delete_product_desc', `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`),
             variant: "destructive"
         })
     };
@@ -37,7 +37,7 @@ export default function ProducerDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi'].includes(s)) return 'secondary';
+        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim'].includes(s)) return 'secondary';
         if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
@@ -109,15 +109,14 @@ export default function ProducerDashboardPage() {
                                 </DropdownMenu>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogTitle>{t('confirm_delete_title', 'Are you absolutely sure?')}</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently delete the product
-                                            "{language === 'id' ? prod.name_id : prod.name}".
+                                            {t('confirm_delete_desc', 'This action cannot be undone. This will permanently delete the product "{{productName}}".', { productName: language === 'id' ? prod.name_id : prod.name })}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => handleDeleteProduct(prod.id)}>Continue</AlertDialogAction>
+                                        <AlertDialogCancel>{t('cancel', 'Cancel')}</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => handleDeleteProduct(prod.id)}>{t('continue', 'Continue')}</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                              </AlertDialog>
