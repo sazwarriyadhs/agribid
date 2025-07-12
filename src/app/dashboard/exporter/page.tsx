@@ -5,29 +5,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { PackageCheck } from "lucide-react"
+import { PackageCheck, Users, BookUser } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from 'next/link';
 
 const exportShipments = [
     { id: 'EXP-001', product: 'Kopi Arabika Gayo', product_id: 'Kopi Arabika Gayo', destination: 'USA', destination_id: 'AS', status: 'In Transit', status_id: 'Dalam Perjalanan' },
     { id: 'EXP-002', product: 'Minyak Kelapa Sawit', product_id: 'Minyak Kelapa Sawit', destination: 'Netherlands', destination_id: 'Belanda', status: 'Delivered', status_id: 'Terkirim' },
-]
+];
+
+const mentoredProducers = [
+    { id: 'PROD-010', name: 'Sari Tani Farm', name_id: 'Sari Tani Farm', auctions: 3, status: 'Active', status_id: 'Aktif' },
+    { id: 'PROD-012', name: 'Mina Jaya Seafood', name_id: 'Mina Jaya Seafood', auctions: 7, status: 'Active', status_id: 'Aktif' },
+];
 
 export default function ExporterDashboardPage() {
     const { t, language } = useI18n();
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
-        if (['active', 'winning', 'in transit', 'verified', 'dalam perjalanan'].includes(s)) return 'default';
+        if (['active', 'winning', 'in transit', 'verified', 'dalam perjalanan', 'aktif'].includes(s)) return 'default';
         if (['ended', 'won', 'delivered', 'terkirim', 'selesai', 'menang', 'terverifikasi'].includes(s)) return 'secondary';
         if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
 
-    const getStatusText = (shipment: typeof exportShipments[0]) => {
-        const statusKey = `status_${(language === 'id' ? shipment.status_id : shipment.status).toLowerCase().replace(/ /g, '_')}`;
-        return t(statusKey, language === 'id' ? shipment.status_id : shipment.status);
+    const getStatusText = (item: { status: string, status_id: string }) => {
+        const statusKey = `status_${(language === 'id' ? item.status_id : item.status).toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, language === 'id' ? item.status_id : item.status);
     }
 
     return (
@@ -36,40 +41,78 @@ export default function ExporterDashboardPage() {
                 <h1 className="text-4xl font-bold font-headline">{t('exporter_dashboard_title')}</h1>
                 <p className="text-muted-foreground">{t('exporter_dashboard_desc')}</p>
             </header>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-headline text-2xl">{t('my_shipments')}</CardTitle>
-                    <CardDescription>{t('exporter_dashboard_desc')}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                     <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>{t('product')}</TableHead>
-                                <TableHead>{t('destination')}</TableHead>
-                                <TableHead>{t('status')}</TableHead>
-                                <TableHead className="text-right">{t('actions')}</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                           {exportShipments.map((ship) => (
-                                <TableRow key={ship.id}>
-                                    <TableCell className="font-medium">{language === 'id' ? ship.product_id : ship.product}</TableCell>
-                                    <TableCell>{language === 'id' ? ship.destination_id : ship.destination}</TableCell>
-                                    <TableCell><Badge variant={getStatusVariant(language === 'id' ? ship.status_id : ship.status)}>{getStatusText(ship)}</Badge></TableCell>
-                                    <TableCell className="text-right">
-                                        <Button asChild variant="ghost" size="sm">
-                                            <Link href="#">
-                                                <PackageCheck className="mr-2"/>{t('track')}
-                                            </Link>
-                                        </Button>
-                                    </TableCell>
+            
+            <div className="space-y-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('my_shipments')}</CardTitle>
+                        <CardDescription>{t('my_shipments_desc', 'Track and manage your ongoing and completed export shipments.')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t('product')}</TableHead>
+                                    <TableHead>{t('destination')}</TableHead>
+                                    <TableHead>{t('status')}</TableHead>
+                                    <TableHead className="text-right">{t('actions')}</TableHead>
                                 </TableRow>
-                           ))}
-                        </TableBody>
-                     </Table>
-                </CardContent>
-            </Card>
+                            </TableHeader>
+                            <TableBody>
+                               {exportShipments.map((ship) => (
+                                    <TableRow key={ship.id}>
+                                        <TableCell className="font-medium">{language === 'id' ? ship.product_id : ship.product}</TableCell>
+                                        <TableCell>{language === 'id' ? ship.destination_id : ship.destination}</TableCell>
+                                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? ship.status_id : ship.status)}>{getStatusText(ship)}</Badge></TableCell>
+                                        <TableCell className="text-right">
+                                            <Button asChild variant="ghost" size="sm">
+                                                <Link href="#">
+                                                    <PackageCheck className="mr-2"/>{t('track')}
+                                                </Link>
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                               ))}
+                            </TableBody>
+                         </Table>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('mentored_producers_title', 'Mentored Producers')}</CardTitle>
+                        <CardDescription>{t('mentored_producers_desc', 'Educate and manage up to 10 producers under your guidance.')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t('producer')}</TableHead>
+                                    <TableHead>{t('successful_auctions', 'Successful Auctions')}</TableHead>
+                                    <TableHead>{t('status')}</TableHead>
+                                    <TableHead className="text-right">{t('actions')}</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                               {mentoredProducers.map((producer) => (
+                                    <TableRow key={producer.id}>
+                                        <TableCell className="font-medium">{language === 'id' ? producer.name_id : producer.name}</TableCell>
+                                        <TableCell className="text-center">{producer.auctions}</TableCell>
+                                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? producer.status_id : producer.status)}>{getStatusText(producer)}</Badge></TableCell>
+                                        <TableCell className="text-right">
+                                            <Button asChild variant="ghost" size="sm">
+                                                <Link href="#">
+                                                    <BookUser className="mr-2"/>{t('educate_manage', 'Educate & Manage')}
+                                                </Link>
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                               ))}
+                            </TableBody>
+                         </Table>
+                    </CardContent>
+                </Card>
+            </div>
         </>
     )
 }

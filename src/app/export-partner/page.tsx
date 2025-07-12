@@ -4,11 +4,21 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useI18n } from '@/context/i18n';
-import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award } from 'lucide-react';
+import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award, Upload, FileUp, Sparkles, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { checkExporterEligibility, CheckExporterEligibilityInput, CheckExporterEligibilityOutput } from '@/ai/flows/check-exporter-eligibility-flow';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+
 
 export default function ExportPartnerPage() {
     const { t } = useI18n();
+    const { toast } = useToast();
+    const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+    const [isCheckingEligibility, setIsCheckingEligibility] = useState(false);
+    const [eligibilityResult, setEligibilityResult] = useState<CheckExporterEligibilityOutput | null>(null);
 
     const benefits = [
         { icon: Globe, title: "benefit_1_title", description: "benefit_1_desc" },
@@ -19,9 +29,53 @@ export default function ExportPartnerPage() {
     const howItWorks = [
         { icon: UserCheck, title: "exporter_step_1_title", description: "exporter_step_1_desc" },
         { icon: Award, title: "exporter_step_2_title", description: "exporter_step_2_desc" },
-        { icon: FileText, title: "exporter_step_3_title", description: "exporter_step_3_desc" },
+        { icon: FileUp, title: "exporter_step_3_title", description: "exporter_step_3_desc" },
         { icon: Plane, title: "exporter_step_4_title", description: "exporter_step_4_desc" },
     ];
+    
+    // Simulating file upload
+    const handleFileUpload = (docType: string) => {
+        if (!uploadedFiles.includes(docType)) {
+            setUploadedFiles([...uploadedFiles, docType]);
+            toast({
+                title: t('document_uploaded_title', 'Document Uploaded'),
+                description: t('document_uploaded_desc', `Document '{{docType}}' has been successfully uploaded.`, { docType }),
+            });
+        }
+    };
+
+    const handleCheckEligibility = async () => {
+        setIsCheckingEligibility(true);
+        setEligibilityResult(null);
+
+        // Mock producer data for the AI check
+        const producerData: CheckExporterEligibilityInput = {
+            producerName: "PT Jaya Farm", // Example name
+            successfulAuctions: 7, // Example value, meets the requirement
+            uploadedDocuments: uploadedFiles,
+        };
+
+        try {
+            const result = await checkExporterEligibility(producerData);
+            setEligibilityResult(result);
+        } catch (error) {
+            console.error("Error checking eligibility:", error);
+            toast({
+                variant: 'destructive',
+                title: t('error'),
+                description: t('ai_check_error_desc', 'Failed to check eligibility with AI. Please try again.'),
+            });
+        } finally {
+            setIsCheckingEligibility(false);
+        }
+    }
+    
+    const getResultVariant = (status: string | undefined) => {
+        if (status === 'eligible') return 'default';
+        if (status === 'not_eligible') return 'destructive';
+        return 'default';
+    };
+
 
     return (
         <div className="container mx-auto max-w-5xl px-4 py-8 md:py-16">
@@ -85,18 +139,68 @@ export default function ExportPartnerPage() {
             </section>
             
             <section id="apply" className="py-16 text-center">
-                <Card className="max-w-2xl mx-auto">
+                <Card className="max-w-3xl mx-auto">
                     <CardHeader>
-                        <CardTitle className="text-3xl font-bold font-headline">{t('ready_to_become_producer')}</CardTitle>
-                        <CardDescription>{t('start_your_journey_now')}</CardDescription>
+                        <CardTitle className="text-3xl font-bold font-headline">{t('ready_to_become_exporter_title', 'Ready to Become an Exporter?')}</CardTitle>
+                        <CardDescription>{t('upload_documents_and_check_eligibility', 'Upload your legal documents and use our AI assistant to check your eligibility.')}</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <Button asChild size="lg">
-                            <Link href="/signup">
-                                <UserCheck className="mr-2 h-5 w-5" />
-                                {t('become_a_producer')}
-                            </Link>
-                        </Button>
+                    <CardContent className="space-y-6">
+                        <div>
+                             <h3 className="text-lg font-semibold mb-4 text-left">{t('upload_legal_documents_title', 'Upload Legal Documents (PDF only)')}</h3>
+                             <div className="grid sm:grid-cols-3 gap-4">
+                                <Button variant={uploadedFiles.includes('legal_entity_deed') ? 'default' : 'outline'} onClick={() => handleFileUpload('legal_entity_deed')}>
+                                    <FileText className="mr-2 h-4 w-4" /> {t('legal_entity_deed', 'Legal Entity Deed')} {uploadedFiles.includes('legal_entity_deed') && <CheckCircle className="ml-2 h-4 w-4" />}
+                                </Button>
+                                <Button variant={uploadedFiles.includes('npwp') ? 'default' : 'outline'} onClick={() => handleFileUpload('npwp')}>
+                                    <FileText className="mr-2 h-4 w-4" /> {t('npwp', 'Tax ID (NPWP)')} {uploadedFiles.includes('npwp') && <CheckCircle className="ml-2 h-4 w-4" />}
+                                </Button>
+                                <Button variant={uploadedFiles.includes('siup') ? 'default' : 'outline'} onClick={() => handleFileUpload('siup')}>
+                                    <FileText className="mr-2 h-4 w-4" /> {t('siup', 'Business License (SIUP)')} {uploadedFiles.includes('siup') && <CheckCircle className="ml-2 h-4 w-4" />}
+                                </Button>
+                             </div>
+                        </div>
+
+                        <div className="border-t pt-6 space-y-4">
+                            <Button size="lg" onClick={handleCheckEligibility} disabled={isCheckingEligibility}>
+                                {isCheckingEligibility ? (
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                ) : (
+                                    <Sparkles className="mr-2 h-5 w-5" />
+                                )}
+                                {t('check_eligibility_with_ai', 'Check Eligibility with AI')}
+                            </Button>
+                            
+                            {eligibilityResult && (
+                                <Alert variant={getResultVariant(eligibilityResult.status)}>
+                                    <AlertTitle className="font-bold flex items-center gap-2">
+                                        {t('eligibility_status', 'Eligibility Status')}: 
+                                        <Badge variant={getResultVariant(eligibilityResult.status)}>{t(eligibilityResult.status, eligibilityResult.status)}</Badge>
+                                    </AlertTitle>
+                                    <AlertDescription className="mt-2 text-left space-y-2">
+                                       <p><span className="font-semibold">{t('recommendation', 'Recommendation')}:</span> {eligibilityResult.recommendation}</p>
+                                       <p><span className="font-semibold">{t('notes', 'Notes')}:</span> {eligibilityResult.notes}</p>
+                                       {eligibilityResult.missingDocuments && eligibilityResult.missingDocuments.length > 0 && (
+                                           <div>
+                                               <p className="font-semibold">{t('missing_documents', 'Missing Documents')}:</p>
+                                               <ul className="list-disc pl-5">
+                                                   {eligibilityResult.missingDocuments.map((doc, i) => <li key={i}>{t(doc, doc)}</li>)}
+                                               </ul>
+                                           </div>
+                                       )}
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+
+                        </div>
+
+                        <div className="border-t pt-6">
+                             <Button asChild size="lg">
+                                <Link href="/dashboard/admin">
+                                    {t('submit_for_admin_verification', 'Submit for Admin Verification')}
+                                </Link>
+                            </Button>
+                            <p className="text-xs text-muted-foreground mt-2">{t('submit_for_admin_verification_desc', 'Once eligible, you can submit your application for final review by the admin.')}</p>
+                        </div>
                     </CardContent>
                 </Card>
             </section>
