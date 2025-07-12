@@ -10,11 +10,13 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type { Role } from '@/config/sidebar';
 
 export const CheckExporterEligibilityInputSchema = z.object({
   producerName: z.string().describe('The name of the user or their company.'),
   successfulAuctions: z.number().describe('The number of successful auction transactions the user has completed (either as a seller or a winning bidder).'),
   uploadedDocuments: z.array(z.string()).describe('A list of document types the user has uploaded (e.g., "npwp", "siup", "legal_entity_deed").'),
+  requestingRole: z.string().describe('The role of the user making the request (e.g., "admin", "partner", "bidder").'),
 });
 export type CheckExporterEligibilityInput = z.infer<typeof CheckExporterEligibilityInputSchema>;
 
@@ -62,6 +64,14 @@ const checkExporterEligibilityFlow = ai.defineFlow(
     outputSchema: CheckExporterEligibilityOutputSchema,
   },
   async (input) => {
+    // BACKEND ROLE VALIDATION EXAMPLE
+    // In a real app, you'd get the user role from a secure session/token, not from the input.
+    // This demonstrates how a backend endpoint would protect itself.
+    const allowedRoles: Role[] = ['admin', 'partner', 'exporter', 'producer', 'bidder'];
+    if (!allowedRoles.includes(input.requestingRole as Role)) {
+      throw new Error(`Unauthorized: Role '${input.requestingRole}' cannot perform this action.`);
+    }
+
     const {output} = await prompt(input);
     return output!;
   }

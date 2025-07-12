@@ -11,11 +11,13 @@ import { useToast } from '@/hooks/use-toast';
 import { checkExporterEligibility, CheckExporterEligibilityInput, CheckExporterEligibilityOutput } from '@/ai/flows/check-exporter-eligibility-flow';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/context/auth';
 
 
 export default function ExportPartnerPage() {
     const { t } = useI18n();
     const { toast } = useToast();
+    const { user } = useAuth();
     const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
     const [isCheckingEligibility, setIsCheckingEligibility] = useState(false);
     const [eligibilityResult, setEligibilityResult] = useState<CheckExporterEligibilityOutput | null>(null);
@@ -48,11 +50,13 @@ export default function ExportPartnerPage() {
         setIsCheckingEligibility(true);
         setEligibilityResult(null);
 
-        // Mock user data for the AI check
+        // In a real app, this data might come from the user's profile.
+        // The role is passed from the auth context for validation on the "backend".
         const userData: CheckExporterEligibilityInput = {
-            producerName: "PT Jaya Farm", // Example name, can be producer or bidder company
+            producerName: user?.name || "Anonymous User",
             successfulAuctions: 7, // Example value, meets the requirement
             uploadedDocuments: uploadedFiles,
+            requestingRole: user?.role || 'bidder', // Pass role for backend validation
         };
 
         try {
@@ -60,10 +64,11 @@ export default function ExportPartnerPage() {
             setEligibilityResult(result);
         } catch (error) {
             console.error("Error checking eligibility:", error);
+            const errorMessage = error instanceof Error ? error.message : t('ai_check_error_desc', 'Failed to check eligibility with AI. Please try again.');
             toast({
                 variant: 'destructive',
                 title: t('error'),
-                description: t('ai_check_error_desc', 'Failed to check eligibility with AI. Please try again.'),
+                description: errorMessage,
             });
         } finally {
             setIsCheckingEligibility(false);
@@ -161,7 +166,7 @@ export default function ExportPartnerPage() {
                         </div>
 
                         <div className="border-t pt-6 space-y-4">
-                            <Button size="lg" onClick={handleCheckEligibility} disabled={isCheckingEligibility}>
+                            <Button size="lg" onClick={handleCheckEligibility} disabled={isCheckingEligibility || !user}>
                                 {isCheckingEligibility ? (
                                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                 ) : (
@@ -169,6 +174,7 @@ export default function ExportPartnerPage() {
                                 )}
                                 {t('check_eligibility_with_ai', 'Check Eligibility with AI')}
                             </Button>
+                            {!user && <p className="text-xs text-muted-foreground">{t('log_in_to_check_eligibility', 'You must be logged in to check eligibility.')}</p>}
                             
                             {eligibilityResult && (
                                 <Alert variant={getResultVariant(eligibilityResult.status)}>
@@ -194,7 +200,7 @@ export default function ExportPartnerPage() {
                         </div>
 
                         <div className="border-t pt-6">
-                             <Button asChild size="lg">
+                             <Button asChild size="lg" disabled={eligibilityResult?.status !== 'eligible'}>
                                 <Link href="/dashboard/admin">
                                     {t('submit_for_admin_verification', 'Submit for Admin Verification')}
                                 </Link>
