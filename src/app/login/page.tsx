@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -25,11 +26,8 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Call the login function from AuthContext.
-    // This will set the user object, including the role.
     login(email);
     
-    // Determine redirect path based on email prefix
     let path = '/dashboard/bidder'; // Default path
     if (email.startsWith('producer@')) {
       path = '/dashboard/producer';
@@ -55,7 +53,7 @@ export default function LoginPage() {
         const qrData = JSON.parse(data);
         if (qrData.userId && qrData.name && qrData.code && qrData.slug && qrData.role) {
              const userEmail = `${qrData.role.toLowerCase()}@agribid.com`;
-             login(userEmail); // Log the user in via context
+             login(userEmail);
              
              toast({
                 title: t('login_success_title'),
