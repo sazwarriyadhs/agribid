@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useI18n } from '@/context/i18n';
 import { AgriBidLogo } from '@/components/icons';
-import { Home, Users, Package, Gavel, Settings, Handshake, Plane, BarChart2, List, UploadCloud } from 'lucide-react';
+import { Home, Users, Package, Gavel, Handshake, Plane, BarChart2, UploadCloud } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
@@ -55,15 +55,14 @@ function DashboardSidebar() {
     const { t } = useI18n();
     const pathname = usePathname();
     
-    // Determine role from the URL, default to 'bidder' if it's just /dashboard
     const pathSegments = pathname.split('/');
-    const role = pathSegments.length > 2 && pathSegments[2] in roleNavigations ? pathSegments[2] : 'bidder';
+    const role = pathSegments[2] in roleNavigations ? pathSegments[2] : 'bidder';
     const menuItems = roleNavigations[role] || roleNavigations['bidder'];
 
     return (
         <Sidebar>
             <SidebarHeader>
-                 <Link href="/" className="flex items-center justify-between p-2">
+                 <Link href="/" className="flex items-center justify-center p-2">
                     <AgriBidLogo className="h-10" />
                 </Link>
             </SidebarHeader>
