@@ -3,11 +3,9 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useI18n } from '@/context/i18n';
-import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck } from 'lucide-react';
+import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ExportPartnerPage() {
     const { t } = useI18n();
@@ -19,10 +17,10 @@ export default function ExportPartnerPage() {
     ];
 
     const howItWorks = [
-        { icon: FileText, title: "step_1_title", description: "step_1_desc" },
-        { icon: ShieldCheck, title: "step_2_title", description: "step_2_desc" },
-        { icon: UserCheck, title: "step_3_title_export", description: "step_3_desc_export" },
-        { icon: Plane, title: "step_4_title_export", description: "step_4_desc_export" },
+        { icon: UserCheck, title: "exporter_step_1_title", description: "exporter_step_1_desc" },
+        { icon: Award, title: "exporter_step_2_title", description: "exporter_step_2_desc" },
+        { icon: FileText, title: "exporter_step_3_title", description: "exporter_step_3_desc" },
+        { icon: Plane, title: "exporter_step_4_title", description: "exporter_step_4_desc" },
     ];
 
     return (
@@ -58,7 +56,7 @@ export default function ExportPartnerPage() {
             <section className="py-16 bg-secondary/50 rounded-xl">
                  <div className="container px-4 md:px-6">
                     <h2 className="text-3xl font-bold text-center font-headline">{t('how_it_works_title_export')}</h2>
-                    <p className="text-center text-muted-foreground mt-2 mb-12">{t('how_it_works_subtitle_export')}</p>
+                    <p className="text-center text-muted-foreground mt-2 mb-12">{t('how_it_works_subtitle_exporter')}</p>
                     <div className="relative">
                         <div className="absolute left-1/2 top-10 bottom-10 w-0.5 bg-border -translate-x-1/2 hidden md:block"></div>
                         {howItWorks.map((step, index) => (
@@ -86,35 +84,19 @@ export default function ExportPartnerPage() {
                 </div>
             </section>
             
-            <section id="apply" className="py-16">
+            <section id="apply" className="py-16 text-center">
                 <Card className="max-w-2xl mx-auto">
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-3xl font-bold font-headline">{t('join_program_title')}</CardTitle>
-                        <CardDescription>{t('join_program_desc')}</CardDescription>
+                    <CardHeader>
+                        <CardTitle className="text-3xl font-bold font-headline">{t('ready_to_become_producer')}</CardTitle>
+                        <CardDescription>{t('start_your_journey_now')}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form className="grid gap-4">
-                            <div className="grid gap-2">
-                                <Label htmlFor="company-name">{t('company_name')}</Label>
-                                <Input id="company-name" placeholder={t('company_name_placeholder')} required />
-                            </div>
-                             <div className="grid gap-2">
-                                <Label htmlFor="contact-name">{t('contact_name')}</Label>
-                                <Input id="contact-name" placeholder={t('contact_name_placeholder')} required />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">{t('email_address')}</Label>
-                                <Input id="email" type="email" placeholder="m@example.com" required />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="products">{t('products_to_export')}</Label>
-                                <Textarea id="products" placeholder={t('products_to_export_placeholder')} required />
-                            </div>
-                            <Button type="submit" size="lg" className="w-full mt-2">
-                                <CheckCircle className="mr-2 h-5 w-5" />
-                                {t('submit_application')}
-                            </Button>
-                        </form>
+                        <Button asChild size="lg">
+                            <Link href="/signup">
+                                <UserCheck className="mr-2 h-5 w-5" />
+                                {t('become_a_producer')}
+                            </Link>
+                        </Button>
                     </CardContent>
                 </Card>
             </section>
