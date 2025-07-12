@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, BarChart2, FilePlus, ShieldCheck, BookUser, Building, Tractor } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, BarChart2, FilePlus, ShieldCheck, BookUser, Building, Tractor, DollarSign, Search } from 'lucide-react';
 
 export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter";
 
@@ -14,12 +14,11 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
   seller: [ 
     { name: "Dashboard", path: "/dashboard/seller", icon: LayoutDashboard, labelKey: 'dashboard' },
     { name: "Create New Auction", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
-    { name: "My Products", path: "/dashboard/seller", icon: Tractor, labelKey: 'my_products' },
   ],
   buyer: [
     { name: "Dashboard", path: "/dashboard/buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
-    { name: "Active Auctions", path: "/#featured-auctions", icon: Gavel, labelKey: 'auctions' },
-    { name: "My Bids", path: "/dashboard/buyer", icon: BarChart2, labelKey: 'my_bids' },
+    { name: "Active Auctions", path: "/#featured-auctions", icon: Search, labelKey: 'auctions' },
+    { name: "My Bids", path: "/dashboard/buyer", icon: Gavel, labelKey: 'my_bids' },
   ],
   admin: [
     { name: "Overview", path: "/dashboard/admin", icon: LayoutDashboard, labelKey: 'admin_dashboard_title' },
@@ -37,7 +36,7 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
   ]
 };
 
-export const dashboardLabel = {
+export const dashboardLabel: { [key: string]: string } = {
   admin: "Dashboard Admin",
   petani: "Dashboard Petani",
   nelayan: "Dashboard Nelayan",
@@ -47,4 +46,5 @@ export const dashboardLabel = {
   eksportir: "Dashboard Ekspor",
   mitra: "Dashboard Vendor",
   buyer: "Dashboard Pembeli",
+  default: "Dashboard"
 };
