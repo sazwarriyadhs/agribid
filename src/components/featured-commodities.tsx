@@ -1,6 +1,6 @@
 'use client';
 import { useI18n } from '@/context/i18n';
-import { Wheat, Leaf, Coffee, Sprout, Layers, CookingPot, Grape, Carrot, Shell, Square, CigaretteOff, Milk, UtensilsCross, Waves } from 'lucide-react';
+import { Wheat, Leaf, Coffee, Sprout, Layers, CookingPot, Grape, Carrot, Shell, Square, CigaretteOff, Milk, UtensilsCrossed, Waves } from 'lucide-react';
 
 const commodities = [
     { key: "rice", Icon: Wheat },
@@ -13,7 +13,7 @@ const commodities = [
     { key: "cassava", Icon: Shell },
     { key: "sweet_potato", Icon: Carrot },
     { key: "corn", Icon: Square },
-    { key: "tea", Icon: UtensilsCross },
+    { key: "tea", Icon: UtensilsCrossed },
     { key: "sugarcane", Icon: Milk },
     { key: "coconut", Icon: Waves },
     { key: "tobacco", Icon: CigaretteOff },
