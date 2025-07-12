@@ -265,5 +265,5 @@
   "bid_placed_title": "Bid Placed Successfully",
   "bid_placed_desc": "Your bid of {{amount}} has been recorded.",
   "payment_info_title": "Payment Information",
-  "payment_info_desc": "All transactions are processed through the joint account: BCA 5735434656 a/n Azwar Riyadh Subarkah (admin)."
+  "payment_info_desc": "All transactions are processed through the joint account: BCA 5735434656 a/n Azwar Riyadh Subarkah (admin). An administration fee of 10% will be applied to the final transaction amount."
 }
