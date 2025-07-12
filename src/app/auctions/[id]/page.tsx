@@ -9,8 +9,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Gavel, Heart, Info, Timer } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useI18n } from '@/context/i18n'
+import { useToast } from '@/hooks/use-toast'
 
-const auctionItem = {
+const initialAuctionItem = {
   id: '1',
   name: 'Organic Wheat Harvest - 10 Tons',
   name_id: 'Panen Gandum Organik - 10 Ton',
@@ -30,7 +31,7 @@ const auctionItem = {
   shipping_id: 'FOB (Freight on Board). Pembeli mengatur pengiriman dari fasilitas kami.',
 }
 
-const bidHistory = [
+const initialBidHistory = [
   { user: 'Bakery Co.', avatar: 'B', bid: 4500, time: '2 minutes ago', time_id: '2 menit yang lalu' },
   { user: 'Mill & Co.', avatar: 'M', bid: 4400, time: '15 minutes ago', time_id: '15 menit yang lalu' },
   { user: 'Artisan Breads', avatar: 'A', bid: 4300, time: '1 hour ago', time_id: '1 jam yang lalu' },
@@ -39,7 +40,13 @@ const bidHistory = [
 
 export default function AuctionPage({ params }: { params: { id: string } }) {
   const [timeLeft, setTimeLeft] = useState('');
+  const [auctionItem, setAuctionItem] = useState(initialAuctionItem);
+  const [bidHistory, setBidHistory] = useState(initialBidHistory);
+  const [bidAmount, setBidAmount] = useState<number | string>('');
+  const { toast } = useToast();
   const { t, formatCurrency, language } = useI18n();
+  
+  const minBidAmount = auctionItem.currentBid + auctionItem.bidIncrement;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -65,7 +72,41 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [t, language]);
+  }, [t, language, auctionItem.endDate]);
+
+  const handlePlaceBid = (e: React.FormEvent) => {
+    e.preventDefault();
+    const bidValue = Number(bidAmount);
+
+    if (bidValue < minBidAmount) {
+        toast({
+            variant: 'destructive',
+            title: t('error'),
+            description: t('bid_must_be_higher', { amount: formatCurrency(minBidAmount) }),
+        });
+        return;
+    }
+    
+    // In a real app, this would be a server action
+    // For now, we simulate the update on the client
+    const newBid = {
+        user: 'You',
+        user_id: 'Anda',
+        avatar: 'Y',
+        bid: bidValue,
+        time: 'Just now',
+        time_id: 'Baru saja'
+    };
+
+    setAuctionItem(prev => ({ ...prev, currentBid: bidValue }));
+    setBidHistory(prev => [newBid, ...prev]);
+    setBidAmount(''); // Reset input
+
+    toast({
+        title: t('bid_placed_title'),
+        description: t('bid_placed_desc', { amount: formatCurrency(bidValue) }),
+    });
+  }
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
@@ -99,15 +140,18 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                              <p className="text-2xl font-bold text-accent">{timeLeft || "Loading..."}</p>
                         </div>
                     </div>
-                    <form className="grid sm:grid-cols-3 gap-3">
+                    <form onSubmit={handlePlaceBid} className="grid sm:grid-cols-3 gap-3">
                         <Input 
                             type="number" 
-                            placeholder={`${formatCurrency(auctionItem.currentBid + auctionItem.bidIncrement)} or more`} 
+                            placeholder={t('bid_placeholder', { amount: formatCurrency(minBidAmount) })} 
                             className="sm:col-span-2 text-lg h-12"
-                            min={auctionItem.currentBid + auctionItem.bidIncrement}
+                            value={bidAmount}
+                            onChange={(e) => setBidAmount(e.target.value)}
+                            min={minBidAmount}
                             step={auctionItem.bidIncrement}
+                            required
                         />
-                        <Button size="lg" className="w-full h-12 text-lg">
+                        <Button size="lg" className="w-full h-12 text-lg" type="submit">
                             <Gavel className="mr-2 h-5 w-5" />
                             {t('place_bid')}
                         </Button>
@@ -147,7 +191,7 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                                                     <AvatarImage src={`https://placehold.co/100x100.png?text=${bid.avatar}`} />
                                                     <AvatarFallback>{bid.avatar}</AvatarFallback>
                                                 </Avatar>
-                                                {bid.user}
+                                                {language === 'id' && bid.user_id ? bid.user_id : bid.user}
                                             </TableCell>
                                             <TableCell className="text-right font-mono">{formatCurrency(bid.bid)}</TableCell>
                                             <TableCell className="text-right text-muted-foreground">{language === 'id' ? bid.time_id : bid.time}</TableCell>

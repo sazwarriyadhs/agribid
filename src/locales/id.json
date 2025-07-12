@@ -259,5 +259,9 @@
   "change_photo": "Ganti Foto",
   "update_product_button": "Perbarui Produk",
   "product_updated_title": "Produk Diperbarui",
-  "product_updated_desc": "Produk Anda telah berhasil diperbarui."
+  "product_updated_desc": "Produk Anda telah berhasil diperbarui.",
+  "bid_placeholder": "{{amount}} atau lebih",
+  "bid_must_be_higher": "Tawaran Anda harus setidaknya {{amount}}.",
+  "bid_placed_title": "Tawaran Berhasil Diajukan",
+  "bid_placed_desc": "Tawaran Anda sebesar {{amount}} telah dicatat."
 }

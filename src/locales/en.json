@@ -259,5 +259,9 @@
   "change_photo": "Change Photo",
   "update_product_button": "Update Product",
   "product_updated_title": "Product Updated",
-  "product_updated_desc": "Your product has been successfully updated."
+  "product_updated_desc": "Your product has been successfully updated.",
+  "bid_placeholder": "{{amount}} or more",
+  "bid_must_be_higher": "Your bid must be at least {{amount}}.",
+  "bid_placed_title": "Bid Placed Successfully",
+  "bid_placed_desc": "Your bid of {{amount}} has been recorded."
 }
