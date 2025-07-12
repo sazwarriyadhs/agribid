@@ -1,7 +1,8 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useI18n } from '@/context/i18n';
-import { Upload, Sparkles, Send, Loader2 } from 'lucide-react';
+import { Upload, Sparkles, Send, Loader2, Save } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
 
@@ -24,26 +25,56 @@ const categories = [
     { key: "forestry_products", label: "Forestry Products" },
 ];
 
-export default function SellPage() {
+// Mock data store for products, in a real app this would be a database.
+const mockProducts = [
+  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', stock: '10 Ton', category: 'Grains', description: 'Premium quality organic hard red winter wheat harvest, perfect for artisan breads.', image: 'https://placehold.co/600x400.png', price: 4500 },
+];
+
+
+function SellPageContents() {
     const { t, formatCurrency } = useI18n();
     const { toast } = useToast();
+    const searchParams = useSearchParams();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [productId, setProductId] = useState<string | null>(null);
+
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [imageDataUri, setImageDataUri] = useState<string | null>(null);
-    const [suggestedPrice, setSuggestedPrice] = useState<number | null>(null);
+    const [price, setPrice] = useState<number | null>(null);
+    
     const [isSuggestingPrice, setIsSuggestingPrice] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const editId = searchParams.get('edit');
+        if (editId) {
+            const productToEdit = mockProducts.find(p => p.id === editId);
+            if (productToEdit) {
+                setIsEditMode(true);
+                setProductId(productToEdit.id);
+                setProductName(productToEdit.name);
+                setDescription(productToEdit.description);
+                setCategory(productToEdit.category);
+                setImagePreview(productToEdit.image);
+                setImageDataUri(productToEdit.image);
+                setPrice(productToEdit.price);
+            }
+        }
+    }, [searchParams]);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-                setImageDataUri(reader.result as string);
+                const result = reader.result as string;
+                setImagePreview(result);
+                setImageDataUri(result);
             };
             reader.readAsDataURL(file);
         }
@@ -60,7 +91,7 @@ export default function SellPage() {
         }
 
         setIsSuggestingPrice(true);
-        setSuggestedPrice(null);
+        setPrice(null);
 
         try {
             const input: SuggestPriceInput = {
@@ -70,7 +101,7 @@ export default function SellPage() {
                 photoDataUri: imageDataUri,
             };
             const result = await suggestPrice(input);
-            setSuggestedPrice(result.suggestedPrice);
+            setPrice(result.suggestedPrice);
             toast({
                 title: t('price_suggestion_success_title'),
                 description: t('price_suggestion_success_desc'),
@@ -90,41 +121,46 @@ export default function SellPage() {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
-        // Here you would typically send the data to your backend for admin verification
-        console.log({
-            productName,
-            description,
-            category,
-            imageDataUri,
-            price: suggestedPrice // or a manually entered price
-        });
         
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-        toast({
-            title: t('product_submitted_title'),
-            description: t('product_submitted_desc'),
-        });
-        
-        // Reset form
-        setProductName('');
-        setDescription('');
-        setCategory('');
-        setImagePreview(null);
-        setImageDataUri(null);
-        setSuggestedPrice(null);
-        if(fileInputRef.current) fileInputRef.current.value = '';
+        if (isEditMode) {
+            toast({
+                title: t('product_updated_title', 'Product Updated'),
+                description: t('product_updated_desc', `"${productName}" has been successfully updated.`),
+            });
+        } else {
+            toast({
+                title: t('product_submitted_title'),
+                description: t('product_submitted_desc'),
+            });
+            // Reset form only on create
+            setProductName('');
+            setDescription('');
+            setCategory('');
+            setImagePreview(null);
+            setImageDataUri(null);
+            setPrice(null);
+            if(fileInputRef.current) fileInputRef.current.value = '';
+        }
 
         setIsSubmitting(false);
     };
+    
+    const priceDisplayValue = price ? formatCurrency(price) : (isEditMode ? t('click_suggest_button') : '');
+
 
     return (
         <div className="container mx-auto max-w-3xl px-4 py-8 md:py-16">
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-3xl font-bold font-headline">{t('sell_your_product_title')}</CardTitle>
-                    <CardDescription>{t('sell_your_product_desc')}</CardDescription>
+                    <CardTitle className="text-3xl font-bold font-headline">
+                        {isEditMode ? t('edit_product_title', 'Edit Product') : t('sell_your_product_title')}
+                    </CardTitle>
+                    <CardDescription>
+                        {isEditMode ? t('edit_product_desc', 'Update the details for your product listing.') : t('sell_your_product_desc')}
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="grid gap-6">
@@ -164,16 +200,27 @@ export default function SellPage() {
                                         </>
                                     )}
                                      <Button type="button" variant="outline" className="mt-4" onClick={() => fileInputRef.current?.click()}>
-                                        {t('browse_files')}
+                                        {imagePreview ? t('change_photo', 'Change Photo') : t('browse_files')}
                                     </Button>
-                                    <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleImageChange} required />
+                                    <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleImageChange} required={!isEditMode} />
                                 </CardContent>
                             </Card>
                         </div>
                         <div className="grid sm:grid-cols-2 gap-4 items-end">
-                            <div className="grid gap-2">
-                                <Label htmlFor="starting-price">{t('suggested_starting_bid')}</Label>
-                                <Input id="starting-price" type="text" value={suggestedPrice ? formatCurrency(suggestedPrice) : ''} readOnly placeholder={t('click_suggest_button')} className="font-bold text-lg" />
+                             <div className="grid gap-2">
+                                <Label htmlFor="starting-price">{t('starting_bid')}</Label>
+                                <Input 
+                                    id="starting-price" 
+                                    type="text" 
+                                    value={priceDisplayValue}
+                                    readOnly={!!price} 
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/[^0-9]/g, '');
+                                        setPrice(value ? parseInt(value, 10) : null);
+                                    }}
+                                    placeholder={t('click_suggest_button')} 
+                                    className="font-bold text-lg" 
+                                />
                             </div>
                             <Button type="button" variant="outline" onClick={handleSuggestPrice} disabled={isSuggestingPrice}>
                                 {isSuggestingPrice ? (
@@ -184,18 +231,27 @@ export default function SellPage() {
                                 {t('suggest_price_with_ai')}
                             </Button>
                         </div>
-                         <Button type="submit" size="lg" className="w-full mt-2" disabled={isSubmitting || !suggestedPrice}>
+                         <Button type="submit" size="lg" className="w-full mt-2" disabled={isSubmitting || (!price && !isEditMode)}>
                             {isSubmitting ? (
                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
-                               <Send className="mr-2 h-5 w-5" />
+                               isEditMode ? <Save className="mr-2 h-5 w-5" /> : <Send className="mr-2 h-5 w-5" />
                             )}
-                            {t('submit_for_verification')}
+                            {isEditMode ? t('update_product_button', 'Update Product') : t('submit_for_verification')}
                         </Button>
-                        <p className="text-xs text-muted-foreground text-center">{t('admin_verification_note')}</p>
+                        {!isEditMode && <p className="text-xs text-muted-foreground text-center">{t('admin_verification_note')}</p>}
                     </form>
                 </CardContent>
             </Card>
         </div>
     );
+}
+
+
+export default function SellPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SellPageContents />
+        </Suspense>
+    )
 }

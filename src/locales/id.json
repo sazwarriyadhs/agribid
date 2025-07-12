@@ -35,7 +35,7 @@
   "amount": "Jumlah",
   "time": "Waktu",
   "origin": "Asal",
-  "starting_bid": "Tawaran Awal",
+  "starting_bid": "Harga Awal",
   "shipping_terms": "Syarat Pengiriman",
   "auction_id": "ID Lelang",
   "auction_ended": "Lelang Berakhir",
@@ -145,7 +145,7 @@
   "product_photo": "Foto Produk",
   "drag_and_drop_or": "Seret & lepas atau",
   "browse_files": "Cari File",
-  "suggested_starting_bid": "Saran Harga Awal",
+  "suggested_starting_bid": "Harga Awal",
   "click_suggest_button": "Klik tombol saran harga...",
   "suggest_price_with_ai": "Sarankan Harga dengan AI",
   "submit_for_verification": "Kirim untuk Verifikasi",
@@ -250,5 +250,14 @@
   "product_rejected": "Produk Ditolak",
   "view_details": "Lihat Detail",
   "suspend_user": "Tangguhkan Pengguna",
-  "delete_user": "Hapus Pengguna"
+  "delete_user": "Hapus Pengguna",
+  "add_new_product": "Tambah Produk Baru",
+  "edit_product": "Ubah",
+  "delete_product": "Hapus",
+  "edit_product_title": "Ubah Produk",
+  "edit_product_desc": "Perbarui detail untuk daftar produk Anda.",
+  "change_photo": "Ganti Foto",
+  "update_product_button": "Perbarui Produk",
+  "product_updated_title": "Produk Diperbarui",
+  "product_updated_desc": "Produk Anda telah berhasil diperbarui."
 }

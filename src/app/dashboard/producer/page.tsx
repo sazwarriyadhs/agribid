@@ -1,21 +1,38 @@
 
 'use client';
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
+import { MoreHorizontal, PlusCircle } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 
-const producerProducts = [
-  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton' },
-  { id: '2', name: 'Fresh Atlantic Salmon', name_id: 'Salmon Atlantik Segar', status: 'Ended', status_id: 'Selesai', stock: '5 Ton' },
-  { id: '3', name: 'Palm Oil Kernels', name_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 m³' },
+const initialProducerProducts = [
+  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton', category: 'Grains', description: 'Premium quality organic hard red winter wheat...' },
+  { id: '2', name: 'Fresh Atlantic Salmon', name_id: 'Salmon Atlantik Segar', status: 'Ended', status_id: 'Selesai', stock: '5 Ton', category: 'Marine Fishery', description: 'Sustainably farmed Atlantic salmon...' },
+  { id: '3', name: 'Palm Oil Kernels', name_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 m³', category: 'Plantation', description: 'High-quality palm oil kernels for processing...' },
 ];
 
 export default function ProducerDashboardPage() {
     const { t, language } = useI18n();
+    const { toast } = useToast();
+    const [producerProducts, setProducerProducts] = useState(initialProducerProducts);
+
+    const handleDeleteProduct = (productId: string) => {
+        const product = producerProducts.find(p => p.id === productId);
+        setProducerProducts(producerProducts.filter(p => p.id !== productId));
+        toast({
+            title: "Product Deleted",
+            description: `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`,
+            variant: "destructive"
+        })
+    };
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -32,9 +49,17 @@ export default function ProducerDashboardPage() {
 
     return (
         <>
-            <header className="mb-8">
-                <h1 className="text-4xl font-bold font-headline">{t('producer_dashboard_title')}</h1>
-                <p className="text-muted-foreground">{t('producer_dashboard_desc')}</p>
+            <header className="mb-8 flex items-center justify-between">
+                <div>
+                    <h1 className="text-4xl font-bold font-headline">{t('producer_dashboard_title')}</h1>
+                    <p className="text-muted-foreground">{t('producer_dashboard_desc')}</p>
+                </div>
+                <Button asChild>
+                    <Link href="/sell">
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        {t('add_new_product', 'Add New Product')}
+                    </Link>
+                </Button>
             </header>
             <Card>
                 <CardHeader>
@@ -58,11 +83,44 @@ export default function ProducerDashboardPage() {
                         <TableCell><Badge variant={getStatusVariant(language === 'id' ? prod.status_id : prod.status)}>{getStatusText(prod)}</Badge></TableCell>
                         <TableCell>{prod.stock}</TableCell>
                         <TableCell className="text-right">
-                             <Button asChild variant="ghost" size="sm">
-                                <Link href={`/auctions/${prod.id}`}>
-                                    {t('manage')}
-                                </Link>
-                             </Button>
+                             <AlertDialog>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="h-8 w-8 p-0">
+                                            <span className="sr-only">Open menu</span>
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
+                                        <DropdownMenuItem asChild>
+                                            <Link href={`/auctions/${prod.id}`}>{t('view_auction')}</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild>
+                                            <Link href={`/sell?edit=${prod.id}`}>{t('edit_product', 'Edit')}</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <AlertDialogTrigger asChild>
+                                            <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                                                {t('delete_product', 'Delete')}
+                                            </DropdownMenuItem>
+                                        </AlertDialogTrigger>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete the product
+                                            "{language === 'id' ? prod.name_id : prod.name}".
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => handleDeleteProduct(prod.id)}>Continue</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                             </AlertDialog>
                         </TableCell>
                         </TableRow>
                     ))}
