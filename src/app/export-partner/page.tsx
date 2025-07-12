@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useI18n } from '@/context/i18n';
-import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award, Upload, FileUp, Sparkles, Loader2 } from 'lucide-react';
+import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award, FileUp, Sparkles, Loader2, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -27,7 +27,7 @@ export default function ExportPartnerPage() {
     ];
 
     const howItWorks = [
-        { icon: UserCheck, title: "exporter_step_1_title", description: "exporter_step_1_desc" },
+        { icon: Users, title: "exporter_step_1_title", description: "exporter_step_1_desc" },
         { icon: Award, title: "exporter_step_2_title", description: "exporter_step_2_desc" },
         { icon: FileUp, title: "exporter_step_3_title", description: "exporter_step_3_desc" },
         { icon: Plane, title: "exporter_step_4_title", description: "exporter_step_4_desc" },
@@ -48,15 +48,15 @@ export default function ExportPartnerPage() {
         setIsCheckingEligibility(true);
         setEligibilityResult(null);
 
-        // Mock producer data for the AI check
-        const producerData: CheckExporterEligibilityInput = {
-            producerName: "PT Jaya Farm", // Example name
+        // Mock user data for the AI check
+        const userData: CheckExporterEligibilityInput = {
+            producerName: "PT Jaya Farm", // Example name, can be producer or bidder company
             successfulAuctions: 7, // Example value, meets the requirement
             uploadedDocuments: uploadedFiles,
         };
 
         try {
-            const result = await checkExporterEligibility(producerData);
+            const result = await checkExporterEligibility(userData);
             setEligibilityResult(result);
         } catch (error) {
             console.error("Error checking eligibility:", error);
