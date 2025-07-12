@@ -36,3 +36,15 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
       { name: "Mentored Producers", path: "/dashboard/exporter", icon: BookUser, labelKey: 'mentored_producers_title' },
   ]
 };
+
+export const dashboardLabel = {
+  admin: "Dashboard Admin",
+  petani: "Dashboard Petani",
+  nelayan: "Dashboard Nelayan",
+  peternak: "Dashboard Peternak",
+  peladang: "Dashboard Peladang",
+  "pengolah hasil hutan": "Dashboard Kehutanan",
+  eksportir: "Dashboard Ekspor",
+  mitra: "Dashboard Vendor",
+  buyer: "Dashboard Pembeli",
+};

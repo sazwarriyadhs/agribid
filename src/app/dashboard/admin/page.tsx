@@ -11,6 +11,8 @@ import { useI18n } from "@/context/i18n";
 import Image from "next/image";
 import { useToast } from '@/hooks/use-toast';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/context/auth';
+import { dashboardLabel } from '@/config/sidebar';
 
 const stats = [
     { title: "total_users", value: "1,250", icon: Users },
@@ -33,8 +35,12 @@ const initialAllUsers = [
 export default function AdminDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
+    const { user } = useAuth();
     const [pendingProducts, setPendingProducts] = useState(initialPendingProducts);
     const [allUsers, setAllUsers] = useState(initialAllUsers);
+    
+    const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('admin_dashboard_title') : t('admin_dashboard_title');
+
 
     const handleProductVerification = (productId: string, action: 'approve' | 'reject') => {
         const product = pendingProducts.find(p => p.id === productId);
@@ -87,7 +93,7 @@ export default function AdminDashboardPage() {
     return (
         <>
             <header>
-                <h1 className="text-3xl font-bold tracking-tight">{t('admin_dashboard_title', 'Overview')}</h1>
+                <h1 className="text-3xl font-bold tracking-tight">{pageTitle}</h1>
                 <p className="text-muted-foreground">{t('admin_dashboard_desc')}</p>
             </header>
 

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
@@ -5,9 +6,9 @@ import type { Role } from '@/config/sidebar';
 
 interface User {
   id: string;
-  name: string;
+  name: string; // Will store the specific role, e.g., 'petani', 'buyer'
   email: string;
-  role: Role;
+  role: Role; // Will store the abstract role, e.g., 'seller', 'buyer'
 }
 
 interface AuthContextType {
@@ -23,9 +24,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (email: string): Role | null => {
     let role: Role = 'buyer'; // Default role
-    const emailPrefix = email.split('@')[0];
+    const emailPrefix = email.split('@')[0].toLowerCase();
     
-    // New role mapping based on detailed user types
     const sellerRoles = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah hasil hutan'];
     if (sellerRoles.includes(emailPrefix)) {
         role = 'seller';
@@ -37,19 +37,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         role = 'exporter';
     } else if (emailPrefix === 'buyer') {
         role = 'buyer';
-    } else if (email.startsWith('producer@')) { // Keep old ones for fallback
-        role = 'seller';
-    } else if (email.startsWith('bidder@')) {
-        role = 'buyer';
-    } else if (email.startsWith('partner@')) {
-        role = 'vendor';
-    } else if (email.startsWith('exporter@')) {
-        role = 'exporter';
     }
 
     const mockUser: User = {
       id: 'usr_123',
-      name: email.split('@')[0].replace(/^\w/, c => c.toUpperCase()),
+      name: emailPrefix, // Use email prefix as the specific role name
       email: email,
       role: role,
     };

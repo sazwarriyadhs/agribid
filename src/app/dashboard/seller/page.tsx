@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -11,6 +12,8 @@ import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth";
+import { dashboardLabel } from "@/config/sidebar";
 
 const initialSellerProducts = [
   { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton', category: 'Grains', description: 'Premium quality organic hard red winter wheat...' },
@@ -21,7 +24,10 @@ const initialSellerProducts = [
 export default function SellerDashboardPage() {
     const { t, language } = useI18n();
     const { toast } = useToast();
+    const { user } = useAuth();
     const [sellerProducts, setSellerProducts] = useState(initialSellerProducts);
+
+    const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('seller_dashboard_title') : t('seller_dashboard_title');
 
     const handleDeleteProduct = (productId: string) => {
         const product = sellerProducts.find(p => p.id === productId);
@@ -50,7 +56,7 @@ export default function SellerDashboardPage() {
         <>
             <header className="mb-8 flex items-center justify-between">
                 <div>
-                    <h1 className="text-4xl font-bold font-headline">{t('seller_dashboard_title', 'Seller Dashboard')}</h1>
+                    <h1 className="text-4xl font-bold font-headline">{pageTitle}</h1>
                     <p className="text-muted-foreground">{t('seller_dashboard_desc', 'Manage your products and auctions.')}</p>
                 </div>
                 <Button asChild>

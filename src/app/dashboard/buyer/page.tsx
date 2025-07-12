@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,6 +8,8 @@ import { Gavel, Trophy, Banknote, Package } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useAuth } from "@/context/auth";
+import { dashboardLabel } from "@/config/sidebar";
 
 const buyerHistory = [
   { id: '1', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Winning', status_id: 'Unggul', amount: 4500 },
@@ -17,6 +20,10 @@ const buyerHistory = [
 
 export default function BuyerDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
+    const { user } = useAuth();
+
+    const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('buyer_dashboard_title') : t('buyer_dashboard_title');
+
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -32,17 +39,17 @@ export default function BuyerDashboardPage() {
     }
     
     const totalSpent = buyerHistory
-        .filter(bid => bid.status === 'Won')
+        .filter(bid => ['Won', 'Menang'].includes(bid.status) || ['Won', 'Menang'].includes(bid.status_id))
         .reduce((acc, bid) => acc + bid.amount, 0);
     
-    const auctionsWon = buyerHistory.filter(bid => bid.status === 'Won').length;
-    const activeBids = buyerHistory.filter(bid => bid.status === 'Winning').length;
+    const auctionsWon = buyerHistory.filter(bid => ['Won', 'Menang'].includes(bid.status) || ['Won', 'Menang'].includes(bid.status_id)).length;
+    const activeBids = buyerHistory.filter(bid => ['Winning', 'Unggul'].includes(bid.status) || ['Winning', 'Unggul'].includes(bid.status_id)).length;
 
 
     return (
         <>
              <header className="mb-8">
-                <h1 className="text-4xl font-bold font-headline">{t('buyer_dashboard_title', 'Buyer Dashboard')}</h1>
+                <h1 className="text-4xl font-bold font-headline">{pageTitle}</h1>
                 <p className="text-muted-foreground">{t('buyer_dashboard_desc', 'Track your bids and auction activity.')}</p>
             </header>
 

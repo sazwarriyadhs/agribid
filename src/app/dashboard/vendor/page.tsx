@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,6 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import { UserCheck, Calendar } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from 'next/link';
+import { useAuth } from "@/context/auth";
+import { dashboardLabel } from "@/config/sidebar";
 
 const verificationRequests = [
     { id: 'VER-001', producer: 'Jaya Farm', producer_id: 'Jaya Farm', date: '2024-07-15', status: 'Pending', status_id: 'Menunggu' },
@@ -15,6 +18,10 @@ const verificationRequests = [
 
 export default function VendorDashboardPage() {
     const { t, language } = useI18n();
+    const { user } = useAuth();
+    
+    const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('vendor_dashboard_title') : t('vendor_dashboard_title');
+
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -33,7 +40,7 @@ export default function VendorDashboardPage() {
     return (
         <>
             <header className="mb-8">
-                <h1 className="text-4xl font-bold font-headline">{t('vendor_dashboard_title', 'Vendor Dashboard')}</h1>
+                <h1 className="text-4xl font-bold font-headline">{pageTitle}</h1>
                 <p className="text-muted-foreground">{t('vendor_dashboard_desc', 'Manage your services and partnerships.')}</p>
             </header>
             <Card>

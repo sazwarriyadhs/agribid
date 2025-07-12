@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import { PackageCheck, BookUser } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from 'next/link';
+import { useAuth } from "@/context/auth";
+import { dashboardLabel } from "@/config/sidebar";
 
 const exportShipments = [
     { id: 'EXP-001', product: 'Kopi Arabika Gayo', product_id: 'Kopi Arabika Gayo', destination: 'USA', destination_id: 'AS', status: 'In Transit', status_id: 'Dalam Perjalanan' },
@@ -21,6 +23,9 @@ const mentoredProducers = [
 
 export default function ExporterDashboardPage() {
     const { t, language } = useI18n();
+    const { user } = useAuth();
+    
+    const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('exporter_dashboard_title') : t('exporter_dashboard_title');
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -39,7 +44,7 @@ export default function ExporterDashboardPage() {
     return (
         <>
             <header className="mb-8">
-                <h1 className="text-4xl font-bold font-headline">{t('exporter_dashboard_title')}</h1>
+                <h1 className="text-4xl font-bold font-headline">{pageTitle}</h1>
                 <p className="text-muted-foreground">{t('exporter_dashboard_desc')}</p>
             </header>
             
