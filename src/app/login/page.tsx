@@ -29,7 +29,6 @@ export default function LoginPage() {
     });
     // This is a simulation. In a real app, you'd get a token
     // and update a global state or cookie.
-    // We can simulate this by telling the header to update.
     // For now, we just redirect.
     router.push('/dashboard');
   };
@@ -68,7 +67,7 @@ export default function LoginPage() {
           <CardHeader>
             <CardTitle className="text-2xl font-headline">{t('log_in')}</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account
+              {t('login_page_desc', 'Enter your email below to login to your account or use QR code.')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -84,9 +83,9 @@ export default function LoginPage() {
               </div>
               <div className="grid gap-2">
                  <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('password', 'Password')}</Label>
                   <Link href="#" className="ml-auto inline-block text-sm underline">
-                    Forgot your password?
+                    {t('forgot_password', 'Forgot your password?')}
                   </Link>
                 </div>
                 <Input id="password" type="password" required />
@@ -100,17 +99,17 @@ export default function LoginPage() {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with
+                      {t('or_continue_with', 'Or continue with')}
                     </span>
                   </div>
                 </div>
               <Button variant="outline" className="w-full" type="button" onClick={() => setIsQrScannerOpen(true)}>
                 <QrCode className="mr-2 h-4 w-4" />
-                Login with QR
+                {t('login_with_qr', 'Login with QR')}
               </Button>
             </form>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
+              {t('dont_have_account', "Don't have an account?")}{' '}
               <Link href="/signup" className="underline">
                 {t('sign_up')}
               </Link>
