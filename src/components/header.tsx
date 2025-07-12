@@ -62,7 +62,7 @@ export function AppHeader() {
                 </DropdownMenuRadioGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>{t('change_currency')}</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={currency} onValueChange={(value) => setCurrency(value as 'idr' | 'usd')}>
+                <DropdownMenuRadioGroup value={currency} onValueChange={(value) => setCurrency(value as 'usd' | 'idr')}>
                     <DropdownMenuRadioItem value="idr">Rupiah (IDR)</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="usd">US Dollar (USD)</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>

@@ -26,17 +26,15 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    login(email);
+    const userRole = login(email); // login now returns the role
     
-    let path = '/dashboard/bidder'; // Default path
-    if (email.startsWith('producer@')) {
-      path = '/dashboard/producer';
-    } else if (email.startsWith('admin@')) {
-      path = '/dashboard/admin';
-    } else if (email.startsWith('partner@')) {
-      path = '/dashboard/partner';
-    } else if (email.startsWith('exporter@')) {
-      path = '/dashboard/exporter';
+    let path = '/dashboard/buyer'; // Default path
+    if (userRole) {
+      if (userRole === 'seller') path = '/dashboard/seller';
+      else if (userRole === 'vendor') path = '/dashboard/vendor';
+      else if (userRole === 'exporter') path = '/dashboard/exporter';
+      else if (userRole === 'admin') path = '/dashboard/admin';
+      else path = `/dashboard/${userRole}`; // For 'buyer'
     }
 
     toast({
@@ -83,7 +81,7 @@ export default function LoginPage() {
             <CardDescription>
               {t('login_page_desc', 'Enter your email below to login to your account.')}
               <br />
-              <span className="text-xs">Use role@agribid.com (e.g., producer@agribid.com)</span>
+              <span className="text-xs">Use role@agribid.com (e.g., petani@agribid.com)</span>
             </CardDescription>
           </CardHeader>
           <CardContent>

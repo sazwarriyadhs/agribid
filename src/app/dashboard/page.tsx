@@ -10,8 +10,8 @@ export default function DashboardRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to the default 'bidder' dashboard if someone lands here.
-    router.replace('/dashboard/bidder');
+    // Redirect to the default 'buyer' dashboard if someone lands here.
+    router.replace('/dashboard/buyer');
   }, [router]);
 
   return (

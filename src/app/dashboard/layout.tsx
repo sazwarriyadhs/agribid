@@ -25,8 +25,8 @@ function Sidebar() {
     const pathname = usePathname();
     const { user } = useAuth();
     
-    // Default to 'bidder' if no user is logged in, or if the role is not in the config.
-    const role: Role = (user?.role && user.role in sidebarByRole) ? user.role : 'bidder';
+    // Default to 'buyer' if no user is logged in, or if the role is not in the config.
+    const role: Role = (user?.role && user.role in sidebarByRole) ? user.role : 'buyer';
     const menuItems = sidebarByRole[role] || [];
 
     const getRoleTitle = (role: Role) => {
@@ -46,7 +46,7 @@ function Sidebar() {
                     <SidebarGroupLabel>{getRoleTitle(role)} {t('navigation')}</SidebarGroupLabel>
                     {menuItems.map((item: NavItem) => {
                         const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
-                        const isActive = pathname === item.path || (item.path !== '/dashboard' && pathname.startsWith(item.path));
+                        const isActive = pathname === item.path || (item.path !== `/dashboard/${role}` && item.path !== '/' && pathname.startsWith(item.path));
                         
                         // Create a unique key using path and name
                         const uniqueKey = `${item.path}-${item.name}`;
