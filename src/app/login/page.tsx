@@ -42,9 +42,13 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const userRole = login(email); // login now returns the role
-    const emailPrefix = email.split('@')[0];
+    // login() sets the user state and returns the user's role
+    const userRole = login(email);
+    
+    // The key for redirection is the part of the email before the '@'
+    const emailPrefix = email.split('@')[0].toLowerCase();
 
+    // Find the correct path from the redirect map, or use a fallback
     const path = dashboardRedirect[emailPrefix] || '/dashboard/buyer';
 
     toast({
@@ -52,6 +56,7 @@ export default function LoginPage() {
       description: t('login_success_desc'),
     });
     
+    // Redirect the user to the correct dashboard
     router.push(path);
   };
 
