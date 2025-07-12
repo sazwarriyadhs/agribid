@@ -263,5 +263,7 @@
   "bid_placeholder": "{{amount}} atau lebih",
   "bid_must_be_higher": "Tawaran Anda harus setidaknya {{amount}}.",
   "bid_placed_title": "Tawaran Berhasil Diajukan",
-  "bid_placed_desc": "Tawaran Anda sebesar {{amount}} telah dicatat."
+  "bid_placed_desc": "Tawaran Anda sebesar {{amount}} telah dicatat.",
+  "payment_info_title": "Informasi Pembayaran",
+  "payment_info_desc": "Semua transaksi pembayaran melalui rekening bersama: BCA 5735434656 a.n Azwar Riyadh Subarkah (admin)."
 }

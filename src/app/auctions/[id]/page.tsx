@@ -6,10 +6,11 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Gavel, Heart, Info, Timer } from 'lucide-react'
+import { Gavel, Heart, Info, Timer, Banknote } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const initialAuctionItem = {
   id: '1',
@@ -223,6 +224,15 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                                     <p className="font-medium text-muted-foreground">{t('auction_id')}</p>
                                     <p>#{params.id}</p>
                                 </div>
+                            </div>
+                             <div className="border-t pt-4">
+                                <Alert>
+                                    <Banknote className="h-4 w-4"/>
+                                    <AlertTitle className="font-semibold">{t('payment_info_title')}</AlertTitle>
+                                    <AlertDescription>
+                                        {t('payment_info_desc')}
+                                    </AlertDescription>
+                                </Alert>
                             </div>
                         </CardContent>
                     </Card>

@@ -4,9 +4,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Gavel, Trophy } from "lucide-react"
+import { Gavel, Trophy, Banknote } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const bidderHistory = [
   { id: '1', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Winning', status_id: 'Unggul', amount: 4500 },
@@ -36,6 +37,15 @@ export default function BidderDashboardPage() {
                 <h1 className="text-4xl font-bold font-headline">{t('bidder_dashboard_title')}</h1>
                 <p className="text-muted-foreground">{t('bidder_dashboard_desc')}</p>
             </header>
+
+             <Alert className="mb-8">
+                <Banknote className="h-4 w-4"/>
+                <AlertTitle className="font-semibold">{t('payment_info_title')}</AlertTitle>
+                <AlertDescription>
+                    {t('payment_info_desc')}
+                </AlertDescription>
+            </Alert>
+
             <Card>
                 <CardHeader>
                     <CardTitle className="font-headline text-2xl">{t('recent_bid_history')}</CardTitle>

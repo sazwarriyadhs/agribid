@@ -263,5 +263,7 @@
   "bid_placeholder": "{{amount}} or more",
   "bid_must_be_higher": "Your bid must be at least {{amount}}.",
   "bid_placed_title": "Bid Placed Successfully",
-  "bid_placed_desc": "Your bid of {{amount}} has been recorded."
+  "bid_placed_desc": "Your bid of {{amount}} has been recorded.",
+  "payment_info_title": "Payment Information",
+  "payment_info_desc": "All transactions are processed through the joint account: BCA 5735434656 a/n Azwar Riyadh Subarkah (admin)."
 }
