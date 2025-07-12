@@ -19,33 +19,40 @@ export default function LoginPage() {
   const router = useRouter();
   const { t } = useI18n();
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
-
+  const [email, setEmail] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Determine redirect path based on email
+    let path = '/dashboard/bidder'; // Default path
+    if (email.startsWith('producer@')) {
+      path = '/dashboard/producer';
+    } else if (email.startsWith('admin@')) {
+      path = '/dashboard/admin';
+    } else if (email.startsWith('partner@')) {
+      path = '/dashboard/partner';
+    } else if (email.startsWith('exporter@')) {
+      path = '/dashboard/exporter';
+    }
+
     toast({
       title: t('login_success_title'),
       description: t('login_success_desc'),
     });
-    // This is a simulation. In a real app, you'd get a token
-    // and update a global state or cookie.
-    // For now, we just redirect.
-    router.push('/dashboard');
+    
+    router.push(path);
   };
 
   const handleQrScanSuccess = (data: string) => {
     console.log('Scanned QR Data:', data);
-    // In a real app, you would verify the QR data (e.g., a token) with the backend
-    // For this demo, we'll assume the QR code contains a valid user identifier.
     try {
         const qrData = JSON.parse(data);
-        // Simple validation: check if required fields exist
         if (qrData.userId && qrData.name && qrData.code && qrData.slug) {
              toast({
                 title: t('login_success_title'),
                 description: `Welcome back, ${qrData.name}!`,
             });
-            // Redirect to the user's public profile page
             router.push(`/u/${qrData.code}/${qrData.slug}`);
         } else {
             throw new Error('Invalid QR code data');
@@ -68,6 +75,8 @@ export default function LoginPage() {
             <CardTitle className="text-2xl font-headline">{t('log_in')}</CardTitle>
             <CardDescription>
               {t('login_page_desc', 'Enter your email below to login to your account.')}
+              <br />
+              <span className="text-xs">Use role@agribid.com (e.g., producer@agribid.com)</span>
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -77,8 +86,9 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
-                  defaultValue="user@agribid.com"
+                  placeholder="role@agribid.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
