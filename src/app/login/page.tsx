@@ -24,9 +24,12 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Call the login function from AuthContext.
+    // This will set the user object, including the role.
     login(email);
     
-    // Determine redirect path based on email
+    // Determine redirect path based on email prefix
     let path = '/dashboard/bidder'; // Default path
     if (email.startsWith('producer@')) {
       path = '/dashboard/producer';
@@ -50,13 +53,15 @@ export default function LoginPage() {
     console.log('Scanned QR Data:', data);
     try {
         const qrData = JSON.parse(data);
-        if (qrData.userId && qrData.name && qrData.code && qrData.slug) {
+        if (qrData.userId && qrData.name && qrData.code && qrData.slug && qrData.role) {
+             const userEmail = `${qrData.role.toLowerCase()}@agribid.com`;
+             login(userEmail); // Log the user in via context
+             
              toast({
                 title: t('login_success_title'),
                 description: `Welcome back, ${qrData.name}!`,
             });
-            // Also log the user in
-            login(`${qrData.role.toLowerCase()}@agribid.com`);
+            
             router.push(`/u/${qrData.code}/${qrData.slug}`);
         } else {
             throw new Error('Invalid QR code data');

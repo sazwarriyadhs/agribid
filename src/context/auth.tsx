@@ -22,14 +22,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const login = (email: string) => {
-    // Determine role from email
+    // This is a mock login function. In a real app, you would validate credentials
+    // with a backend and the backend would return the user's data including their role.
+
+    // Determine role from email for this demo
     let role: Role = 'bidder'; // Default role
     if (email.startsWith('producer@')) role = 'producer';
     else if (email.startsWith('admin@')) role = 'admin';
     else if (email.startsWith('partner@')) role = 'partner';
     else if (email.startsWith('exporter@')) role = 'exporter';
 
-    // Mock user data
+    // Mock user data based on role
     const mockUser: User = {
       id: 'usr_123',
       name: email.split('@')[0].replace(/^\w/, c => c.toUpperCase()),
