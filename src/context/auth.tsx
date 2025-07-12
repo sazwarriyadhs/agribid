@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         role = 'admin';
     } else if (emailPrefix === 'mitra') {
         role = 'vendor';
-    } else if (emailPrefix === 'ekportir') {
+    } else if (emailPrefix === 'eksportir') {
         role = 'exporter';
     } else if (emailPrefix === 'buyer') {
         role = 'buyer';

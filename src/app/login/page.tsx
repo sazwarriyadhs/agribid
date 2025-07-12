@@ -14,6 +14,22 @@ import { useState } from 'react';
 import { QrScannerDialog } from '@/components/qr-scanner-dialog';
 import { useAuth } from '@/context/auth';
 
+const dashboardRedirect: Record<string, string> = {
+  admin: "/dashboard/admin",
+  petani: "/dashboard/seller",
+  nelayan: "/dashboard/seller",
+  peternak: "/dashboard/seller",
+  peladang: "/dashboard/seller",
+  "pengolah hasil hutan": "/dashboard/seller",
+  eksportir: "/dashboard/exporter",
+  mitra: "/dashboard/vendor",
+  buyer: "/dashboard/buyer",
+  producer: "/dashboard/seller", // fallback
+  bidder: "/dashboard/buyer", // fallback
+  partner: "/dashboard/vendor", // fallback
+  exporter: "/dashboard/exporter" // fallback
+};
+
 
 export default function LoginPage() {
   const { toast } = useToast();
@@ -27,15 +43,9 @@ export default function LoginPage() {
     e.preventDefault();
     
     const userRole = login(email); // login now returns the role
-    
-    let path = '/dashboard/buyer'; // Default path
-    if (userRole) {
-      if (userRole === 'seller') path = '/dashboard/seller';
-      else if (userRole === 'vendor') path = '/dashboard/vendor';
-      else if (userRole === 'exporter') path = '/dashboard/exporter';
-      else if (userRole === 'admin') path = '/dashboard/admin';
-      else path = `/dashboard/${userRole}`; // For 'buyer'
-    }
+    const emailPrefix = email.split('@')[0];
+
+    const path = dashboardRedirect[emailPrefix] || '/dashboard/buyer';
 
     toast({
       title: t('login_success_title'),
