@@ -26,16 +26,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     let role: Role = 'buyer'; // Default role
     const emailPrefix = email.split('@')[0].toLowerCase();
     
-    const sellerRoles = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah hasil hutan'];
+    const sellerRoles = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah hasil hutan', 'producer'];
     if (sellerRoles.includes(emailPrefix)) {
         role = 'seller';
     } else if (emailPrefix === 'admin') {
         role = 'admin';
-    } else if (emailPrefix === 'mitra') {
+    } else if (emailPrefix === 'mitra' || emailPrefix === 'partner') {
         role = 'vendor';
-    } else if (emailPrefix === 'eksportir') {
+    } else if (emailPrefix === 'eksportir' || emailPrefix === 'exporter') {
         role = 'exporter';
-    } else if (emailPrefix === 'buyer') {
+    } else if (emailPrefix === 'buyer' || emailPrefix === 'bidder') {
         role = 'buyer';
     }
 
