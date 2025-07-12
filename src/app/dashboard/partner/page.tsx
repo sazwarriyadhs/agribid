@@ -20,14 +20,14 @@ export default function PartnerDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'in transit', 'verified', 'terverifikasi'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered'].includes(s)) return 'secondary';
-        if (['pending', 'outbid', 'suspended', 'menunggu'].includes(s)) return 'destructive';
+        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terkirim'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
 
     const getStatusText = (request: typeof verificationRequests[0]) => {
-        const key = `status_${request.status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key, language === 'id' ? request.status_id : request.status);
+        const statusKey = `status_${(language === 'id' ? request.status_id : request.status).toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, language === 'id' ? request.status_id : request.status);
     }
 
     return (
@@ -59,7 +59,11 @@ export default function PartnerDashboardPage() {
                                         <TableCell>{req.date}</TableCell>
                                         <TableCell><Badge variant={getStatusVariant(language === 'id' ? req.status_id : req.status)}>{getStatusText(req)}</Badge></TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="outline" size="sm"><UserCheck className="mr-2"/>{t('review')}</Button>
+                                            <Button asChild variant="outline" size="sm">
+                                                <Link href="#">
+                                                    <UserCheck className="mr-2"/>{t('review')}
+                                                </Link>
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -70,7 +74,11 @@ export default function PartnerDashboardPage() {
                         <h3 className="text-lg font-semibold mb-2 mt-4">{t('mentoring_schedule')}</h3>
                         <Card className="flex items-center justify-between p-4">
                             <p>{t('mentoring_schedule_desc')}</p>
-                            <Button><Calendar className="mr-2"/>{t('view_schedule')}</Button>
+                             <Button asChild>
+                                <Link href="#">
+                                    <Calendar className="mr-2"/>{t('view_schedule')}
+                                </Link>
+                            </Button>
                         </Card>
                     </div>
                 </CardContent>
@@ -78,5 +86,3 @@ export default function PartnerDashboardPage() {
         </>
     )
 }
-
-    

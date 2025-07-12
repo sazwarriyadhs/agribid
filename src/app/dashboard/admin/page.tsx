@@ -10,7 +10,7 @@ import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal } from
 import { useI18n } from "@/context/i18n";
 import Image from "next/image";
 import { useToast } from '@/hooks/use-toast';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 
 const stats = [
     { title: "total_users", value: "1,250", icon: Users },
@@ -19,8 +19,8 @@ const stats = [
 ];
 
 const initialPendingProducts = [
-    { id: 'PROD-004', name: 'Robusta Coffee Beans', name_id: 'Biji Kopi Robusta', producer: 'Kintamani Highlands', image: 'https://placehold.co/100x100.png', category: 'Plantation' },
-    { id: 'PROD-005', name: 'Frozen Tuna Loin', name_id: 'Loin Tuna Beku', producer: 'Bahari Seafood', image: 'https://placehold.co/100x100.png', category: 'Marine Fishery' },
+    { id: 'PROD-004', name: 'Robusta Coffee Beans', name_id: 'Biji Kopi Robusta', producer: 'Kintamani Highlands', image: 'https://placehold.co/100x100.png', aiHint: 'coffee beans', category: 'Plantation' },
+    { id: 'PROD-005', name: 'Frozen Tuna Loin', name_id: 'Loin Tuna Beku', producer: 'Bahari Seafood', image: 'https://placehold.co/100x100.png', aiHint: 'tuna loin', category: 'Marine Fishery' },
 ];
 
 const initialAllUsers = [
@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
 
         toast({
             title: action === 'approve' ? t('product_approved') : t('product_rejected'),
-            description: `${language === 'id' ? product.name_id : product.name} has been ${action}.`,
+            description: `${language === 'id' ? product.name_id : product.name} has been ${action === 'approve' ? 'approved' : 'rejected'}.`,
         });
         setPendingProducts(currentProducts => currentProducts.filter(p => p.id !== productId));
     };
@@ -53,13 +53,13 @@ export default function AdminDashboardPage() {
 
         if (action === 'suspend') {
             toast({
-                title: 'User Suspended',
+                title: t('suspend_user'),
                 description: `${user.name} has been suspended.`,
             });
             setAllUsers(users => users.map(u => u.id === userId ? { ...u, status: 'Suspended', status_id: 'Ditangguhkan' } : u));
         } else if (action === 'delete') {
             toast({
-                title: 'User Deleted',
+                title: t('delete_user'),
                 description: `${user.name} has been deleted.`,
                 variant: 'destructive'
             });
@@ -69,26 +69,28 @@ export default function AdminDashboardPage() {
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
-        if (['active', 'winning', 'verified'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered'].includes(s)) return 'secondary';
-        if (['pending', 'outbid', 'suspended', 'ditangguhkan'].includes(s)) return 'destructive';
+        if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
+        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim', 'dalam perjalanan'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
     
     const getRoleText = (user: typeof allUsers[0]) => {
         const key = `role_${user.role.toLowerCase()}`;
-        return t(key, user.role);
+        const translated = t(key, user.role);
+        return language === 'id' ? user.role_id : translated;
     }
 
     const getStatusText = (user: typeof allUsers[0]) => {
         const key = `status_${user.status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key, user.status);
+        const translated = t(key, user.status);
+        return language === 'id' ? user.status_id : translated;
     }
 
     return (
         <>
             <header>
-                <h1 className="text-3xl font-bold tracking-tight">{t('admin_dashboard_title')}</h1>
+                <h1 className="text-3xl font-bold tracking-tight">{t('admin_dashboard_title', 'Overview')}</h1>
                 <p className="text-muted-foreground">{t('admin_dashboard_desc')}</p>
             </header>
 
@@ -131,7 +133,7 @@ export default function AdminDashboardPage() {
                                {pendingProducts.length > 0 ? pendingProducts.map((prod) => (
                                     <TableRow key={prod.id}>
                                         <TableCell className="font-medium flex items-center gap-3">
-                                            <Image src={prod.image} alt={language === 'id' ? prod.name_id : prod.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint="coffee beans" />
+                                            <Image src={prod.image} alt={language === 'id' ? prod.name_id : prod.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint={prod.aiHint} />
                                             {language === 'id' ? prod.name_id : prod.name}
                                         </TableCell>
                                         <TableCell>{prod.producer}</TableCell>
@@ -181,9 +183,11 @@ export default function AdminDashboardPage() {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
+                                                    <DropdownMenuSeparator />
                                                     <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
                                                     <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-destructive" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
+                                                    <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>
@@ -197,5 +201,3 @@ export default function AdminDashboardPage() {
         </>
     )
 }
-
-    

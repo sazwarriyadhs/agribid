@@ -20,14 +20,14 @@ export default function BidderDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'verified', 'unggul'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'menang'].includes(s)) return 'secondary';
-        if (['pending', 'outbid', 'suspended', 'kalah'].includes(s)) return 'destructive';
+        if (['ended', 'won', 'delivered', 'menang', 'selesai', 'terverifikasi', 'terkirim'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'kalah', 'menunggu', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
 
     const getStatusText = (bid: typeof bidderHistory[0]) => {
-        const key = `status_${bid.status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key, language === 'id' ? bid.status_id : bid.status);
+        const statusKey = `status_${(language === 'id' ? bid.status_id : bid.status).toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, language === 'id' ? bid.status_id : bid.status);
     }
 
     return (
@@ -91,5 +91,3 @@ export default function BidderDashboardPage() {
         </>
     )
 }
-
-    

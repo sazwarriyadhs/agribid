@@ -58,10 +58,10 @@ function DashboardSidebar() {
     const { t } = useI18n();
     const pathname = usePathname();
     
-    // Determine role from the URL, default to 'admin' if it's just /dashboard
+    // Determine role from the URL, default to 'bidder' if it's just /dashboard
     const pathSegments = pathname.split('/');
-    const role = pathSegments.length > 2 && pathSegments[2] in roleNavigations ? pathSegments[2] : 'admin';
-    const menuItems = roleNavigations[role] || roleNavigations['admin'];
+    const role = pathSegments.length > 2 && pathSegments[2] in roleNavigations ? pathSegments[2] : 'bidder';
+    const menuItems = roleNavigations[role] || roleNavigations['bidder'];
 
     return (
         <Sidebar>

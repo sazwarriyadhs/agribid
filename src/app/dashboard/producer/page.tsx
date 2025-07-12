@@ -20,14 +20,14 @@ export default function ProducerDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'selesai'].includes(s)) return 'secondary';
-        if (['pending', 'outbid', 'suspended', 'menunggu'].includes(s)) return 'destructive';
+        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
 
     const getStatusText = (product: typeof producerProducts[0]) => {
-        const key = `status_${product.status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key, language === 'id' ? product.status_id : product.status);
+        const statusKey = `status_${(language === 'id' ? product.status_id : product.status).toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, language === 'id' ? product.status_id : product.status);
     }
 
     return (
@@ -73,5 +73,3 @@ export default function ProducerDashboardPage() {
         </>
     )
 }
-
-    

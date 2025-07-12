@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { PackageCheck, UploadCloud, List } from "lucide-react"
+import { PackageCheck } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from 'next/link';
 
@@ -20,14 +20,14 @@ export default function ExporterDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'in transit', 'verified', 'dalam perjalanan'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'terkirim'].includes(s)) return 'secondary';
-        if (['pending', 'outbid', 'suspended'].includes(s)) return 'destructive';
+        if (['ended', 'won', 'delivered', 'terkirim', 'selesai', 'menang', 'terverifikasi'].includes(s)) return 'secondary';
+        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
 
     const getStatusText = (shipment: typeof exportShipments[0]) => {
-        const key = `status_${shipment.status.toLowerCase().replace(/ /g, '_')}`;
-        return t(key, language === 'id' ? shipment.status_id : shipment.status);
+        const statusKey = `status_${(language === 'id' ? shipment.status_id : shipment.status).toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, language === 'id' ? shipment.status_id : shipment.status);
     }
 
     return (
@@ -58,7 +58,11 @@ export default function ExporterDashboardPage() {
                                     <TableCell>{language === 'id' ? ship.destination_id : ship.destination}</TableCell>
                                     <TableCell><Badge variant={getStatusVariant(language === 'id' ? ship.status_id : ship.status)}>{getStatusText(ship)}</Badge></TableCell>
                                     <TableCell className="text-right">
-                                        <Button variant="ghost" size="sm"><PackageCheck className="mr-2"/>{t('track')}</Button>
+                                        <Button asChild variant="ghost" size="sm">
+                                            <Link href="#">
+                                                <PackageCheck className="mr-2"/>{t('track')}
+                                            </Link>
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                            ))}
@@ -69,5 +73,3 @@ export default function ExporterDashboardPage() {
         </>
     )
 }
-
-    
