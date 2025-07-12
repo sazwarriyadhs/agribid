@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { PackageCheck, Users, BookUser } from "lucide-react"
+import { PackageCheck, BookUser } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from 'next/link';
 
@@ -31,8 +31,9 @@ export default function ExporterDashboardPage() {
     }
 
     const getStatusText = (item: { status: string, status_id: string }) => {
-        const statusKey = `status_${(language === 'id' ? item.status_id : item.status).toLowerCase().replace(/ /g, '_')}`;
-        return t(statusKey, language === 'id' ? item.status_id : item.status);
+        const currentStatus = language === 'id' ? item.status_id : item.status;
+        const statusKey = `status_${currentStatus.toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, currentStatus);
     }
 
     return (
@@ -67,7 +68,7 @@ export default function ExporterDashboardPage() {
                                         <TableCell className="text-right">
                                             <Button asChild variant="ghost" size="sm">
                                                 <Link href="#">
-                                                    <PackageCheck className="mr-2"/>{t('track')}
+                                                    <PackageCheck className="mr-2 h-4 w-4"/>{t('track')}
                                                 </Link>
                                             </Button>
                                         </TableCell>
@@ -102,7 +103,7 @@ export default function ExporterDashboardPage() {
                                         <TableCell className="text-right">
                                             <Button asChild variant="ghost" size="sm">
                                                 <Link href="#">
-                                                    <BookUser className="mr-2"/>{t('educate_manage', 'Educate & Manage')}
+                                                    <BookUser className="mr-2 h-4 w-4"/>{t('educate_manage', 'Educate & Manage')}
                                                 </Link>
                                             </Button>
                                         </TableCell>

@@ -26,8 +26,9 @@ export default function PartnerDashboardPage() {
     }
 
     const getStatusText = (request: typeof verificationRequests[0]) => {
-        const statusKey = `status_${(language === 'id' ? request.status_id : request.status).toLowerCase().replace(/ /g, '_')}`;
-        return t(statusKey, language === 'id' ? request.status_id : request.status);
+        const currentStatus = language === 'id' ? request.status_id : request.status;
+        const statusKey = `status_${currentStatus.toLowerCase().replace(/ /g, '_')}`;
+        return t(statusKey, currentStatus);
     }
 
     return (
@@ -61,7 +62,7 @@ export default function PartnerDashboardPage() {
                                         <TableCell className="text-right">
                                             <Button asChild variant="outline" size="sm">
                                                 <Link href="#">
-                                                    <UserCheck className="mr-2"/>{t('review')}
+                                                    <UserCheck className="mr-2 h-4 w-4"/>{t('review')}
                                                 </Link>
                                             </Button>
                                         </TableCell>
@@ -76,7 +77,7 @@ export default function PartnerDashboardPage() {
                             <p>{t('mentoring_schedule_desc')}</p>
                              <Button asChild>
                                 <Link href="#">
-                                    <Calendar className="mr-2"/>{t('view_schedule')}
+                                    <Calendar className="mr-2 h-4 w-4"/>{t('view_schedule')}
                                 </Link>
                             </Button>
                         </Card>
