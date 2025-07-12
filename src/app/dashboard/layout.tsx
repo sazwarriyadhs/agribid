@@ -30,7 +30,6 @@ const roleNavigations: Record<string, NavItem[]> = {
     { href: "/dashboard/admin", label: "admin_dashboard_title", icon: Home },
     { href: "/dashboard/admin", label: "user_management", icon: Users },
     { href: "/dashboard/admin", label: "pending_product_verifications", icon: Package },
-    { href: "/dashboard/admin", label: "active_auctions", icon: Gavel },
   ],
   producer: [
       { href: "/dashboard/producer", label: "my_products", icon: Package },
@@ -39,7 +38,6 @@ const roleNavigations: Record<string, NavItem[]> = {
   ],
   bidder: [
       { href: "/dashboard/bidder", label: "bidder_dashboard_title", icon: Gavel },
-      { href: "/dashboard/bidder", label: "bid_history", icon: List },
       { href: "/u/P001/jessica-sutrisno", label: "profile", icon: Users },
   ],
   partner: [
