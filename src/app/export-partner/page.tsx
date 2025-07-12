@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useI18n } from '@/context/i18n';
-import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck } from 'lucide-react';
+import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck } from 'lucide-react';
 
 export default function ExportPartnerPage() {
     const { t } = useI18n();
@@ -20,7 +21,8 @@ export default function ExportPartnerPage() {
     const howItWorks = [
         { icon: FileText, title: "step_1_title", description: "step_1_desc" },
         { icon: ShieldCheck, title: "step_2_title", description: "step_2_desc" },
-        { icon: Plane, title: "step_3_title", description: "step_3_desc" },
+        { icon: UserCheck, title: "step_3_title_export", description: "step_3_desc_export" },
+        { icon: Plane, title: "step_4_title_export", description: "step_4_desc_export" },
     ];
 
     return (

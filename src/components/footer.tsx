@@ -1,3 +1,4 @@
+
 'use client'
 import Link from 'next/link';
 import { AgriBidLogo } from './icons';
@@ -21,16 +22,16 @@ export function AppFooter() {
   ];
 
   const companyLinks = [
-    { href: "#", label: "About Us" },
-    { href: "#", label: "Careers" },
+    { href: "#", label: "about_us" },
+    { href: "#", label: "careers" },
     { href: "/export-partner", label: "export_partner_program" },
-    { href: "#", label: "Partners" },
-    { href: "#", label: "Contact" },
+    { href: "#", label: "partners" },
+    { href: "#", label: "contact" },
   ];
 
   const legalLinks = [
-    { href: "#", label: "Terms of Service" },
-    { href: "#", label: "Privacy Policy" },
+    { href: "#", label: "terms_of_service" },
+    { href: "#", label: "privacy_policy" },
   ];
 
   return (
