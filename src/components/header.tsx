@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AgriBidLogo } from './icons';
 import { Button } from '@/components/ui/button';
-import { Bell, User, LogOut, LayoutDashboard, Gavel, Settings, Globe, ChevronDown, Plane } from 'lucide-react';
+import { Bell, User, LogOut, LayoutDashboard, Settings, Globe, ChevronDown, Plane } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,7 +19,7 @@ const notifications = [
 ]
 
 export function AppHeader() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would be managed by a global auth context in a real app
   const { toast } = useToast()
   const { t, language, setLanguage, currency, setCurrency } = useI18n();
 
@@ -31,7 +31,8 @@ export function AppHeader() {
     })
   };
 
-  // This is a simulation function. In a real app, this would not exist.
+  // This is a simulation function. It's triggered by the login button for demo purposes.
+  // In a real app, the login page would set the auth state.
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
@@ -123,7 +124,7 @@ export function AppHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild><Link href="/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/u/B001/john-farmer"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/u/P001/jessica-sutrisno"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
@@ -134,7 +135,7 @@ export function AppHeader() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button asChild variant="ghost" onClick={handleLogin}>
+              <Button asChild variant="outline">
                 <Link href="/login">{t('log_in')}</Link>
               </Button>
               <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">

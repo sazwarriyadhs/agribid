@@ -67,7 +67,7 @@ export default function LoginPage() {
           <CardHeader>
             <CardTitle className="text-2xl font-headline">{t('log_in')}</CardTitle>
             <CardDescription>
-              {t('login_page_desc', 'Enter your email below to login to your account or use QR code.')}
+              {t('login_page_desc', 'Enter your email below to login to your account.')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -78,6 +78,7 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
+                  defaultValue="user@agribid.com"
                   required
                 />
               </div>
@@ -88,26 +89,26 @@ export default function LoginPage() {
                     {t('forgot_password', 'Forgot your password?')}
                   </Link>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" defaultValue="password" required />
               </div>
               <Button type="submit" className="w-full">
                 {t('log_in')}
               </Button>
-               <div className="relative my-2">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      {t('or_continue_with', 'Or continue with')}
-                    </span>
-                  </div>
-                </div>
-              <Button variant="outline" className="w-full" type="button" onClick={() => setIsQrScannerOpen(true)}>
-                <QrCode className="mr-2 h-4 w-4" />
-                {t('login_with_qr', 'Login with QR')}
-              </Button>
             </form>
+             <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    {t('or_continue_with', 'Or')}
+                  </span>
+                </div>
+              </div>
+            <Button variant="outline" className="w-full" type="button" onClick={() => setIsQrScannerOpen(true)}>
+              <QrCode className="mr-2 h-4 w-4" />
+              {t('login_with_qr', 'Login with Membership QR')}
+            </Button>
             <div className="mt-4 text-center text-sm">
               {t('dont_have_account', "Don't have an account?")}{' '}
               <Link href="/signup" className="underline">
