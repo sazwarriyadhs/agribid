@@ -9,17 +9,17 @@ import { useI18n } from '@/context/i18n';
 
 const heroSlides = [
   {
-    src: '/images/hero1.jpeg',
+    src: '/images/hero1.png',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle',
   },
   {
-    src: '/images/hero2.jpeg',
+    src: '/images/hero2.png',
     titleKey: 'hero_title_2',
     subtitleKey: 'hero_subtitle_2',
   },
   {
-    src: '/images/hero3.jpeg',
+    src: '/images/hero1.png',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3',
   },
