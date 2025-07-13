@@ -110,25 +110,22 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="w-full text-white">
-        <div className="w-full h-[90vh] lg:h-screen">
+      <section className="relative w-full h-[90vh] lg:h-screen text-white">
           <Carousel
             opts={{ loop: true }}
             plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
-            className="w-full h-full"
+            className="absolute inset-0 w-full h-full"
           >
             <CarouselContent className="h-full">
               {heroSlides.map((slide, index) => (
-                <CarouselItem key={index} className="relative h-full">
-                  <div className="relative w-full h-full">
-                    <Image
+                <CarouselItem key={index} className="relative w-full h-full">
+                  <Image
                       src={slide.src}
                       alt={t(slide.titleKey as any, "Hero image")}
                       fill
                       className="object-cover w-full h-full brightness-50"
                       priority={index === 0}
                     />
-                  </div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 p-8">
                       <div className="max-w-3xl">
                         <h1 className="text-3xl md:text-5xl font-headline font-bold tracking-tight">
@@ -153,7 +150,6 @@ export default function Home() {
             <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
             <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
           </Carousel>
-        </div>
       </section>
 
       <section id="featured-auctions" className="py-12 md:py-24 bg-background mt-[-20px] md:mt-[-40px] relative z-10 rounded-t-2xl">
@@ -252,3 +248,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
