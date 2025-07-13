@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -19,7 +18,7 @@ import { GlobalDemand } from '@/components/global-demand';
 
 const heroSlides = [
   {
-    src: '/images/hero1.jpeg', // pastikan file ada di public/images
+    src: '/images/hero1.jpeg',
     fallback: 'https://source.unsplash.com/1600x900/?farm',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle',
@@ -43,7 +42,7 @@ const featuredAuctions = [
       id: '1',
       name: 'Organic Wheat Harvest',
       name_id: 'Panen Gandum Organik',
-      image: 'https://source.unsplash.com/600x400/?wheat',
+      image: '/images/wheat.jpeg',
       aiHint: 'wheat field',
       seller: 'Green Valley Farms',
       seller_id: 'Green Valley Farms',
@@ -58,7 +57,7 @@ const featuredAuctions = [
       id: '2',
       name: 'Fresh Atlantic Salmon',
       name_id: 'Salmon Atlantik Segar',
-      image: 'https://source.unsplash.com/600x400/?salmon',
+      image: '/images/salmon.jpeg',
       aiHint: 'salmon seafood',
       seller: 'Ocean Fresh',
       seller_id: 'Ocean Fresh',
@@ -73,7 +72,7 @@ const featuredAuctions = [
       id: '3',
       name: 'Palm Oil Kernels',
       name_id: 'Biji Kelapa Sawit',
-      image: 'https://source.unsplash.com/600x400/?palm',
+      image: '/images/palm-oil.jpeg',
       aiHint: 'palm oil plantation',
       seller: 'Nusantara Palms',
       seller_id: 'Nusantara Palms',
