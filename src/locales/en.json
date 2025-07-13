@@ -80,8 +80,8 @@
   "login_success_desc": "Welcome back to AgriBid!",
   "logout_success_title": "Logged Out",
   "logout_success_desc": "You have successfully logged out.",
-  "featured_commodities_title": "Featured Agricultural Commodities",
-  "featured_commodities_subtitle": "Explore Indonesia's leading agricultural, plantation, fishery, livestock, and forestry products.",
+  "browse_by_category": "Browse by Category",
+  "browse_by_category_subtitle": "Explore our marketplace by product category.",
   "rice": "Rice",
   "palm_oil": "Palm Oil",
   "coffee": "Coffee",
@@ -447,5 +447,10 @@
   "all_categories": "All Categories",
   "no_auctions_found": "No auctions found.",
   "try_different_search": "Try adjusting your search or category filters.",
-  "view_member_card": "View Member Card"
+  "view_member_card": "View Member Card",
+  "Pertanian": "Agriculture",
+  "Peternakan": "Livestock",
+  "Perikanan": "Fishery",
+  "Perkebunan": "Plantation",
+  "Hasil Hutan": "Forestry"
 }

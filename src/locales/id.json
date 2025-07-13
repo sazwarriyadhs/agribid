@@ -80,8 +80,8 @@
   "login_success_desc": "Selamat datang kembali di AgriBid!",
   "logout_success_title": "Berhasil Keluar",
   "logout_success_desc": "Anda telah berhasil keluar.",
-  "featured_commodities_title": "Komoditas Pertanian Unggulan",
-  "featured_commodities_subtitle": "Jelajahi produk-produk pertanian, perkebunan, perikanan, peternakan, dan hasil hutan terkemuka di Indonesia.",
+  "browse_by_category": "Telusuri Berdasarkan Kategori",
+  "browse_by_category_subtitle": "Jelajahi pasar kami berdasarkan kategori produk.",
   "rice": "Padi",
   "palm_oil": "Kelapa Sawit",
   "coffee": "Kopi",
@@ -447,5 +447,10 @@
   "all_categories": "Semua Kategori",
   "no_auctions_found": "Tidak ada lelang yang ditemukan.",
   "try_different_search": "Coba sesuaikan pencarian atau filter kategori Anda.",
-  "view_member_card": "Lihat Kartu Anggota"
+  "view_member_card": "Lihat Kartu Anggota",
+  "Pertanian": "Pertanian",
+  "Peternakan": "Peternakan",
+  "Perikanan": "Perikanan",
+  "Perkebunan": "Perkebunan",
+  "Hasil Hutan": "Hasil Hutan"
 }
