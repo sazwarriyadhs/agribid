@@ -32,6 +32,8 @@ export function DashboardHeader() {
     })
   };
 
+  const profileUrl = user ? `/u/${user.id}/${user.name}` : '/login';
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center px-4 md:px-6">
@@ -97,7 +99,7 @@ export function DashboardHeader() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" />
+                    <AvatarImage src={`https://placehold.co/100x100.png?text=${user.name.charAt(0).toUpperCase()}`} alt="User avatar" />
                     <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 </Button>
@@ -111,7 +113,7 @@ export function DashboardHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild><Link href={`/dashboard/${user.role}`}><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href="/u/P001/jessica-sutrisno"><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href={profileUrl}><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>

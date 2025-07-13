@@ -39,11 +39,31 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    login(email);
+    // Simple check for demo purposes
+    if (password !== 'password') {
+        toast({
+            variant: 'destructive',
+            title: 'Login Failed',
+            description: 'Invalid credentials. Please try again.',
+        });
+        return;
+    }
+
+    const loggedInUser = login(email);
+    
+    if (!loggedInUser) {
+         toast({
+            variant: 'destructive',
+            title: 'Login Failed',
+            description: 'Invalid user role specified in email.',
+        });
+        return;
+    }
     
     const emailPrefix = email.split('@')[0].toLowerCase();
     const path = dashboardRedirect[emailPrefix] || '/dashboard/buyer';
@@ -62,14 +82,15 @@ export default function LoginPage() {
         const qrData = JSON.parse(data);
         if (qrData.userId && qrData.name && qrData.code && qrData.slug && qrData.role) {
              const userEmail = `${qrData.role.toLowerCase()}@agribid.com`;
-             login(userEmail);
+             const loggedInUser = login(userEmail);
+             if (!loggedInUser) return;
              
              toast({
                 title: t('login_success_title'),
                 description: `Welcome back, ${qrData.name}!`,
             });
             
-            router.push(`/u/${qrData.code}/${qrData.slug}`);
+            router.push(`/u/${loggedInUser.id}/${loggedInUser.name}`);
         } else {
             throw new Error('Invalid QR code data');
         }
@@ -91,7 +112,7 @@ export default function LoginPage() {
             <CardDescription>
               {t('login_page_desc', 'Enter your email below to login to your account.')}
               <br />
-              <span className="text-xs">Use role@agribid.com (e.g., petani@agribid.com)</span>
+              <span className="text-xs">Use role@agribid.com and "password" for demo.</span>
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -114,7 +135,7 @@ export default function LoginPage() {
                     {t('forgot_password', 'Forgot your password?')}
                   </Link>
                 </div>
-                <Input id="password" type="password" defaultValue="password" required />
+                <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
               </div>
               <Button type="submit" className="w-full">
                 {t('log_in')}
