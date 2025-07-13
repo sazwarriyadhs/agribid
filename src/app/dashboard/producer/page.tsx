@@ -29,7 +29,7 @@ export default function ProducerDashboardPage() {
         setProducerProducts(producerProducts.filter(p => p.id !== productId));
         toast({
             title: t('delete_product_title', 'Product Deleted'),
-            description: t('delete_product_desc', `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`),
+            description: t('delete_product_desc', `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`, { productName: language === 'id' ? product?.name_id : product?.name }),
             variant: "destructive"
         })
     };

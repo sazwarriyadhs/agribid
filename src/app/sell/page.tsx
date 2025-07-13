@@ -15,6 +15,7 @@ import { Upload, Sparkles, Send, Loader2, Save, Info } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { getMockProducts } from '@/app/dashboard/seller/page';
 
 const categories = [
     { key: "grains", label: "Grains" },
@@ -26,14 +27,8 @@ const categories = [
     { key: "forestry_products", label: "Forestry Products" },
 ];
 
-// Mock data store for products, in a real app this would be a database.
-const mockProducts = [
-  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', category: 'Grains', description: 'Premium quality organic hard red winter wheat harvest, perfect for artisan breads.', image: 'https://placehold.co/600x400.png', price: 4500, quantity: '10 Ton', shelfLife: 'Up to 12 months', packaging: '50kg bags' },
-];
-
-
 function SellPageContents() {
-    const { t, formatCurrency } = useI18n();
+    const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -49,7 +44,7 @@ function SellPageContents() {
     const [packaging, setPackaging] = useState('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [imageDataUri, setImageDataUri] = useState<string | null>(null);
-    const [price, setPrice] = useState<number | null>(null);
+    const [price, setPrice] = useState<number | string>('');
     
     const [isSuggestingPrice, setIsSuggestingPrice] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,22 +52,24 @@ function SellPageContents() {
     useEffect(() => {
         const editId = searchParams.get('edit');
         if (editId) {
-            const productToEdit = mockProducts.find(p => p.id === editId);
+            const products = getMockProducts();
+            const productToEdit = products.find(p => p.id === editId);
             if (productToEdit) {
                 setIsEditMode(true);
                 setProductId(productToEdit.id);
-                setProductName(productToEdit.name);
+                setProductName(language === 'id' ? productToEdit.name_id : productToEdit.name);
                 setDescription(productToEdit.description);
                 setCategory(productToEdit.category);
                 setQuantity(productToEdit.quantity);
                 setShelfLife(productToEdit.shelfLife);
                 setPackaging(productToEdit.packaging);
-                setImagePreview(productToEdit.image);
-                setImageDataUri(productToEdit.image);
+                // In a real app, you would fetch the image data URI if it's not already available
+                setImagePreview(`https://placehold.co/600x400.png`); 
+                setImageDataUri(`https://placehold.co/600x400.png`);
                 setPrice(productToEdit.price);
             }
         }
-    }, [searchParams]);
+    }, [searchParams, language]);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -98,7 +95,7 @@ function SellPageContents() {
         }
 
         setIsSuggestingPrice(true);
-        setPrice(null);
+        setPrice('');
 
         try {
             const input: SuggestPriceInput = {
@@ -111,7 +108,7 @@ function SellPageContents() {
             setPrice(result.suggestedPrice);
             toast({
                 title: t('price_suggestion_success_title'),
-                description: t('price_suggestion_success_desc'),
+                description: `${t('price_suggestion_success_desc')} ${formatCurrency(result.suggestedPrice)}`,
             });
         } catch (error) {
             console.error("Error suggesting price:", error);
@@ -151,15 +148,12 @@ function SellPageContents() {
             setPackaging('');
             setImagePreview(null);
             setImageDataUri(null);
-            setPrice(null);
+            setPrice('');
             if(fileInputRef.current) fileInputRef.current.value = '';
         }
 
         setIsSubmitting(false);
     };
-    
-    const priceDisplayValue = price ? formatCurrency(price) : (isEditMode ? t('click_suggest_button') : '');
-
 
     return (
         <div className="container mx-auto max-w-3xl px-4 py-8 md:py-16">
@@ -228,7 +222,7 @@ function SellPageContents() {
                                      <Button type="button" variant="outline" className="mt-4" onClick={() => fileInputRef.current?.click()}>
                                         {imagePreview ? t('change_photo', 'Change Photo') : t('browse_files')}
                                     </Button>
-                                    <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" required={!isEditMode} />
+                                    <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" required={!isEditMode} onChange={handleImageChange} />
                                 </CardContent>
                             </Card>
                         </div>
@@ -237,15 +231,12 @@ function SellPageContents() {
                                 <Label htmlFor="starting-price">{t('starting_bid')}</Label>
                                 <Input 
                                     id="starting-price" 
-                                    type="text" 
-                                    value={priceDisplayValue}
-                                    readOnly={!!price} 
-                                    onChange={(e) => {
-                                        const value = e.target.value.replace(/[^0-9]/g, '');
-                                        setPrice(value ? parseInt(value, 10) : null);
-                                    }}
-                                    placeholder={t('click_suggest_button')} 
-                                    className="font-bold text-lg" 
+                                    type="number" 
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    placeholder={t('suggested_starting_bid')} 
+                                    className="font-bold text-lg"
+                                    required
                                 />
                             </div>
                             <Button type="button" variant="outline" onClick={handleSuggestPrice} disabled={isSuggestingPrice}>
@@ -264,7 +255,7 @@ function SellPageContents() {
                                 {t('auction_requirements_desc')}
                             </AlertDescription>
                          </Alert>
-                         <Button type="submit" size="lg" className="w-full mt-2" disabled={isSubmitting || (!price && !isEditMode)}>
+                         <Button type="submit" size="lg" className="w-full mt-2" disabled={isSubmitting || !price}>
                             {isSubmitting ? (
                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
