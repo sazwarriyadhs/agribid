@@ -5,12 +5,12 @@ import type { LucideIcon } from 'lucide-react';
 
 const commodities: { key: string; Icon: LucideIcon }[] = [
     { key: "rice", Icon: Wheat },
-    { key: "palm_oil", Icon: Leaf },
     { key: "coffee", Icon: Coffee },
     { key: "shrimp", Icon: Fish },
     { key: "beef", Icon: Beef },
     { key: "cocoa", Icon: Shell },
     { key: "milk", Icon: Milk },
+    { key: "forestry_products", Icon: Leaf }
 ];
 
 export function FeaturedCommodities() {
