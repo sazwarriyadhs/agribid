@@ -70,8 +70,8 @@ const InteractiveMap = () => {
         }),
       ],
       view: new View({
-        center: fromLonLat([118.0157, -2.5489]), // Center of Indonesia
-        zoom: 4,
+        center: fromLonLat([0, 0]), // Center of the world map
+        zoom: 2, // Zoom level to show the world
       }),
       controls: [],
     });
