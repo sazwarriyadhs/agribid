@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <section className="w-full text-white">
-        <div className="w-full aspect-w-16 aspect-h-9">
+        <div className="w-full max-w-[1024px] h-[90vh] md:h-[1080px] mx-auto">
             <Carousel 
                 opts={{ loop: true }}
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -135,8 +135,8 @@ export default function Home() {
                                     alt={t(slide.titleKey as any)}
                                     data-ai-hint={slide.aiHint}
                                     layout="fill"
-                                    objectFit="none"
-                                    className="-z-10 brightness-50"
+                                    objectFit="contain"
+                                    className="-z-10"
                                 />
                                 <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
                                     <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
