@@ -122,28 +122,30 @@ export default function Home() {
             <CarouselContent className="h-full">
               {heroSlides.map((slide, index) => (
                 <CarouselItem key={index} className="relative h-full">
-                  <div className="relative w-full h-full flex items-center justify-center text-center bg-black">
+                  <div className="relative w-full h-full">
                     <Image
                       src={slide.src}
                       alt={t(slide.titleKey)}
                       data-ai-hint={slide.aiHint}
                       fill
-                      className="object-contain -z-10"
+                      className="object-cover -z-10 brightness-50"
                     />
-                    <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
-                      <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
-                        {t(slide.titleKey)}
-                      </h1>
-                      <p className="mt-4 max-w-3xl mx-auto text-lg text-primary-foreground/90">
-                        {t(slide.subtitleKey)}
-                      </p>
-                      <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                          <Link href="#featured-auctions">{t('browse_auctions')}</Link>
-                        </Button>
-                        <Button asChild size="lg" variant="secondary">
-                          <Link href="/signup">{t('become_a_producer')}</Link>
-                        </Button>
+                    <div className="absolute inset-0 flex items-center justify-center text-center bg-black/40">
+                      <div className="absolute bottom-10 left-0 right-0 p-4">
+                        <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
+                          {t(slide.titleKey)}
+                        </h1>
+                        <p className="mt-4 max-w-3xl mx-auto text-lg text-primary-foreground/90">
+                          {t(slide.subtitleKey)}
+                        </p>
+                        <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+                          <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                            <Link href="#featured-auctions">{t('browse_auctions')}</Link>
+                          </Button>
+                          <Button asChild size="lg" variant="secondary">
+                            <Link href="/signup">{t('become_a_producer')}</Link>
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
