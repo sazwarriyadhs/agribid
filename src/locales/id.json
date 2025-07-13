@@ -344,7 +344,14 @@
   "route": "Rute",
   "accept_job": "Terima Pekerjaan",
   "job_accepted_title": "Pekerjaan Diterima",
-  "job_accepted_desc": "Pesanan {{orderId}} sekarang dalam perjalanan."
+  "job_accepted_desc": "Pesanan {{orderId}} sekarang dalam perjalanan.",
+  "quantity": "Kuantitas",
+  "shelf_life": "Daya Tahan Produk",
+  "packaging": "Pengemasan",
+  "quantity_placeholder": "cth., 10 Ton, 500 Ekor",
+  "shelf_life_placeholder": "cth., 7 hari, 6 bulan",
+  "packaging_placeholder": "cth., Kontainer berpendingin",
+  "product_specifications": "Spesifikasi Produk"
 }
 
     

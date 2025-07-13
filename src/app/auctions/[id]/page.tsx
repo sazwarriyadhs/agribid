@@ -1,3 +1,4 @@
+
 'use client'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -6,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Gavel, Heart, Info, Timer, Banknote } from 'lucide-react'
+import { Gavel, Heart, Info, Timer, Banknote, Package, Clock, Shield } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
@@ -30,6 +31,12 @@ const initialAuctionItem = {
   origin_id: 'Kansas, AS',
   shipping: 'FOB (Freight on Board). Buyer arranges shipping from our facility.',
   shipping_id: 'FOB (Freight on Board). Pembeli mengatur pengiriman dari fasilitas kami.',
+  quantity: '10 Tons',
+  quantity_id: '10 Ton',
+  shelfLife: 'Up to 12 months if stored properly.',
+  shelfLife_id: 'Hingga 12 bulan jika disimpan dengan benar.',
+  packaging: 'Packed in 50kg polypropylene bags.',
+  packaging_id: 'Dikemas dalam karung polipropilena 50kg.',
 }
 
 const initialBidHistory = [
@@ -168,45 +175,43 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                 </CardFooter>
             </Card>
 
-            <Tabs defaultValue="history" className="mt-8">
+            <Tabs defaultValue="details" className="mt-8">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="history"><Gavel className="mr-2 h-4 w-4" />{t('bid_history')}</TabsTrigger>
                     <TabsTrigger value="details"><Info className="mr-2 h-4 w-4" />{t('details')}</TabsTrigger>
+                    <TabsTrigger value="history"><Gavel className="mr-2 h-4 w-4" />{t('bid_history')}</TabsTrigger>
                 </TabsList>
-                <TabsContent value="history">
-                    <Card>
-                        <CardContent className="p-0">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>{t('bidder')}</TableHead>
-                                        <TableHead className="text-right">{t('amount')}</TableHead>
-                                        <TableHead className="text-right">{t('time')}</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {bidHistory.map((bid, i) => (
-                                        <TableRow key={i}>
-                                            <TableCell className="font-medium flex items-center gap-2">
-                                                <Avatar className="h-8 w-8">
-                                                    <AvatarImage src={`https://placehold.co/100x100.png?text=${bid.avatar}`} />
-                                                    <AvatarFallback>{bid.avatar}</AvatarFallback>
-                                                </Avatar>
-                                                {language === 'id' && bid.user_id ? bid.user_id : bid.user}
-                                            </TableCell>
-                                            <TableCell className="text-right font-mono">{formatCurrency(bid.bid)}</TableCell>
-                                            <TableCell className="text-right text-muted-foreground">{language === 'id' ? bid.time_id : bid.time}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
                 <TabsContent value="details">
                      <Card>
                         <CardContent className="pt-6 space-y-4 text-sm">
                             <p>{language === 'id' ? auctionItem.description_id : auctionItem.description}</p>
+                            
+                            <div className="border-t pt-4">
+                                <h3 className="font-semibold text-base mb-2">{t('product_specifications', 'Product Specifications')}</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="flex items-start gap-3">
+                                        <Package className="h-5 w-5 mt-0.5 text-primary"/>
+                                        <div>
+                                            <p className="font-medium text-muted-foreground">{t('quantity')}</p>
+                                            <p>{language === 'id' ? auctionItem.quantity_id : auctionItem.quantity}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <Clock className="h-5 w-5 mt-0.5 text-primary"/>
+                                        <div>
+                                            <p className="font-medium text-muted-foreground">{t('shelf_life')}</p>
+                                            <p>{language === 'id' ? auctionItem.shelfLife_id : auctionItem.shelfLife}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <Shield className="h-5 w-5 mt-0.5 text-primary"/>
+                                        <div>
+                                            <p className="font-medium text-muted-foreground">{t('packaging')}</p>
+                                            <p>{language === 'id' ? auctionItem.packaging_id : auctionItem.packaging}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div className="grid grid-cols-2 gap-4 border-t pt-4">
                                 <div>
                                     <p className="font-medium text-muted-foreground">{t('origin')}</p>
@@ -237,9 +242,41 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                         </CardContent>
                     </Card>
                 </TabsContent>
+                <TabsContent value="history">
+                    <Card>
+                        <CardContent className="p-0">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t('bidder')}</TableHead>
+                                        <TableHead className="text-right">{t('amount')}</TableHead>
+                                        <TableHead className="text-right">{t('time')}</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {bidHistory.map((bid, i) => (
+                                        <TableRow key={i}>
+                                            <TableCell className="font-medium flex items-center gap-2">
+                                                <Avatar className="h-8 w-8">
+                                                    <AvatarImage src={`https://placehold.co/100x100.png?text=${bid.avatar}`} />
+                                                    <AvatarFallback>{bid.avatar}</AvatarFallback>
+                                                </Avatar>
+                                                {language === 'id' && bid.user_id ? bid.user_id : bid.user}
+                                            </TableCell>
+                                            <TableCell className="text-right font-mono">{formatCurrency(bid.bid)}</TableCell>
+                                            <TableCell className="text-right text-muted-foreground">{language === 'id' ? bid.time_id : bid.time}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
             </Tabs>
         </div>
       </div>
     </div>
   );
 }
+
+    

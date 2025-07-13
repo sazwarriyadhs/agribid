@@ -344,7 +344,14 @@
   "route": "Route",
   "accept_job": "Accept Job",
   "job_accepted_title": "Job Accepted",
-  "job_accepted_desc": "Order {{orderId}} is now in transit."
+  "job_accepted_desc": "Order {{orderId}} is now in transit.",
+  "quantity": "Quantity",
+  "shelf_life": "Shelf Life",
+  "packaging": "Packaging",
+  "quantity_placeholder": "e.g., 10 Tons, 500 Ekor",
+  "shelf_life_placeholder": "e.g., 7 days, 6 months",
+  "packaging_placeholder": "e.g., Refrigerated container",
+  "product_specifications": "Product Specifications"
 }
 
     

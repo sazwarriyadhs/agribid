@@ -27,7 +27,7 @@ const categories = [
 
 // Mock data store for products, in a real app this would be a database.
 const mockProducts = [
-  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', stock: '10 Ton', category: 'Grains', description: 'Premium quality organic hard red winter wheat harvest, perfect for artisan breads.', image: 'https://placehold.co/600x400.png', price: 4500 },
+  { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', category: 'Grains', description: 'Premium quality organic hard red winter wheat harvest, perfect for artisan breads.', image: 'https://placehold.co/600x400.png', price: 4500, quantity: '10 Ton', shelfLife: 'Up to 12 months', packaging: '50kg bags' },
 ];
 
 
@@ -43,6 +43,9 @@ function SellPageContents() {
     const [productName, setProductName] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
+    const [quantity, setQuantity] = useState('');
+    const [shelfLife, setShelfLife] = useState('');
+    const [packaging, setPackaging] = useState('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [imageDataUri, setImageDataUri] = useState<string | null>(null);
     const [price, setPrice] = useState<number | null>(null);
@@ -60,6 +63,9 @@ function SellPageContents() {
                 setProductName(productToEdit.name);
                 setDescription(productToEdit.description);
                 setCategory(productToEdit.category);
+                setQuantity(productToEdit.quantity);
+                setShelfLife(productToEdit.shelfLife);
+                setPackaging(productToEdit.packaging);
                 setImagePreview(productToEdit.image);
                 setImageDataUri(productToEdit.image);
                 setPrice(productToEdit.price);
@@ -139,6 +145,9 @@ function SellPageContents() {
             setProductName('');
             setDescription('');
             setCategory('');
+            setQuantity('');
+            setShelfLife('');
+            setPackaging('');
             setImagePreview(null);
             setImageDataUri(null);
             setPrice(null);
@@ -168,22 +177,38 @@ function SellPageContents() {
                             <Label htmlFor="product-name">{t('product_name')}</Label>
                             <Input id="product-name" value={productName} onChange={(e) => setProductName(e.target.value)} placeholder={t('product_name_placeholder')} required />
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="category">{t('category')}</Label>
-                            <Select onValueChange={setCategory} value={category}>
-                                <SelectTrigger id="category">
-                                    <SelectValue placeholder={t('select_category_placeholder')} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {categories.map((cat) => (
-                                        <SelectItem key={cat.key} value={cat.label}>{t(cat.key as any)}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="category">{t('category')}</Label>
+                                <Select onValueChange={setCategory} value={category}>
+                                    <SelectTrigger id="category">
+                                        <SelectValue placeholder={t('select_category_placeholder')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {categories.map((cat) => (
+                                            <SelectItem key={cat.key} value={cat.label}>{t(cat.key as any)}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="quantity">{t('quantity', 'Quantity / Volume')}</Label>
+                                <Input id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder={t('quantity_placeholder', 'e.g., 10 Ton, 500 Ekor')} required />
+                            </div>
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="description">{t('description')}</Label>
                             <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={t('description_placeholder')} required />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div className="grid gap-2">
+                                <Label htmlFor="shelf-life">{t('shelf_life', 'Product Durability / Shelf Life')}</Label>
+                                <Input id="shelf-life" value={shelfLife} onChange={(e) => setShelfLife(e.target.value)} placeholder={t('shelf_life_placeholder', 'e.g., 7 days, 6 months')} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="packaging">{t('packaging', 'Packaging Details')}</Label>
+                                <Input id="packaging" value={packaging} onChange={(e) => setPackaging(e.target.value)} placeholder={t('packaging_placeholder', 'e.g., Refrigerated container')} />
+                            </div>
                         </div>
                         <div className="grid gap-2">
                             <Label>{t('product_photo')}</Label>
@@ -255,3 +280,5 @@ export default function SellPage() {
         </Suspense>
     )
 }
+
+    
