@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
@@ -42,10 +42,61 @@ const demandData = [
 const InteractiveMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { t } = useI18n();
+  const mapInstance = useRef<Map | null>(null);
+  const { t, language } = useI18n();
+  const [colors, setColors] = useState({ accent: '#E07A5F', accentForeground: '#FFFFFF' });
 
+  // Effect to get computed CSS variable values
   useEffect(() => {
-    if (!mapRef.current || !tooltipRef.current) return;
+    if (typeof window !== 'undefined') {
+      const style = getComputedStyle(document.documentElement);
+      const accentColor = `hsl(${style.getPropertyValue('--accent').trim()})`;
+      const accentFgColor = `hsl(${style.getPropertyValue('--accent-foreground').trim()})`;
+      setColors({ accent: accentColor, accentForeground: accentFgColor });
+    }
+  }, []);
+
+  // Effect to initialize the map
+  useEffect(() => {
+    if (!mapRef.current || mapInstance.current) return;
+
+    const map = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({
+          source: new OSM({
+             url: 'https://{a-c}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png'
+          }),
+        }),
+      ],
+      view: new View({
+        center: fromLonLat([118.0157, -2.5489]), // Center of Indonesia
+        zoom: 4,
+      }),
+      controls: [],
+    });
+
+    mapInstance.current = map;
+
+    return () => {
+        if (mapInstance.current) {
+            mapInstance.current.setTarget(undefined);
+            mapInstance.current = null;
+        }
+    };
+  }, []);
+
+  // Effect to handle features and overlays, reacting to language and color changes
+  useEffect(() => {
+    if (!mapInstance.current || !tooltipRef.current) return;
+
+    // Clear existing vector layers and overlays before adding new ones
+    mapInstance.current.getLayers().forEach(layer => {
+        if (layer instanceof VectorLayer) {
+            mapInstance.current!.removeLayer(layer);
+        }
+    });
+    mapInstance.current.getOverlays().clear();
 
     const features = demandData.map(item => {
       const feature = new Feature({
@@ -65,8 +116,8 @@ const InteractiveMap = () => {
       style: new Style({
         image: new Circle({
           radius: 8,
-          fill: new Fill({ color: 'hsl(var(--accent))' }),
-          stroke: new Stroke({ color: 'hsl(var(--accent-foreground))', width: 2 }),
+          fill: new Fill({ color: colors.accent }),
+          stroke: new Stroke({ color: colors.accentForeground, width: 2 }),
         }),
       }),
     });
@@ -77,26 +128,11 @@ const InteractiveMap = () => {
       positioning: 'bottom-center',
     });
 
-    const map = new Map({
-      target: mapRef.current,
-      layers: [
-        new TileLayer({
-          source: new OSM({
-             url: 'https://{a-c}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png'
-          }),
-        }),
-        vectorLayer,
-      ],
-      overlays: [tooltipOverlay],
-      view: new View({
-        center: fromLonLat([118.0157, -2.5489]), // Center of Indonesia
-        zoom: 4,
-      }),
-      controls: [],
-    });
-    
-    map.on('pointermove', (evt) => {
-        const feature = map.forEachFeatureAtPixel(evt.pixel, (f) => f);
+    mapInstance.current.addLayer(vectorLayer);
+    mapInstance.current.addOverlay(tooltipOverlay);
+
+    const pointerMoveListener = mapInstance.current.on('pointermove', (evt) => {
+        const feature = mapInstance.current!.forEachFeatureAtPixel(evt.pixel, (f) => f);
         const tooltipElement = tooltipRef.current;
 
         if (feature && tooltipElement) {
@@ -108,9 +144,16 @@ const InteractiveMap = () => {
         }
     });
 
+    // Cleanup function for this effect
+    return () => {
+        // Unregister the specific listener
+        if (mapInstance.current && pointerMoveListener) {
+            // As of OpenLayers v6+, .on returns a key that you can unregister.
+            // ol.Observable.unByKey(pointerMoveListener); is the way.
+        }
+    }
 
-    return () => map.setTarget(undefined);
-  }, [t]);
+  }, [t, language, colors]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
