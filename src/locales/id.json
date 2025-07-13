@@ -406,5 +406,13 @@
   "delivery_order_terms": "Dokumen ini menyatakan bahwa barang yang tercantum di atas telah diberangkatkan untuk pengiriman. Harap tunjukkan dokumen ini saat tiba. Ini bukan faktur pajak.",
   "sender_signature": "Tanda Tangan Pengirim",
   "carrier_signature": "Tanda Tangan Pembawa",
-  "recipient_signature": "Tanda Tangan Penerima"
+  "recipient_signature": "Tanda Tangan Penerima",
+  "products_sold": "Produk Terjual",
+  "gross_revenue": "Pendapatan Kotor",
+  "sales_by_category": "Penjualan per Kategori",
+  "sales_by_category_desc": "Distribusi pendapatan dari produk yang terjual.",
+  "bidding_activity_by_category": "Aktivitas Penawaran per Kategori",
+  "bidding_activity_desc": "Bagaimana aktivitas penawaran Anda didistribusikan di seluruh kategori.",
+  "total_shipments": "Total Pengiriman",
+  "mentored_producers": "Produsen Binaan"
 }

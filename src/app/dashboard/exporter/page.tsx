@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { PackageCheck, BookUser } from "lucide-react"
+import { PackageCheck, BookUser, Plane, Users } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from 'next/link';
 import { useAuth } from "@/context/auth";
@@ -47,6 +47,23 @@ export default function ExporterDashboardPage() {
                 <h1 className="text-4xl font-bold font-headline">{pageTitle}</h1>
                 <p className="text-muted-foreground">{t('exporter_dashboard_desc')}</p>
             </header>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mb-8">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                       <CardTitle className="text-sm font-medium">{t('total_shipments', 'Total Shipments')}</CardTitle>
+                       <Plane className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent><div className="text-2xl font-bold">{exportShipments.length}</div></CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                       <CardTitle className="text-sm font-medium">{t('mentored_producers', 'Mentored Producers')}</CardTitle>
+                       <Users className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent><div className="text-2xl font-bold">{mentoredProducers.length}</div></CardContent>
+                </Card>
+            </div>
             
             <div className="space-y-8">
                 <Card>

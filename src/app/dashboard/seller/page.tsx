@@ -1,30 +1,33 @@
 
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
-import { MoreHorizontal, PlusCircle } from "lucide-react";
+import { MoreHorizontal, PlusCircle, DollarSign, Package, CheckCircle, PieChart } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth";
 import { dashboardLabel } from "@/config/sidebar";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Pie, Cell, PieChart as RechartsPieChart } from "recharts"
+
 
 const productsByRole = {
   petani: [
     { id: 'PROD-P01', name: 'Padi Organik', name_id: 'Padi Organik', status: 'Active', status_id: 'Aktif', stock: '15 Ton', category: 'Grains', description: 'Padi organik varietas unggul dari sawah subur.', price: 500, quantity: '15 Ton', shelfLife: '12 bulan', packaging: 'Karung 50kg' },
-    { id: 'PROD-P02', name: 'Cabai Merah Keriting', name_id: 'Cabai Merah Keriting', status: 'Ended', status_id: 'Selesai', stock: '500 Kg', category: 'Fruits & Vegetables', description: 'Cabai merah keriting segar, tingkat kepedasan tinggi.', price: 20, quantity: '500 Kg', shelfLife: '1 minggu', packaging: 'Kardus berventilasi' },
+    { id: 'PROD-P02', name: 'Cabai Merah Keriting', name_id: 'Cabai Merah Keriting', status: 'Ended', status_id: 'Selesai', stock: '500 Kg', category: 'Fruits & Vegetables', description: 'Cabai merah keriting segar, tingkat kepedasan tinggi.', price: 200, quantity: '500 Kg', shelfLife: '1 minggu', packaging: 'Kardus berventilasi' },
     { id: 'PROD-P03', name: 'Jagung Manis', name_id: 'Jagung Manis', status: 'Pending', status_id: 'Menunggu', stock: '5 Ton', category: 'Fruits & Vegetables', description: 'Jagung manis kualitas ekspor.', price: 150, quantity: '5 Ton', shelfLife: '5 hari', packaging: 'Kardus' },
   ],
   nelayan: [
     { id: 'PROD-N01', name: 'Tuna Sirip Kuning Segar', name_id: 'Tuna Sirip Kuning Segar', status: 'Active', status_id: 'Aktif', stock: '2 Ton', category: 'Marine Fishery', description: 'Tuna segar, ditangkap secara berkelanjutan.', price: 8000, quantity: '2 Ton', shelfLife: '3 hari (dingin)', packaging: 'Kotak styrofoam dengan es' },
     { id: 'PROD-N02', name: 'Cumi-cumi Beku', name_id: 'Cumi-cumi Beku', status: 'Active', status_id: 'Aktif', stock: '1.5 Ton', category: 'Marine Fishery', description: 'Cumi-cumi beku, kualitas ekspor.', price: 3000, quantity: '1.5 Ton', shelfLife: '6 bulan (beku)', packaging: 'Blok beku dalam kardus' },
-    { id: 'PROD-N03', name: 'Lobster Mutiara Hidup', name_id: 'Lobster Mutiara Hidup', status: 'Ended', status_id: 'Selesai', stock: '300 Kg', category: 'Marine Fishery', description: 'Lobster mutiara hidup untuk pasar premium.', price: 2500, quantity: '300 Kg', shelfLife: '24 jam (hidup)', packaging: 'Kotak berventilasi dengan kain basah' },
+    { id: 'PROD-N03', name: 'Lobster Mutiara Hidup', name_id: 'Lobster Mutiara Hidup', status: 'Ended', status_id: 'Selesai', stock: '300 Kg', category: 'Marine Fishery', description: 'Lobster mutiara hidup untuk pasar premium.', price: 25000, quantity: '300 Kg', shelfLife: '24 jam (hidup)', packaging: 'Kotak berventilasi dengan kain basah' },
   ],
   peternak: [
     { id: 'PROD-T01', name: 'Sapi Limousin', name_id: 'Sapi Limousin', status: 'Active', status_id: 'Aktif', stock: '20 Ekor', category: 'Livestock', description: 'Sapi limousin jantan, berat rata-rata 500kg.', price: 10000, quantity: '20 Ekor', shelfLife: 'N/A', packaging: 'Truk ternak' },
@@ -44,6 +47,19 @@ const productsByRole = {
   ]
 };
 
+const chartConfig = {
+  sales: {
+    label: "Sales",
+  },
+  'Grains': { label: 'Grains', color: 'hsl(var(--chart-1))' },
+  'Fruits & Vegetables': { label: 'Fruits & Vegetables', color: 'hsl(var(--chart-2))' },
+  'Livestock': { label: 'Livestock', color: 'hsl(var(--chart-3))' },
+  'Marine Fishery': { label: 'Marine Fishery', color: 'hsl(var(--chart-4))' },
+  'Plantation': { label: 'Plantation', color: 'hsl(var(--chart-5))' },
+  'Forestry Products': { label: 'Forestry Products', color: 'hsl(var(--chart-1))' },
+} satisfies import('@/components/ui/chart').ChartConfig;
+
+
 export function getMockProducts() {
     const allProducts = Object.values(productsByRole).flat();
     return allProducts;
@@ -51,7 +67,7 @@ export function getMockProducts() {
 
 
 export default function SellerDashboardPage() {
-    const { t, language } = useI18n();
+    const { t, language, formatCurrency } = useI18n();
     const { toast } = useToast();
     const { user } = useAuth();
     
@@ -89,6 +105,26 @@ export default function SellerDashboardPage() {
         const statusKey = `status_${(language === 'id' ? product.status_id : product.status).toLowerCase().replace(/ /g, '_')}`;
         return t(statusKey, language === 'id' ? product.status_id : product.status);
     }
+    
+    const stats = useMemo(() => {
+        const activeAuctions = sellerProducts.filter(p => p.status === 'Active').length;
+        const productsSold = sellerProducts.filter(p => p.status === 'Ended');
+        const grossRevenue = productsSold.reduce((acc, p) => acc + p.price, 0);
+        return { activeAuctions, productsSold: productsSold.length, grossRevenue };
+    }, [sellerProducts]);
+
+    const salesByCategory = useMemo(() => {
+        const soldProducts = sellerProducts.filter(p => p.status === 'Ended');
+        const categoryData = soldProducts.reduce((acc, product) => {
+            if (!acc[product.category]) {
+                acc[product.category] = 0;
+            }
+            acc[product.category] += product.price;
+            return acc;
+        }, {} as Record<string, number>);
+        
+        return Object.entries(categoryData).map(([name, value]) => ({ name, value, fill: `var(--color-${name})`}));
+    }, [sellerProducts]);
 
     return (
         <>
@@ -104,72 +140,119 @@ export default function SellerDashboardPage() {
                     </Link>
                 </Button>
             </header>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-headline text-2xl">{t('my_products')}</CardTitle>
-                    <CardDescription>{t('my_products_desc')}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                <Table>
-                    <TableHeader>
-                    <TableRow>
-                        <TableHead>{t('product')}</TableHead>
-                        <TableHead>{t('status')}</TableHead>
-                        <TableHead>{t('stock')}</TableHead>
-                        <TableHead className="text-right">{t('actions')}</TableHead>
-                    </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                    {sellerProducts.map((prod) => (
-                        <TableRow key={prod.id}>
-                        <TableCell className="font-medium">{language === 'id' ? prod.name_id : prod.name}</TableCell>
-                        <TableCell><Badge variant={getStatusVariant(language === 'id' ? prod.status_id : prod.status)}>{getStatusText(prod)}</Badge></TableCell>
-                        <TableCell>{prod.stock}</TableCell>
-                        <TableCell className="text-right">
-                             <AlertDialog>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="h-8 w-8 p-0">
-                                            <span className="sr-only">Open menu</span>
-                                            <MoreHorizontal className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
-                                        <DropdownMenuItem asChild>
-                                            <Link href={`/auctions/${prod.id}`}>{t('view_auction')}</Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem asChild>
-                                            <Link href={`/sell?edit=${prod.id}`}>{t('edit_product', 'Edit')}</Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <AlertDialogTrigger asChild>
-                                            <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                                                {t('delete_product', 'Delete')}
-                                            </DropdownMenuItem>
-                                        </AlertDialogTrigger>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>{t('confirm_delete_title', 'Are you absolutely sure?')}</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            {t('confirm_delete_desc', 'This action cannot be undone. This will permanently delete the product "{{productName}}".', { productName: language === 'id' ? prod.name_id : prod.name })}
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>{t('cancel', 'Cancel')}</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => handleDeleteProduct(prod.id)}>{t('continue', 'Continue')}</AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                             </AlertDialog>
-                        </TableCell>
+             <div className="grid gap-4 md:grid-cols-3 mb-8">
+                <Card>
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                       <CardTitle className="text-sm font-medium">{t('active_auctions')}</CardTitle>
+                       <Package className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent><div className="text-2xl font-bold">{stats.activeAuctions}</div></CardContent>
+                </Card>
+                <Card>
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                       <CardTitle className="text-sm font-medium">{t('products_sold', 'Products Sold')}</CardTitle>
+                       <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent><div className="text-2xl font-bold">{stats.productsSold}</div></CardContent>
+                </Card>
+                <Card>
+                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                       <CardTitle className="text-sm font-medium">{t('gross_revenue', 'Gross Revenue')}</CardTitle>
+                       <DollarSign className="h-4 w-4 text-muted-foreground" />
+                   </CardHeader>
+                   <CardContent><div className="text-2xl font-bold">{formatCurrency(stats.grossRevenue)}</div></CardContent>
+                </Card>
+            </div>
+            
+            <div className="grid lg:grid-cols-5 gap-8">
+                <Card className="lg:col-span-3">
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('my_products')}</CardTitle>
+                        <CardDescription>{t('my_products_desc')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                    <Table>
+                        <TableHeader>
+                        <TableRow>
+                            <TableHead>{t('product')}</TableHead>
+                            <TableHead>{t('status')}</TableHead>
+                            <TableHead>{t('stock')}</TableHead>
+                            <TableHead className="text-right">{t('actions')}</TableHead>
                         </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
-                </CardContent>
-            </Card>
+                        </TableHeader>
+                        <TableBody>
+                        {sellerProducts.map((prod) => (
+                            <TableRow key={prod.id}>
+                            <TableCell className="font-medium">{language === 'id' ? prod.name_id : prod.name}</TableCell>
+                            <TableCell><Badge variant={getStatusVariant(language === 'id' ? prod.status_id : prod.status)}>{getStatusText(prod)}</Badge></TableCell>
+                            <TableCell>{prod.stock}</TableCell>
+                            <TableCell className="text-right">
+                                 <AlertDialog>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <span className="sr-only">Open menu</span>
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/auctions/${prod.id}`}>{t('view_auction')}</Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <Link href={`/sell?edit=${prod.id}`}>{t('edit_product', 'Edit')}</Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <AlertDialogTrigger asChild>
+                                                <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                                                    {t('delete_product', 'Delete')}
+                                                </DropdownMenuItem>
+                                            </AlertDialogTrigger>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>{t('confirm_delete_title', 'Are you absolutely sure?')}</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                {t('confirm_delete_desc', 'This action cannot be undone. This will permanently delete the product "{{productName}}".', { productName: language === 'id' ? prod.name_id : prod.name })}
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>{t('cancel', 'Cancel')}</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => handleDeleteProduct(prod.id)}>{t('continue', 'Continue')}</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                 </AlertDialog>
+                            </TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    </CardContent>
+                </Card>
+                 <Card className="lg:col-span-2">
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('sales_by_category', 'Sales by Category')}</CardTitle>
+                        <CardDescription>{t('sales_by_category_desc', 'Revenue distribution from sold products.')}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-center">
+                        <ChartContainer
+                            config={chartConfig}
+                            className="mx-auto aspect-square w-full max-w-[300px]"
+                        >
+                            <RechartsPieChart>
+                                <ChartTooltip content={<ChartTooltipContent nameKey="value" hideLabel />} />
+                                <Pie data={salesByCategory} dataKey="value" nameKey="name" innerRadius={60}>
+                                    {salesByCategory.map((entry) => (
+                                        <Cell key={`cell-${entry.name}`} fill={entry.fill} />
+                                    ))}
+                                </Pie>
+                            </RechartsPieChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+            </div>
         </>
     )
 }

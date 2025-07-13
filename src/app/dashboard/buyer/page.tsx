@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Gavel, Trophy, Banknote, Package, Truck, Sparkles, Loader2 } from "lucide-react"
+import { Gavel, Trophy, Banknote, Package, Truck, Sparkles, Loader2, BarChart, ShoppingCart } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -14,13 +14,24 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { calculateShippingCost, CalculateShippingCostInput } from "@/ai/flows/calculate-shipping-cost-flow";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Bar, XAxis, YAxis, CartesianGrid, BarChart as RechartsBarChart } from "recharts"
 
 const buyerHistory = [
-  { id: '1', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Winning', status_id: 'Unggul', amount: 4500, shipmentStatus: 'Pending Payment', shipmentStatus_id: 'Menunggu Pembayaran', origin: 'Green Valley Farms, Kansas' },
-  { id: '2', item: 'Fresh Atlantic Salmon', item_id: 'Salmon Atlantik Segar', status: 'Won', status_id: 'Menang', amount: 1200, shipmentStatus: 'In Transit', shipmentStatus_id: 'Dalam Perjalanan', origin: 'Ocean Fresh, Bali' },
-  { id: '3', item: 'Palm Oil Kernels', item_id: 'Biji Kelapa Sawit', status: 'Outbid', status_id: 'Kalah', amount: 850, shipmentStatus: null, shipmentStatus_id: null, origin: null },
-  { id: '4', item: 'Granny Smith Apples', item_id: 'Apel Granny Smith', status: 'Won', status_id: 'Menang', amount: 800, shipmentStatus: 'Delivered', shipmentStatus_id: 'Terkirim', origin: 'Apple Orchards, Washington' },
+  { id: '1', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Winning', status_id: 'Unggul', amount: 4500, shipmentStatus: 'Pending Payment', shipmentStatus_id: 'Menunggu Pembayaran', origin: 'Green Valley Farms, Kansas', category: 'Grains' },
+  { id: '2', item: 'Fresh Atlantic Salmon', item_id: 'Salmon Atlantik Segar', status: 'Won', status_id: 'Menang', amount: 1200, shipmentStatus: 'In Transit', shipmentStatus_id: 'Dalam Perjalanan', origin: 'Ocean Fresh, Bali', category: 'Marine Fishery' },
+  { id: '3', item: 'Palm Oil Kernels', item_id: 'Biji Kelapa Sawit', status: 'Outbid', status_id: 'Kalah', amount: 850, shipmentStatus: null, shipmentStatus_id: null, origin: null, category: 'Plantation' },
+  { id: '4', item: 'Granny Smith Apples', item_id: 'Apel Granny Smith', status: 'Won', status_id: 'Menang', amount: 800, shipmentStatus: 'Delivered', shipmentStatus_id: 'Terkirim', origin: 'Apple Orchards, Washington', category: 'Fruits & Vegetables' },
+  { id: '5', item: 'Robusta Coffee Beans', item_id: 'Biji Kopi Robusta', status: 'Won', status_id: 'Menang', amount: 2200, shipmentStatus: 'Delivered', shipmentStatus_id: 'Terkirim', origin: 'Kintamani Highlands', category: 'Plantation' },
 ];
+
+const chartConfig = {
+  bids: {
+    label: "Bids",
+    color: "hsl(var(--primary))",
+  },
+} satisfies import('@/components/ui/chart').ChartConfig;
+
 
 export default function BuyerDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
@@ -58,6 +69,21 @@ export default function BuyerDashboardPage() {
     
     const auctionsWon = buyerHistory.filter(bid => ['Won', 'Menang'].includes(bid.status) || ['Won', 'Menang'].includes(bid.status_id)).length;
     const activeBids = buyerHistory.filter(bid => ['Winning', 'Unggul'].includes(bid.status) || ['Winning', 'Unggul'].includes(bid.status_id)).length;
+    
+    const bidsByCategory = buyerHistory.reduce((acc, bid) => {
+        const category = bid.category;
+        if (!acc[category]) {
+            acc[category] = 0;
+        }
+        acc[category]++;
+        return acc;
+    }, {} as Record<string, number>);
+
+    const chartData = Object.entries(bidsByCategory).map(([category, bids]) => ({
+        category: t(category.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'), category),
+        bids
+    }));
+
 
     const handleCalculateShipping = async (orderId: string, origin: string, productDetails: string) => {
         setIsCalculating(orderId);
@@ -122,35 +148,54 @@ export default function BuyerDashboardPage() {
                 </Card>
             </div>
 
-            <Card className="mb-8">
-                <CardHeader>
-                    <CardTitle className="font-headline text-2xl">{t('recent_bid_history')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                     <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>{t('item')}</TableHead>
-                                <TableHead>{t('status')}</TableHead>
-                                <TableHead className="text-right">{t('your_bid')}</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {buyerHistory.map((bid) => (
-                                <TableRow key={bid.id}>
-                                <TableCell className="font-medium">
-                                    <Link href={`/auctions/${bid.id}`} className="hover:underline">
-                                        {language === 'id' ? bid.item_id : bid.item}
-                                    </Link>
-                                </TableCell>
-                                <TableCell><Badge variant={getStatusVariant(language === 'id' ? bid.status_id : bid.status)}>{getStatusText(bid)}</Badge></TableCell>
-                                <TableCell className="text-right font-mono">{formatCurrency(bid.amount)}</TableCell>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('recent_bid_history')}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                         <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t('item')}</TableHead>
+                                    <TableHead>{t('status')}</TableHead>
+                                    <TableHead className="text-right">{t('your_bid')}</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+                            </TableHeader>
+                            <TableBody>
+                                {buyerHistory.map((bid) => (
+                                    <TableRow key={bid.id}>
+                                    <TableCell className="font-medium">
+                                        <Link href={`/auctions/${bid.id}`} className="hover:underline">
+                                            {language === 'id' ? bid.item_id : bid.item}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell><Badge variant={getStatusVariant(language === 'id' ? bid.status_id : bid.status)}>{getStatusText(bid)}</Badge></TableCell>
+                                    <TableCell className="text-right font-mono">{formatCurrency(bid.amount)}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline text-2xl">{t('bidding_activity_by_category', 'Bidding Activity by Category')}</CardTitle>
+                        <CardDescription>{t('bidding_activity_desc', 'How your bidding activity is distributed across categories.')}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="h-80 w-full">
+                        <ChartContainer config={chartConfig}>
+                             <RechartsBarChart data={chartData} layout="vertical" margin={{ left: 20, right: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" />
+                                <YAxis dataKey="category" type="category" width={100} tickLine={false} axisLine={false} />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Bar dataKey="bids" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                            </RechartsBarChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+            </div>
 
             <Card>
                 <CardHeader>

@@ -406,5 +406,13 @@
   "delivery_order_terms": "This document certifies that the goods listed above have been dispatched for delivery. Please present this document upon arrival. This is not a tax invoice.",
   "sender_signature": "Sender Signature",
   "carrier_signature": "Carrier Signature",
-  "recipient_signature": "Recipient Signature"
+  "recipient_signature": "Recipient Signature",
+  "products_sold": "Products Sold",
+  "gross_revenue": "Gross Revenue",
+  "sales_by_category": "Sales by Category",
+  "sales_by_category_desc": "Revenue distribution from sold products.",
+  "bidding_activity_by_category": "Bidding Activity by Category",
+  "bidding_activity_desc": "How your bidding activity is distributed across categories.",
+  "total_shipments": "Total Shipments",
+  "mentored_producers": "Mentored Producers"
 }
