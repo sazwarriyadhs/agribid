@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
        <section className="w-full text-white">
-        <div className="w-full aspect-[2/3] md:aspect-[4/3] lg:aspect-[21/9]">
+        <div className="w-full aspect-square">
             <Carousel 
                 opts={{ loop: true }}
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -129,27 +129,27 @@ export default function Home() {
                 <CarouselContent className="h-full">
                     {heroSlides.map((slide, index) => (
                         <CarouselItem key={index} className="h-full relative">
-                            <div className="relative w-full h-full flex items-center justify-center text-center">
+                            <div className="relative w-full h-full flex items-center justify-center text-center bg-black">
                                 <Image
                                     src={slide.src}
                                     alt={t(slide.titleKey as any)}
                                     data-ai-hint={slide.aiHint}
                                     layout="fill"
-                                    objectFit="cover"
-                                    className="-z-10 brightness-50"
+                                    objectFit="contain"
+                                    className="-z-10"
                                 />
-                                <div className="container px-4 md:px-6 animate-fade-in-up">
-                                    <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight">
+                                <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
+                                    <h1 className="text-xl md:text-3xl font-headline font-bold tracking-tight">
                                         {t(slide.titleKey as any)}
                                     </h1>
-                                    <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/90">
+                                    <p className="mt-2 max-w-2xl mx-auto text-sm md:text-base text-primary-foreground/90">
                                         {t(slide.subtitleKey as any)}
                                     </p>
-                                    <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                                        <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                                    <div className="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
+                                        <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                                         <Link href="#featured-auctions">{t('browse_auctions')}</Link>
                                         </Button>
-                                        <Button asChild size="lg" variant="secondary">
+                                        <Button asChild size="sm" variant="secondary">
                                         <Link href="/signup">{t('become_a_producer')}</Link>
                                         </Button>
                                     </div>
@@ -302,5 +302,7 @@ export default function Home() {
     
 
 
+
+    
 
     
