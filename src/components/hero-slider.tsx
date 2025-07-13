@@ -19,7 +19,7 @@ const heroSlides = [
     subtitleKey: 'hero_subtitle_2',
   },
   {
-    src: '/images/hero1.png',
+    src: '/images/hero3.png',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3',
   },
