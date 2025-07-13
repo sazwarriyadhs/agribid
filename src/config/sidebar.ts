@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, BarChart2, FilePlus, ShieldCheck, BookUser, Building, Tractor, DollarSign, Search } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote } from 'lucide-react';
 
 export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter";
 
@@ -18,7 +18,7 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
   ],
   buyer: [
     { name: "Dashboard", path: "/dashboard/buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
-    { name: "Active Auctions", path: "/#featured-auctions", icon: Search, labelKey: 'auctions' },
+    { name: "Active Auctions", path: "/", icon: Search, labelKey: 'auctions' },
     { name: "My Bids", path: "/dashboard/buyer", icon: Gavel, labelKey: 'my_bids' },
   ],
   admin: [

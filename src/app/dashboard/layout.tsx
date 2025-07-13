@@ -46,10 +46,22 @@ function Sidebar() {
                     <SidebarGroupLabel>{getRoleTitle(role)} {t('navigation')}</SidebarGroupLabel>
                     {menuItems.map((item: NavItem) => {
                         const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
-                        const isActive = pathname === item.path || (item.path !== `/dashboard/${role}` && item.path !== '/' && pathname.startsWith(item.path));
                         
-                        // Create a unique key using path and name
-                        const uniqueKey = `${item.path}-${item.name}`;
+                        // Handle active state logic
+                        // The dashboard link is active only on its exact path.
+                        // Other links are active if the pathname starts with their path.
+                        // The root path '/' is a special case for the buyer's "Active Auctions" link.
+                        let isActive = false;
+                        if (item.path === `/dashboard/${role}`) {
+                            isActive = pathname === item.path;
+                        } else if (item.path === '/') {
+                            isActive = pathname === item.path;
+                        } else {
+                            isActive = pathname.startsWith(item.path);
+                        }
+
+                        // Create a unique key using path and labelKey
+                        const uniqueKey = `${item.path}-${item.labelKey || item.name}`;
 
                         return (
                          <SidebarMenuItem key={uniqueKey}>
@@ -83,9 +95,9 @@ export default function DashboardLayout({
         <div className="flex min-h-screen">
             <Sidebar />
             <SidebarInset>
-                <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+                <main className="flex-1 space-y-8 p-4 md:p-8 pt-6">
                     {children}
-                </div>
+                </main>
             </SidebarInset>
         </div>
     </SidebarProvider>
