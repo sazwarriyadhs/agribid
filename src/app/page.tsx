@@ -119,8 +119,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-       <section className="w-full text-white">
-        <div className="w-full aspect-square">
+      <section className="w-full text-white">
+        <div className="w-full max-w-[1024px] h-[1080px] mx-auto overflow-hidden">
             <Carousel 
                 opts={{ loop: true }}
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -128,7 +128,7 @@ export default function Home() {
             >
                 <CarouselContent className="h-full">
                     {heroSlides.map((slide, index) => (
-                        <CarouselItem key={index} className="h-full relative">
+                        <CarouselItem key={index} className="relative h-full">
                             <div className="relative w-full h-full flex items-center justify-center text-center bg-black">
                                 <Image
                                     src={slide.src}
