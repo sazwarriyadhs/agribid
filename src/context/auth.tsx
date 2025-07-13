@@ -31,11 +31,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         role = 'seller';
     } else if (emailPrefix === 'admin') {
         role = 'admin';
-    } else if (emailPrefix === 'mitra' || emailPrefix === 'partner') {
+    } else if (['mitra', 'partner', 'vendor'].includes(emailPrefix)) {
         role = 'vendor';
-    } else if (emailPrefix === 'eksportir' || emailPrefix === 'exporter') {
+    } else if (['eksportir', 'exporter'].includes(emailPrefix)) {
         role = 'exporter';
-    } else if (emailPrefix === 'buyer' || emailPrefix === 'bidder') {
+    } else if (['buyer', 'bidder'].includes(emailPrefix)) {
         role = 'buyer';
     }
 

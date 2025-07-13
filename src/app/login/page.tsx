@@ -23,11 +23,12 @@ const dashboardRedirect: Record<string, string> = {
   "pengolah hasil hutan": "/dashboard/seller",
   eksportir: "/dashboard/exporter",
   mitra: "/dashboard/vendor",
+  partner: "/dashboard/vendor",
+  vendor: "/dashboard/vendor",
   buyer: "/dashboard/buyer",
-  producer: "/dashboard/seller", // fallback
-  bidder: "/dashboard/buyer", // fallback
-  partner: "/dashboard/vendor", // fallback
-  exporter: "/dashboard/exporter" // fallback
+  bidder: "/dashboard/buyer",
+  producer: "/dashboard/seller",
+  exporter: "/dashboard/exporter",
 };
 
 
@@ -42,13 +43,9 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // login() sets the user state and returns the user's role
-    const userRole = login(email);
+    login(email);
     
-    // The key for redirection is the part of the email before the '@'
     const emailPrefix = email.split('@')[0].toLowerCase();
-
-    // Find the correct path from the redirect map, or use a fallback
     const path = dashboardRedirect[emailPrefix] || '/dashboard/buyer';
 
     toast({
@@ -56,7 +53,6 @@ export default function LoginPage() {
       description: t('login_success_desc'),
     });
     
-    // Redirect the user to the correct dashboard
     router.push(path);
   };
 
