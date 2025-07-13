@@ -226,6 +226,7 @@
   "status_in_transit": "Dalam Perjalanan",
   "status_delivered": "Terkirim",
   "status_suspended": "Ditangguhkan",
+  "status_completed": "Selesai",
   "membership_card": "Kartu Member",
   "membership_card_title": "Kartu Keanggotaan Digital Anda",
   "membership_card_subtitle": "Kartu ini adalah bukti keanggotaan terverifikasi Anda di AgriBid.",
@@ -320,5 +321,21 @@
   "stable_demand": "Permintaan Stabil",
   "growing_demand": "Permintaan Tumbuh",
   "top_destinations": "Tujuan Utama",
-  "log_in_to_check_eligibility": "Anda harus masuk untuk memeriksa kelayakan."
+  "log_in_to_check_eligibility": "Anda harus masuk untuk memeriksa kelayakan.",
+  "financial_reports": "Laporan Keuangan",
+  "payments": "Pembayaran",
+  "financial_overview_title": "Gambaran Keuangan",
+  "financial_overview_desc": "Lacak pendapatan, transaksi, dan pembayaran.",
+  "transaction_volume": "Volume Transaksi",
+  "pending_payouts": "Pembayaran Tertunda",
+  "monthly_revenue_title": "Pendapatan Bulanan",
+  "payment_management_title": "Manajemen Pembayaran",
+  "payment_management_desc": "Lihat dan kelola semua transaksi di platform.",
+  "transaction_id": "ID Transaksi",
+  "date": "Tanggal",
+  "mark_as_paid": "Tandai Lunas",
+  "payment_marked_as_paid_title": "Pembayaran Diperbarui",
+  "payment_marked_as_paid_desc": "Transaksi {{transactionId}} telah ditandai lunas."
 }
+
+    

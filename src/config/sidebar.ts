@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart } from 'lucide-react';
 
 export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter";
 
@@ -23,6 +23,8 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
   ],
   admin: [
     { name: "Overview", path: "/dashboard/admin", icon: LayoutDashboard, labelKey: 'admin_dashboard_title' },
+    { name: "Financial Reports", path: "/dashboard/admin#financial-reports", icon: LineChart, labelKey: 'financial_reports' },
+    { name: "Payments", path: "/dashboard/admin#payment-management", icon: Banknote, labelKey: 'payments' },
     { name: "Product Verification", path: "/dashboard/admin", icon: ShieldCheck, labelKey: 'pending_product_verifications' },
     { name: "User Management", path: "/dashboard/admin", icon: Users, labelKey: 'user_management' },
   ],
@@ -49,3 +51,5 @@ export const dashboardLabel: { [key: string]: string } = {
   buyer: "Dashboard Pembeli",
   default: "Dashboard"
 };
+
+    

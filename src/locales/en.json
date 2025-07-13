@@ -226,6 +226,7 @@
   "status_in_transit": "In Transit",
   "status_delivered": "Delivered",
   "status_suspended": "Suspended",
+  "status_completed": "Completed",
   "membership_card": "Membership Card",
   "membership_card_title": "Your Digital Membership Card",
   "membership_card_subtitle": "This card is proof of your verified membership on AgriBid.",
@@ -320,5 +321,21 @@
   "stable_demand": "Stable Demand",
   "growing_demand": "Growing Demand",
   "top_destinations": "Top Destinations",
-  "log_in_to_check_eligibility": "You must be logged in to check eligibility."
+  "log_in_to_check_eligibility": "You must be logged in to check eligibility.",
+  "financial_reports": "Financial Reports",
+  "payments": "Payments",
+  "financial_overview_title": "Financial Overview",
+  "financial_overview_desc": "Track revenue, transactions, and payouts.",
+  "transaction_volume": "Transaction Volume",
+  "pending_payouts": "Pending Payouts",
+  "monthly_revenue_title": "Monthly Revenue",
+  "payment_management_title": "Payment Management",
+  "payment_management_desc": "View and manage all transactions on the platform.",
+  "transaction_id": "Transaction ID",
+  "date": "Date",
+  "mark_as_paid": "Mark as Paid",
+  "payment_marked_as_paid_title": "Payment Updated",
+  "payment_marked_as_paid_desc": "Transaction {{transactionId}} has been marked as paid."
 }
+
+    
