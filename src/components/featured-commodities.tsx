@@ -11,8 +11,20 @@ const categories: { key: string; Icon: LucideIcon }[] = [
     { key: "Hasil Hutan", Icon: Leaf }
 ];
 
-export function FeaturedCommodities() {
+interface FeaturedCommoditiesProps {
+  onCategorySelect: (category: string) => void;
+}
+
+export function FeaturedCommodities({ onCategorySelect }: FeaturedCommoditiesProps) {
   const { t } = useI18n();
+
+  const handleCategoryClick = (categoryKey: string) => {
+    onCategorySelect(categoryKey);
+    const featuredAuctionsSection = document.getElementById('featured-auctions');
+    if (featuredAuctionsSection) {
+      featuredAuctionsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section className="py-16 md:py-24 bg-background">
@@ -21,7 +33,11 @@ export function FeaturedCommodities() {
         <p className="text-center text-muted-foreground mt-2 mb-12">{t('browse_by_category_subtitle')}</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
           {categories.map(({ key, Icon }) => (
-            <div key={key} className="flex flex-col items-center text-center p-4 rounded-lg bg-card hover:shadow-lg transition-shadow cursor-pointer">
+            <div 
+              key={key} 
+              onClick={() => handleCategoryClick(key)}
+              className="flex flex-col items-center text-center p-4 rounded-lg bg-card hover:shadow-lg transition-shadow cursor-pointer"
+            >
               <div className="bg-primary/10 p-4 rounded-full mb-4">
                 <Icon className="h-10 w-10 text-primary" />
               </div>

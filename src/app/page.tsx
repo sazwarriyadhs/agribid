@@ -123,13 +123,9 @@ const categories = [
     { key: "all", label: "All Categories" },
     { key: "Pertanian", label: "Pertanian" },
     { key: "Peternakan", label: "Peternakan" },
-    { key: "grains", label: "Grains" },
-    { key: "livestock", label: "Livestock" },
-    { key: "fruits_vegetables", label: "Fruits & Vegetables" },
-    { key: "plantation", label: "Plantation" },
-    { key: "marine_fishery", label: "Marine Fishery" },
-    { key: "inland_fishery", label: "Inland Fishery" },
-    { key: "forestry_products", label: "Forestry Products" },
+    { key: "Perikanan", label: "Perikanan" },
+    { key: "Perkebunan", label: "Perkebunan" },
+    { key: "Hasil Hutan", label: "Hasil Hutan" }
 ];
 
 export default function Home() {
@@ -192,7 +188,7 @@ export default function Home() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Select onValueChange={setSelectedCategory} defaultValue="All Categories">
+                <Select onValueChange={setSelectedCategory} value={selectedCategory}>
                     <SelectTrigger>
                         <SelectValue placeholder={t('select_category_placeholder')} />
                     </SelectTrigger>
@@ -282,7 +278,7 @@ export default function Home() {
         </div>
       </section>
 
-      <FeaturedCommodities />
+      <FeaturedCommodities onCategorySelect={setSelectedCategory} />
       
       <DirectFromProducer />
 
