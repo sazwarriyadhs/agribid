@@ -160,7 +160,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="featured-auctions" className="py-12 md:py-24 bg-background pt-4 md:pt-10 pb-12 mt-[-20px] md:mt-[-40px]">
+      <section id="featured-auctions" className="py-12 md:py-24 bg-background mt-[-20px] md:mt-[-40px] relative z-10 rounded-t-2xl md:rounded-t-3xl">
         <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
             <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
