@@ -373,5 +373,15 @@
   "shipping_cost": "Shipping Cost",
   "calculate_with_ai": "Calculate with AI",
   "shipping_cost_calculated_title": "Shipping Cost Calculated",
-  "shipping_cost_calculated_desc": "Estimated shipping cost is {{amount}}."
+  "shipping_cost_calculated_desc": "Estimated shipping cost is {{amount}}.",
+  "auction_requirements_title": "Auction Eligibility Requirements",
+  "auction_requirements_desc": "Make sure your product listing includes a clear photo, detailed description, and accurate specifications to pass admin verification.",
+  "export_product_requirements_title": "Export-Ready Product Requirements",
+  "export_product_requirements_subtitle": "Ensure your products meet these standards to be eligible for the global market.",
+  "export_req_1_title": "Quality Standards",
+  "export_req_1_desc": "Products must meet international quality standards (e.g., Grade A, Premium Quality) and be free from defects.",
+  "export_req_2_title": "Certifications",
+  "export_req_2_desc": "Relevant certifications such as Halal, Organic, HACCP, or GAP are often required by international buyers.",
+  "export_req_3_title": "Packaging & Labeling",
+  "export_req_3_desc": "Packaging must be durable, suitable for long-distance shipping, and labeled according to the destination country's regulations."
 }

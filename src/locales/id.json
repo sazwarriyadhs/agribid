@@ -373,5 +373,15 @@
   "shipping_cost": "Biaya Kirim",
   "calculate_with_ai": "Hitung dengan AI",
   "shipping_cost_calculated_title": "Biaya Kirim Terhitung",
-  "shipping_cost_calculated_desc": "Estimasi biaya pengiriman adalah {{amount}}."
+  "shipping_cost_calculated_desc": "Estimasi biaya pengiriman adalah {{amount}}.",
+  "auction_requirements_title": "Syarat Kelayakan Lelang",
+  "auction_requirements_desc": "Pastikan daftar produk Anda menyertakan foto yang jelas, deskripsi mendetail, dan spesifikasi yang akurat untuk lolos verifikasi admin.",
+  "export_product_requirements_title": "Syarat Produk Layak Ekspor",
+  "export_product_requirements_subtitle": "Pastikan produk Anda memenuhi standar ini agar layak untuk pasar global.",
+  "export_req_1_title": "Standar Kualitas",
+  "export_req_1_desc": "Produk harus memenuhi standar kualitas internasional (misalnya, Kualitas A, Kualitas Premium) dan bebas dari cacat.",
+  "export_req_2_title": "Sertifikasi",
+  "export_req_2_desc": "Sertifikasi yang relevan seperti Halal, Organik, HACCP, atau GAP sering kali diperlukan oleh pembeli internasional.",
+  "export_req_3_title": "Pengemasan & Pelabelan",
+  "export_req_3_desc": "Pengemasan harus tahan lama, sesuai untuk pengiriman jarak jauh, dan dilabeli sesuai dengan peraturan negara tujuan."
 }

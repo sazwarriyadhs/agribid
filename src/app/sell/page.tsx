@@ -11,9 +11,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useI18n } from '@/context/i18n';
-import { Upload, Sparkles, Send, Loader2, Save } from 'lucide-react';
+import { Upload, Sparkles, Send, Loader2, Save, Info } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const categories = [
     { key: "grains", label: "Grains" },
@@ -227,7 +228,7 @@ function SellPageContents() {
                                      <Button type="button" variant="outline" className="mt-4" onClick={() => fileInputRef.current?.click()}>
                                         {imagePreview ? t('change_photo', 'Change Photo') : t('browse_files')}
                                     </Button>
-                                    <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleImageChange} required={!isEditMode} />
+                                    <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" required={!isEditMode} />
                                 </CardContent>
                             </Card>
                         </div>
@@ -256,6 +257,13 @@ function SellPageContents() {
                                 {t('suggest_price_with_ai')}
                             </Button>
                         </div>
+                         <Alert>
+                            <Info className="h-4 w-4" />
+                            <AlertTitle>{t('auction_requirements_title')}</AlertTitle>
+                            <AlertDescription>
+                                {t('auction_requirements_desc')}
+                            </AlertDescription>
+                         </Alert>
                          <Button type="submit" size="lg" className="w-full mt-2" disabled={isSubmitting || (!price && !isEditMode)}>
                             {isSubmitting ? (
                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -280,5 +288,3 @@ export default function SellPage() {
         </Suspense>
     )
 }
-
-    

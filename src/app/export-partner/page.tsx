@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useI18n } from '@/context/i18n';
-import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award, FileUp, Sparkles, Loader2, Users } from 'lucide-react';
+import { CheckCircle, FileText, Globe, Handshake, Plane, ShieldCheck, UserCheck, Award, FileUp, Sparkles, Loader2, Users, FileBadge, Box, ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -33,6 +33,12 @@ export default function ExportPartnerPage() {
         { icon: Award, title: "exporter_step_2_title", description: "exporter_step_2_desc" },
         { icon: FileUp, title: "exporter_step_3_title", description: "exporter_step_3_desc" },
         { icon: Plane, title: "exporter_step_4_title", description: "exporter_step_4_desc" },
+    ];
+
+    const exportRequirements = [
+        { icon: ThumbsUp, title: "export_req_1_title", description: "export_req_1_desc" },
+        { icon: FileBadge, title: "export_req_2_title", description: "export_req_2_desc" },
+        { icon: Box, title: "export_req_3_title", description: "export_req_3_desc" },
     ];
     
     // Simulating file upload
@@ -140,6 +146,26 @@ export default function ExportPartnerPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            <section className="py-16">
+                <h2 className="text-3xl font-bold text-center font-headline">{t('export_product_requirements_title')}</h2>
+                <p className="text-center text-muted-foreground mt-2 mb-12">{t('export_product_requirements_subtitle')}</p>
+                <div className="grid md:grid-cols-3 gap-8 text-left">
+                    {exportRequirements.map((req, index) => (
+                        <Card key={index}>
+                            <CardHeader className="flex flex-row items-center gap-4">
+                                <div className="bg-primary/10 p-3 rounded-full">
+                                    <req.icon className="h-6 w-6 text-primary" />
+                                </div>
+                                <CardTitle className="font-headline text-xl">{t(req.title as any)}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground">{t(req.description as any)}</p>
+                            </CardContent>
+                        </Card>
+                    ))}
                 </div>
             </section>
             
