@@ -19,51 +19,110 @@ import HeroSlider from '@/components/hero-slider';
 import { DirectFromProducer } from '@/components/direct-from-producer';
 
 // TODO: Connect to the database and fetch real data.
-// This is placeholder data.
+// This is placeholder data based on user's database query.
 const allActiveAuctions = [
     {
       id: '1',
-      name: 'Organic Wheat Harvest',
-      name_id: 'Panen Gandum Organik',
+      name: 'Lelang Cabai Organik',
+      name_id: 'Lelang Cabai Organik',
       image: 'https://placehold.co/600x400.png',
-      aiHint: 'organic wheat',
-      seller: 'Green Valley Farms',
-      seller_id: 'Peternakan Lembah Hijau',
-      currentBid: 4500,
-      bidders: [
-        { name: 'Bakery Co.', bid: 4500, avatar: 'B' },
-        { name: 'Mill & Co.', bid: 4400, avatar: 'M' },
-      ],
-      category: 'Grains'
+      aiHint: 'organic chili',
+      seller: 'Petani Lokal',
+      seller_id: 'Petani Lokal',
+      currentBid: 30000,
+      bidders: [],
+      category: 'Pertanian'
     },
     {
       id: '2',
-      name: 'Fresh Atlantic Salmon',
-      name_id: 'Salmon Atlantik Segar',
+      name: 'Lelang Jagung Manis',
+      name_id: 'Lelang Jagung Manis',
       image: 'https://placehold.co/600x400.png',
-      aiHint: 'atlantic salmon',
-      seller: 'Ocean Fresh Exporters',
-      seller_id: 'Eksportir Samudera Segar',
-      currentBid: 1200,
-      bidders: [{ name: 'Seafood World', bid: 1200, avatar: 'S' }],
-      category: 'Marine Fishery'
+      aiHint: 'sweet corn',
+      seller: 'Petani Lokal',
+      seller_id: 'Petani Lokal',
+      currentBid: 15000,
+      bidders: [],
+      category: 'Pertanian'
+    },
+    {
+      id: '5',
+      name: 'Lelang Telur Ayam Kampung',
+      name_id: 'Lelang Telur Ayam Kampung',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'free range eggs',
+      seller: 'Peternak Lokal',
+      seller_id: 'Peternak Lokal',
+      currentBid: 20000,
+      bidders: [],
+      category: 'Peternakan'
+    },
+    {
+      id: '6',
+      name: 'Lelang Sayur Bayam Organik',
+      name_id: 'Lelang Sayur Bayam Organik',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'organic spinach',
+      seller: 'Petani Lokal',
+      seller_id: 'Petani Lokal',
+      currentBid: 10000,
+      bidders: [],
+      category: 'Pertanian'
+    },
+    {
+      id: '8',
+      name: 'Lelang Padi IR64',
+      name_id: 'Lelang Padi IR64',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'rice paddy',
+      seller: 'Petani Lokal',
+      seller_id: 'Petani Lokal',
+      currentBid: 40000,
+      bidders: [],
+      category: 'Pertanian'
+    },
+    {
+      id: '10',
+      name: 'Lelang Tomat Merah Segar',
+      name_id: 'Lelang Tomat Merah Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fresh tomatoes',
+      seller: 'Petani Lokal',
+      seller_id: 'Petani Lokal',
+      currentBid: 12000,
+      bidders: [],
+      category: 'Pertanian'
     },
     {
       id: '3',
-      name: 'Arabica Coffee Beans',
-      name_id: 'Biji Kopi Arabika',
+      name: 'Lelang Daging Sapi Segar',
+      name_id: 'Lelang Daging Sapi Segar',
       image: 'https://placehold.co/600x400.png',
-      aiHint: 'coffee beans',
-      seller: 'Highland Coffee',
-      seller_id: 'Kopi Dataran Tinggi',
-      currentBid: 3200,
-      bidders: [{ name: 'Global Coffee Inc.', bid: 3200, avatar: 'G' }],
-      category: 'Plantation'
+      aiHint: 'fresh beef',
+      seller: 'Peternak Lokal',
+      seller_id: 'Peternak Lokal',
+      currentBid: 85000,
+      bidders: [],
+      category: 'Peternakan'
     },
+    {
+      id: '11',
+      name: 'Lelang Ayam Broiler Hidup',
+      name_id: 'Lelang Ayam Broiler Hidup',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'live broiler chicken',
+      seller: 'Peternak Lokal',
+      seller_id: 'Peternak Lokal',
+      currentBid: 60000,
+      bidders: [],
+      category: 'Peternakan'
+    }
 ];
 
 const categories = [
     { key: "all", label: "All Categories" },
+    { key: "Pertanian", label: "Pertanian" },
+    { key: "Peternakan", label: "Peternakan" },
     { key: "grains", label: "Grains" },
     { key: "livestock", label: "Livestock" },
     { key: "fruits_vegetables", label: "Fruits & Vegetables" },
@@ -140,7 +199,7 @@ export default function Home() {
                     <SelectContent>
                         {categories.map((cat) => (
                            <SelectItem key={cat.key} value={cat.label}>
-                                {cat.key === 'all' ? t('all_categories', 'All Categories') : t(cat.key as any)}
+                                {cat.key === 'all' ? t('all_categories', 'All Categories') : t(cat.label.toLowerCase() as any, cat.label)}
                             </SelectItem>
                         ))}
                     </SelectContent>
