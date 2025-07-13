@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth';
 import { sidebarByRole, NavItem } from '@/config/sidebar';
 import type { Role } from '@/config/sidebar';
+import { DashboardHeader } from '@/components/dashboard-header';
 
 function Sidebar() {
     const { t } = useI18n();
@@ -47,20 +48,17 @@ function Sidebar() {
                     {menuItems.map((item: NavItem) => {
                         const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
                         
-                        // Handle active state logic
-                        // The dashboard link is active only on its exact path.
-                        // Other links are active if the pathname starts with their path.
-                        // The root path '/' is a special case for the buyer's "Active Auctions" link.
                         let isActive = false;
                         if (item.path === `/dashboard/${role}`) {
                             isActive = pathname === item.path;
                         } else if (item.path === '/') {
+                             // The root path '/' is a special case for the buyer's "Active Auctions" link.
+                             // It should only be active if the pathname is exactly '/'
                             isActive = pathname === item.path;
                         } else {
                             isActive = pathname.startsWith(item.path);
                         }
 
-                        // Create a unique key using path and labelKey
                         const uniqueKey = `${item.path}-${item.labelKey || item.name}`;
 
                         return (
@@ -92,9 +90,10 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-background">
             <Sidebar />
             <SidebarInset>
+                <DashboardHeader />
                 <main className="flex-1 space-y-8 p-4 md:p-8 pt-6">
                     {children}
                 </main>

@@ -3,8 +3,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { AgriBidLogo } from './icons';
 import { Button } from '@/components/ui/button';
 import { Bell, User, LogOut, LayoutDashboard, Settings, Globe, ChevronDown, Plane } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -13,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from "@/hooks/use-toast"
 import { useI18n } from '@/context/i18n';
 import { useAuth } from '@/context/auth';
+import { SidebarTrigger } from './ui/sidebar';
 
 const notifications = [
     { title: "Outbid!", description: "You've been outbid on 'Organic Wheat Harvest'." },
@@ -20,16 +19,10 @@ const notifications = [
     { title: "You Won!", description: "Congratulations! You won the auction for 'Granny Smith Apples'." },
 ]
 
-export function AppHeader() {
+export function DashboardHeader() {
   const { toast } = useToast()
   const { t, language, setLanguage, currency, setCurrency } = useI18n();
   const { user, logout } = useAuth();
-  const pathname = usePathname();
-  
-  // Hide the header on dashboard pages
-  if (pathname.startsWith('/dashboard')) {
-      return null;
-  }
 
   const handleLogout = () => {
     logout();
@@ -40,19 +33,12 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center px-4 md:px-6">
-        <Link href="/" className="mr-6 flex items-center">
-          <AgriBidLogo className="h-10" />
-        </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link href="/#featured-auctions" className="text-muted-foreground transition-colors hover:text-foreground">{t('auctions')}</Link>
-          <Link href="/export-partner" className="text-muted-foreground transition-colors hover:text-foreground flex items-center gap-2">
-            <Plane className="h-4 w-4"/> {t('export')}
-          </Link>
-          <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">{t('about')}</Link>
-          <Link href="#" className="text-muted-foreground transition-colors hover:text-foreground">{t('partners')}</Link>
-        </nav>
+    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center px-4 md:px-6">
+        <div className="md:hidden">
+            <SidebarTrigger />
+        </div>
+        
         <div className="flex flex-1 items-center justify-end gap-2">
            <DropdownMenu>
               <DropdownMenuTrigger asChild>
