@@ -9,19 +9,19 @@ import { useI18n } from '@/context/i18n';
 
 const heroSlides = [
   {
-    src: 'https://placehold.co/1600x900.png',
+    src: 'https://placehold.co/1584x1056.png',
     aiHint: 'farm field',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle',
   },
   {
-    src: 'https://placehold.co/1600x900.png',
+    src: 'https://placehold.co/1584x1056.png',
     aiHint: 'agriculture technology',
     titleKey: 'hero_title_2',
     subtitleKey: 'hero_subtitle_2',
   },
   {
-    src: 'https://placehold.co/1600x900.png',
+    src: 'https://placehold.co/1584x1056.png',
     aiHint: 'seafood market',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3',
