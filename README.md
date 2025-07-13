@@ -1,4 +1,4 @@
-
+slider
 # AgriBid - The Digital Marketplace for Agriculture
 
 ![AgriBid Hero](https://placehold.co/1200x600.png)
