@@ -88,6 +88,16 @@ export default function AuctionPage() {
 
   const handlePlaceBid = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!bidAmount) {
+        toast({
+            variant: 'destructive',
+            title: t('error'),
+            description: t('bid_placeholder', { amount: formatCurrency(minBidAmount) }),
+        });
+        return;
+    }
+
     const bidValue = Number(bidAmount);
 
     if (bidValue < minBidAmount) {
@@ -161,7 +171,6 @@ export default function AuctionPage() {
                             onChange={(e) => setBidAmount(e.target.value)}
                             min={minBidAmount}
                             step={auctionItem.bidIncrement}
-                            required
                         />
                         <Button size="lg" className="w-full h-12 text-lg" type="submit">
                             <Gavel className="mr-2 h-5 w-5" />
