@@ -112,50 +112,48 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="w-full text-white">
-        <div className="w-full max-w-[1024px] h-[1080px] mx-auto overflow-hidden">
-          <Carousel
-            opts={{ loop: true }}
-            plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
-            className="w-full h-full"
-          >
-            <CarouselContent className="h-full">
-              {heroSlides.map((slide, index) => (
-                <CarouselItem key={index} className="relative h-full">
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={slide.src}
-                      alt={t(slide.titleKey)}
-                      data-ai-hint={slide.aiHint}
-                      fill
-                      className="object-cover -z-10 brightness-50"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center text-center bg-black/40">
-                      <div className="absolute bottom-10 left-0 right-0 p-4">
-                        <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
-                          {t(slide.titleKey)}
-                        </h1>
-                        <p className="mt-4 max-w-3xl mx-auto text-lg text-primary-foreground/90">
-                          {t(slide.subtitleKey)}
-                        </p>
-                        <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                          <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                            <Link href="#featured-auctions">{t('browse_auctions')}</Link>
-                          </Button>
-                          <Button asChild size="lg" variant="secondary">
-                            <Link href="/signup">{t('become_a_producer')}</Link>
-                          </Button>
-                        </div>
+       <section className="w-full text-white">
+        <Carousel
+          opts={{ loop: true }}
+          plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
+          className="w-full"
+        >
+          <CarouselContent className="aspect-[3/4] lg:aspect-video">
+            {heroSlides.map((slide, index) => (
+              <CarouselItem key={index} className="relative">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={slide.src}
+                    alt={t(slide.titleKey as any)}
+                    data-ai-hint={slide.aiHint}
+                    fill
+                    className="object-cover brightness-50"
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-end text-center bg-black/40 p-8">
+                    <div className="max-w-3xl">
+                      <h1 className="text-3xl md:text-5xl font-headline font-bold tracking-tight">
+                        {t(slide.titleKey as any)}
+                      </h1>
+                      <p className="mt-4 text-lg text-primary-foreground/90">
+                        {t(slide.subtitleKey as any)}
+                      </p>
+                      <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+                        <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <Link href="#featured-auctions">{t('browse_auctions')}</Link>
+                        </Button>
+                        <Button asChild size="lg" variant="secondary">
+                          <Link href="/signup">{t('become_a_producer')}</Link>
+                        </Button>
                       </div>
                     </div>
                   </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
-            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
-          </Carousel>
-        </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+        </Carousel>
       </section>
 
       <section id="featured-auctions" className="py-16 md:py-24 bg-background relative z-10 mt-[-20px] md:mt-[-40px]">
