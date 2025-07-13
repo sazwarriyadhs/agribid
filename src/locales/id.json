@@ -201,7 +201,7 @@
   "partner_dashboard_title": "Dasbor Mitra",
   "partner_dashboard_desc": "Kelola verifikasi produsen dan jadwal pendampingan.",
   "vendor_dashboard_title": "Dasbor Vendor",
-  "vendor_dashboard_desc": "Kelola layanan dan kemitraan Anda.",
+  "vendor_dashboard_desc": "Kelola pesanan logistik dan pengiriman Anda.",
   "producer_verification_requests": "Permintaan Verifikasi Produsen",
   "producer": "Produsen",
   "submission_date": "Tanggal Pengajuan",
@@ -335,7 +335,16 @@
   "date": "Tanggal",
   "mark_as_paid": "Tandai Lunas",
   "payment_marked_as_paid_title": "Pembayaran Diperbarui",
-  "payment_marked_as_paid_desc": "Transaksi {{transactionId}} telah ditandai lunas."
+  "payment_marked_as_paid_desc": "Transaksi {{transactionId}} telah ditandai lunas.",
+  "status_pending_acceptance": "Menunggu Penerimaan",
+  "shipping_orders_title": "Pesanan Pengiriman",
+  "shipping_orders_desc": "Kelola tugas pengiriman yang diberikan dari lelang yang berhasil.",
+  "new_shipping_orders": "Pesanan Pengiriman Baru",
+  "completed_shipments": "Pengiriman Selesai",
+  "route": "Rute",
+  "accept_job": "Terima Pekerjaan",
+  "job_accepted_title": "Pekerjaan Diterima",
+  "job_accepted_desc": "Pesanan {{orderId}} sekarang dalam perjalanan."
 }
 
     

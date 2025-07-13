@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck } from 'lucide-react';
 
 export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter";
 
@@ -30,7 +30,7 @@ export const sidebarByRole: Record<Role, NavItem[]> = {
   ],
   vendor: [
       { name: "Dashboard", path: "/dashboard/vendor", icon: LayoutDashboard, labelKey: 'dashboard' },
-      { name: "Verification Requests", path: "/dashboard/vendor", icon: Handshake, labelKey: 'producer_verification_requests' },
+      { name: "Shipping Orders", path: "/dashboard/vendor", icon: Truck, labelKey: 'shipping_orders_title' },
   ],
   exporter: [
       { name: "Dashboard", path: "/dashboard/exporter", icon: LayoutDashboard, labelKey: 'dashboard' },

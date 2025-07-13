@@ -201,7 +201,7 @@
   "partner_dashboard_title": "Partner Dashboard",
   "partner_dashboard_desc": "Manage producer verifications and mentoring schedules.",
   "vendor_dashboard_title": "Vendor Dashboard",
-  "vendor_dashboard_desc": "Manage your services and partnerships.",
+  "vendor_dashboard_desc": "Manage your logistics and shipping orders.",
   "producer_verification_requests": "Producer Verification Requests",
   "producer": "Producer",
   "submission_date": "Submission Date",
@@ -335,7 +335,16 @@
   "date": "Date",
   "mark_as_paid": "Mark as Paid",
   "payment_marked_as_paid_title": "Payment Updated",
-  "payment_marked_as_paid_desc": "Transaction {{transactionId}} has been marked as paid."
+  "payment_marked_as_paid_desc": "Transaction {{transactionId}} has been marked as paid.",
+  "status_pending_acceptance": "Pending Acceptance",
+  "shipping_orders_title": "Shipping Orders",
+  "shipping_orders_desc": "Manage shipping jobs assigned from successful auctions.",
+  "new_shipping_orders": "New Shipping Orders",
+  "completed_shipments": "Completed Shipments",
+  "route": "Route",
+  "accept_job": "Accept Job",
+  "job_accepted_title": "Job Accepted",
+  "job_accepted_desc": "Order {{orderId}} is now in transit."
 }
 
     
