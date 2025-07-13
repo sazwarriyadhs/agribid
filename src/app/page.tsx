@@ -1,5 +1,5 @@
 
-'use client'
+'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,7 +11,7 @@ import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import Autoplay from "embla-carousel-autoplay";
+import Autoplay from 'embla-carousel-autoplay';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
@@ -19,20 +19,23 @@ import { GlobalDemand } from '@/components/global-demand';
 
 const heroSlides = [
   {
-    src: '/images/hero1.jpeg',
+    src: '/images/hero1.jpeg', // pastikan file ada di public/images
+    fallback: 'https://source.unsplash.com/1600x900/?farm',
     titleKey: 'hero_title',
-    subtitleKey: 'hero_subtitle'
+    subtitleKey: 'hero_subtitle',
   },
   {
     src: '/images/hero2.jpeg',
+    fallback: 'https://source.unsplash.com/1600x900/?agriculture',
     titleKey: 'hero_title_2',
-    subtitleKey: 'hero_subtitle_2'
+    subtitleKey: 'hero_subtitle_2',
   },
   {
     src: '/images/hero3.jpeg',
+    fallback: 'https://source.unsplash.com/1600x900/?market',
     titleKey: 'hero_title_3',
-    subtitleKey: 'hero_subtitle_3'
-  }
+    subtitleKey: 'hero_subtitle_3',
+  },
 ];
 
 const featuredAuctions = [
@@ -40,7 +43,7 @@ const featuredAuctions = [
       id: '1',
       name: 'Organic Wheat Harvest',
       name_id: 'Panen Gandum Organik',
-      image: 'https://placehold.co/600x400.png',
+      image: 'https://source.unsplash.com/600x400/?wheat',
       aiHint: 'wheat field',
       seller: 'Green Valley Farms',
       seller_id: 'Green Valley Farms',
@@ -55,7 +58,7 @@ const featuredAuctions = [
       id: '2',
       name: 'Fresh Atlantic Salmon',
       name_id: 'Salmon Atlantik Segar',
-      image: 'https://placehold.co/600x400.png',
+      image: 'https://source.unsplash.com/600x400/?salmon',
       aiHint: 'salmon seafood',
       seller: 'Ocean Fresh',
       seller_id: 'Ocean Fresh',
@@ -70,7 +73,7 @@ const featuredAuctions = [
       id: '3',
       name: 'Palm Oil Kernels',
       name_id: 'Biji Kelapa Sawit',
-      image: 'https://placehold.co/600x400.png',
+      image: 'https://source.unsplash.com/600x400/?palm',
       aiHint: 'palm oil plantation',
       seller: 'Nusantara Palms',
       seller_id: 'Nusantara Palms',
@@ -124,6 +127,9 @@ export default function Home() {
                       alt={t(slide.titleKey as any, "Hero image")}
                       fill
                       className="object-cover w-full h-full brightness-50"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = slide.fallback;
+                      }}
                       priority={index === 0}
                     />
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 p-8">
@@ -248,5 +254,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
