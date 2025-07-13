@@ -1,4 +1,12 @@
+/**
+ * DEPRECATED: This file is being replaced by a direct database connection.
+ * The logic below is preserved for reference but is no longer in use.
+ * All components have been updated to point to placeholder data.
+ * You should implement your database queries (e.g., using Prisma)
+ * and replace the placeholder data in the respective components.
+ */
 
+/*
 export interface Product {
     id: string;
     name: string;
@@ -150,5 +158,10 @@ class ProductDatabase {
     }
 }
 
-// Create a singleton instance of the database
+
 export const productDatabase = new ProductDatabase();
+*/
+
+// TODO: Connect to the database and fetch real data.
+// This file is now deprecated and will be removed once the database connection is implemented.
+export {};

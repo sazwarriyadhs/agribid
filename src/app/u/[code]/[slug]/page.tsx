@@ -22,8 +22,9 @@ import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
-import { productDatabase, Product } from '@/lib/mock-data';
 
+// TODO: Connect to the database and fetch the user's products.
+const userProducts: any[] = [];
 
 export default function ProfilePage() {
     const { t, language } = useI18n();
@@ -41,8 +42,7 @@ export default function ProfilePage() {
         return notFound();
     }
     
-    // Filter products by the current user
-    const userProducts = productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user.name);
+    // const userProducts = productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user.name);
 
     const userProfile = {
         code: `U-${user.id.slice(0, 4).toUpperCase()}`,
@@ -64,7 +64,7 @@ export default function ProfilePage() {
         return 'outline';
     }
 
-    const getStatusText = (item: Product) => {
+    const getStatusText = (item: any) => {
         const currentStatus = language === 'id' ? item.status_id : item.status;
         const statusKey = `status_${currentStatus.toLowerCase().replace(/ /g, '_')}`;
         return t(statusKey, currentStatus);

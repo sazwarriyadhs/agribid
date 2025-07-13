@@ -16,8 +16,6 @@ import { useAuth } from "@/context/auth";
 import { dashboardLabel } from "@/config/sidebar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Pie, Cell, PieChart as RechartsPieChart } from "recharts"
-import { productDatabase } from "@/lib/mock-data";
-
 
 const chartConfig = {
   sales: {
@@ -39,27 +37,24 @@ export default function SellerDashboardPage() {
     
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('seller_dashboard_title') : t('seller_dashboard_title');
     
-    // Get all products and filter them by the current seller.
-    // In a real app, this would be a proper DB query.
-    const allProducts = productDatabase.getProducts();
-    const [sellerProducts, setSellerProducts] = useState(
-        allProducts.filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user?.name)
-    );
+    // TODO: Connect to the database and fetch products for the current user.
+    const [sellerProducts, setSellerProducts] = useState<any[]>([]);
     
-    useEffect(() => {
-        // Subscribe to changes in the database to keep the UI in sync
-        const unsubscribe = productDatabase.subscribe(() => {
-             setSellerProducts(
-                productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user?.name)
-             );
-        });
-        return () => unsubscribe();
-    }, [user?.name]);
+    // useEffect(() => {
+    //     // Subscribe to changes in the database to keep the UI in sync
+    //     const unsubscribe = productDatabase.subscribe(() => {
+    //          setSellerProducts(
+    //             productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user?.name)
+    //          );
+    //     });
+    //     return () => unsubscribe();
+    // }, [user?.name]);
 
 
     const handleDeleteProduct = (productId: string) => {
+        // TODO: Implement server action to delete product from the database.
         const product = sellerProducts.find(p => p.id === productId);
-        productDatabase.deleteProduct(productId); // This will trigger the subscription and update state
+        setSellerProducts(prev => prev.filter(p => p.id !== productId));
         toast({
             title: t('delete_product_title', 'Product Deleted'),
             description: t('delete_product_desc', `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`, { productName: language === 'id' ? product?.name_id : product?.name }),
@@ -75,7 +70,7 @@ export default function SellerDashboardPage() {
         return 'outline';
     }
 
-    const getStatusText = (product: typeof sellerProducts[0]) => {
+    const getStatusText = (product: any) => {
         const statusKey = `status_${(language === 'id' ? product.status_id : product.status).toLowerCase().replace(/ /g, '_')}`;
         return t(statusKey, language === 'id' ? product.status_id : product.status);
     }

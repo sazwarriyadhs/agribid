@@ -13,7 +13,9 @@ import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useParams, notFound } from 'next/navigation'
-import { productDatabase } from '@/lib/mock-data'
+
+// TODO: Connect to the database and fetch real data based on the ID from params.
+const auctionItem: any = null; // Placeholder for fetched data
 
 const initialBidHistory = [
   { user: 'Bakery Co.', avatar: 'B', bid: 4500, time: '2 minutes ago', time_id: '2 menit yang lalu' },
@@ -27,7 +29,8 @@ export default function AuctionPage() {
   const { toast } = useToast();
   const { t, formatCurrency, language } = useI18n();
   
-  const auctionItem = productDatabase.getProductById(params.id as string);
+  // In a real app, you would fetch this data from your database using the params.id
+  // const auctionItem = productDatabase.getProductById(params.id as string);
 
   const [timeLeft, setTimeLeft] = useState('');
   const [currentBid, setCurrentBid] = useState(auctionItem?.currentBid || 0);
@@ -70,7 +73,7 @@ export default function AuctionPage() {
             <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4"/>
                 <AlertTitle>Auction Not Found</AlertTitle>
-                <AlertDescription>The auction you are looking for does not exist or has been removed.</AlertDescription>
+                <AlertDescription>The auction you are looking for does not exist or has been removed. This could be because the database is not yet connected.</AlertDescription>
             </Alert>
         </div>
     )
@@ -99,8 +102,7 @@ export default function AuctionPage() {
         return;
     }
     
-    // In a real app, this would be a server action
-    // For now, we simulate the update on the client
+    // TODO: Implement a server action to record the bid in the 'bids' table.
     const newBid = {
         user: 'You',
         user_id: 'Anda',

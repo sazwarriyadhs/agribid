@@ -15,7 +15,6 @@ import { useAuth } from '@/context/auth';
 import { dashboardLabel } from '@/config/sidebar';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Line, XAxis, YAxis, CartesianGrid, LineChart as RechartsLineChart } from "recharts"
-import { productDatabase } from '@/lib/mock-data';
 
 const stats = [
     { title: "total_users", value: "1,250", icon: Users },
@@ -29,24 +28,14 @@ const financialStats = [
     { title: "pending_payouts", value: 3, icon: CircleHelp },
 ]
 
-const initialAllUsers = [
-    { id: 'USR-001', name: 'John Farmer', role: 'Producer', status: 'Active' },
-    { id: 'USR-002', name: 'Bakery Co.', role: 'Bidder', status: 'Active' },
-    { id: 'USR-003', name: 'Agri-Finance Corp', role: 'Partner', status: 'Active' },
-    { id: 'USR-004', name: 'Global Exporters', role: 'Exporter', status: 'Suspended' },
-];
+// TODO: Connect to the database and fetch real data from the 'users' table.
+const initialAllUsers: any[] = [];
 
-const initialTransactions = [
-    { id: 'TRX-001', user: 'Bakery Co.', amount: 4500, status: 'Completed', status_id: 'Selesai', date: '2024-07-20' },
-    { id: 'TRX-002', user: 'Global Grains', amount: 8200, status: 'Completed', status_id: 'Selesai', date: '2024-07-19' },
-    { id: 'TRX-003', user: 'Artisan Breads', amount: 1200, status: 'Pending', status_id: 'Menunggu', date: '2024-07-21' },
-    { id: 'TRX-004', user: 'Seafood World', amount: 3500, status: 'Completed', status_id: 'Selesai', date: '2024-07-18' },
-];
+// TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
+const initialTransactions: any[] = [];
 
-const initialShippingReports = [
-    { orderId: 'ORD-WHEAT-001', vendor: 'FarmFresh Logistics', reportedStatus: 'Delivered', reportedStatus_id: 'Terkirim', time: '5 mins ago', time_id: '5 menit lalu' },
-    { orderId: 'ORD-SALMON-002', vendor: 'Oceanic Shipping', reportedStatus: 'In Transit', reportedStatus_id: 'Dalam Perjalanan', time: '1 hour ago', time_id: '1 jam lalu'},
-];
+// TODO: Connect to the database and fetch real data from a 'shipments' or similar table.
+const initialShippingReports: any[] = [];
 
 const chartData = [
   { month: "Jan", month_id: "Jan", revenue: 12000 },
@@ -69,32 +58,38 @@ export default function AdminDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
     const { user } = useAuth();
-    const [pendingProducts, setPendingProducts] = useState(productDatabase.getProductsByStatus('Pending'));
+    
+    // TODO: Connect to the database and fetch real data from the 'products' table where status is 'Pending'.
+    const [pendingProducts, setPendingProducts] = useState<any[]>([]);
+    
     const [allUsers, setAllUsers] = useState(initialAllUsers);
     const [transactions, setTransactions] = useState(initialTransactions);
     const [shippingReports, setShippingReports] = useState(initialShippingReports);
     
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('admin_dashboard_title') : t('admin_dashboard_title');
     
-    useEffect(() => {
-        const unsubscribe = productDatabase.subscribe(() => {
-            setPendingProducts(productDatabase.getProductsByStatus('Pending'));
-        });
-        return () => unsubscribe();
-    }, []);
+    // useEffect(() => {
+    //     const unsubscribe = productDatabase.subscribe(() => {
+    //         setPendingProducts(productDatabase.getProductsByStatus('Pending'));
+    //     });
+    //     return () => unsubscribe();
+    // }, []);
 
     const handleProductVerification = (productId: string, action: 'approve' | 'reject') => {
+        // TODO: Implement a server action to update the product status in the database.
         const product = pendingProducts.find(p => p.id === productId);
         if (!product) return;
 
         if (action === 'approve') {
-            productDatabase.updateProductStatus(productId, 'Active');
+            // productDatabase.updateProductStatus(productId, 'Active');
+            setPendingProducts(prev => prev.filter(p => p.id !== productId));
             toast({
                 title: t('product_approved'),
                 description: `${language === 'id' ? product.name_id : product.name} has been approved and is now live.`,
             });
         } else {
-            productDatabase.updateProductStatus(productId, 'Rejected');
+            // productDatabase.updateProductStatus(productId, 'Rejected');
+            setPendingProducts(prev => prev.filter(p => p.id !== productId));
             toast({
                 title: t('product_rejected'),
                 description: `${language === 'id' ? product.name_id : product.name} has been rejected.`,
@@ -103,6 +98,7 @@ export default function AdminDashboardPage() {
     };
 
     const handleUserAction = (userId: string, action: 'suspend' | 'delete') => {
+        // TODO: Implement a server action to update the user status or delete the user from the database.
         const user = allUsers.find(u => u.id === userId);
         if (!user) return;
 
@@ -123,6 +119,7 @@ export default function AdminDashboardPage() {
     };
     
     const handlePaymentAction = (transactionId: string) => {
+        // TODO: Implement a server action to update the payment status in the database.
         setTransactions(current => current.map(tx => tx.id === transactionId ? {...tx, status: 'Completed', status_id: 'Selesai'} : tx))
         toast({ title: t('payment_marked_as_paid_title'), description: t('payment_marked_as_paid_desc', {transactionId}) })
     }

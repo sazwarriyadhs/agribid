@@ -15,7 +15,6 @@ import { Upload, Sparkles, Send, Loader2, Save, Info } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { productDatabase, Product } from '@/lib/mock-data';
 import { useAuth } from '@/context/auth';
 
 const categories = [
@@ -54,20 +53,10 @@ function SellPageContents() {
     useEffect(() => {
         const editId = searchParams.get('edit');
         if (editId) {
-            const productToEdit = productDatabase.getProductById(editId);
-            if (productToEdit) {
-                setIsEditMode(true);
-                setProductId(productToEdit.id);
-                setProductName(language === 'id' ? productToEdit.name_id : productToEdit.name);
-                setDescription(productToEdit.description);
-                setCategory(productToEdit.category);
-                setQuantity(productToEdit.quantity || '');
-                setShelfLife(productToEdit.shelfLife || '');
-                setPackaging(productToEdit.packaging || '');
-                setImagePreview(productToEdit.image); 
-                setImageDataUri(productToEdit.image);
-                setPrice(productToEdit.currentBid);
-            }
+            // TODO: Fetch product data from the database using the editId
+            // For now, it won't populate the form in edit mode as mock data is removed.
+            setIsEditMode(true);
+            setProductId(editId);
         }
     }, [searchParams, language]);
 
@@ -139,37 +128,17 @@ function SellPageContents() {
         event.preventDefault();
         setIsSubmitting(true);
         
-        // Simulate API call
+        // TODO: Implement a server action to save/update the product in the database.
+        // The data to save is in the component's state (productName, description, etc.).
+        
         await new Promise(resolve => setTimeout(resolve, 1500));
         
-        const productData: Partial<Product> = {
-            name: productName,
-            name_id: productName, // Simple duplication for mock data
-            description: description,
-            category: category,
-            quantity: quantity,
-            shelfLife: shelfLife,
-            packaging: packaging,
-            image: imageDataUri || 'https://placehold.co/600x400.png',
-            aiHint: 'product',
-            currentBid: Number(price),
-            seller: user?.name || 'Anonymous Producer',
-            seller_id: user?.name || 'Produsen Anonim',
-        };
-
-
-        if (isEditMode && productId) {
-            productDatabase.updateProduct(productId, productData);
+        if (isEditMode) {
             toast({
                 title: t('product_updated_title', 'Product Updated'),
                 description: t('product_updated_desc', `"${productName}" has been successfully updated.`),
             });
         } else {
-            productDatabase.addProduct({
-                ...productData,
-                status: 'Pending',
-                status_id: 'Menunggu'
-            });
             toast({
                 title: t('product_submitted_title'),
                 description: t('product_submitted_desc'),

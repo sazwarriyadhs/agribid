@@ -17,7 +17,10 @@ import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 import HeroSlider from '@/components/hero-slider';
 import { DirectFromProducer } from '@/components/direct-from-producer';
-import { productDatabase } from '@/lib/mock-data';
+
+// TODO: Connect to the database and fetch real data.
+// This is placeholder data.
+const allActiveAuctions: any[] = []; 
 
 const categories = [
     { key: "all", label: "All Categories" },
@@ -32,12 +35,13 @@ const categories = [
 
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
-  const allActiveAuctions = productDatabase.getProductsByStatus('Active');
+  // const allActiveAuctions = productDatabase.getProductsByStatus('Active'); // Replaced with placeholder
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
 
   const featuredAuctions = useMemo(() => {
+    // TODO: Implement search and filter logic with database query.
     return allActiveAuctions.filter(item => {
       const nameMatches = language === 'id'
         ? item.name_id.toLowerCase().includes(searchTerm.toLowerCase())
