@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/context/auth";
 import { dashboardLabel } from "@/config/sidebar";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { calculateShippingCost, CalculateShippingCostInput } from "@/ai/flows/calculate-shipping-cost-flow";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
@@ -30,6 +30,10 @@ const chartConfig = {
     label: "Bids",
     color: "hsl(var(--primary))",
   },
+  Grains: { label: "Grains", color: "hsl(var(--chart-1))" },
+  'Fruits & Vegetables': { label: "Fruits & Vegetables", color: "hsl(var(--chart-2))" },
+  'Marine Fishery': { label: "Marine Fishery", color: "hsl(var(--chart-4))" },
+  Plantation: { label: "Plantation", color: "hsl(var(--chart-5))" },
 } satisfies import('@/components/ui/chart').ChartConfig;
 
 
@@ -45,7 +49,7 @@ export default function BuyerDashboardPage() {
     const getStatusVariant = (status: string | null) => {
         const s = status ? status.toLowerCase() : '';
         if (['active', 'winning', 'verified', 'unggul'].includes(s)) return 'default';
-        if (['ended', 'won', 'menang', 'selesai', 'terverifikasi'].includes(s)) return 'secondary';
+        if (['ended', 'won', 'menang', 'selesai', 'terverifikasi', 'receipt confirmed', 'penerimaan dikonfirmasi'].includes(s)) return 'default';
         if (['pending', 'outbid', 'suspended', 'kalah', 'menunggu', 'ditangguhkan'].includes(s)) return 'destructive';
         if (['in transit', 'dalam perjalanan'].includes(s)) return 'default';
         if (['delivered', 'terkirim'].includes(s)) return 'secondary';
@@ -70,19 +74,21 @@ export default function BuyerDashboardPage() {
     const auctionsWon = buyerHistory.filter(bid => ['Won', 'Menang'].includes(bid.status) || ['Won', 'Menang'].includes(bid.status_id)).length;
     const activeBids = buyerHistory.filter(bid => ['Winning', 'Unggul'].includes(bid.status) || ['Winning', 'Unggul'].includes(bid.status_id)).length;
     
-    const bidsByCategory = buyerHistory.reduce((acc, bid) => {
-        const category = bid.category;
-        if (!acc[category]) {
-            acc[category] = 0;
-        }
-        acc[category]++;
-        return acc;
-    }, {} as Record<string, number>);
+    const chartData = useMemo(() => {
+        const bidsByCategory = buyerHistory.reduce((acc, bid) => {
+            const category = bid.category;
+            if (!acc[category]) {
+                acc[category] = 0;
+            }
+            acc[category]++;
+            return acc;
+        }, {} as Record<string, number>);
 
-    const chartData = Object.entries(bidsByCategory).map(([category, bids]) => ({
-        category: t(category.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'), category),
-        bids
-    }));
+        return Object.entries(bidsByCategory).map(([category, bids]) => ({
+            category: t(category.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'), category),
+            bids
+        }));
+    }, [t, language]);
 
 
     const handleCalculateShipping = async (orderId: string, origin: string, productDetails: string) => {
@@ -187,7 +193,7 @@ export default function BuyerDashboardPage() {
                         <ChartContainer config={chartConfig}>
                              <RechartsBarChart data={chartData} layout="vertical" margin={{ left: 20, right: 20 }}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" />
+                                <XAxis type="number" dataKey="bids" />
                                 <YAxis dataKey="category" type="category" width={100} tickLine={false} axisLine={false} />
                                 <ChartTooltip content={<ChartTooltipContent />} />
                                 <Bar dataKey="bids" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
@@ -217,7 +223,7 @@ export default function BuyerDashboardPage() {
                                 <TableRow key={order.id}>
                                     <TableCell className="font-medium">{language === 'id' ? order.item_id : order.item}</TableCell>
                                     <TableCell>
-                                        <Badge variant={getStatusVariant(order.shipmentStatus)}>
+                                        <Badge variant={getStatusVariant(language === 'id' ? order.shipmentStatus_id : order.shipmentStatus)}>
                                             {getShipmentStatusText(language === 'id' ? order.shipmentStatus_id : order.shipmentStatus)}
                                         </Badge>
                                     </TableCell>

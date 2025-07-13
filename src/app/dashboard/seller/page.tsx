@@ -51,11 +51,11 @@ const chartConfig = {
   sales: {
     label: "Sales",
   },
-  'Grains': { label: 'Grains', color: 'hsl(var(--chart-1))' },
+  Grains: { label: "Grains", color: "hsl(var(--chart-1))" },
   'Fruits & Vegetables': { label: 'Fruits & Vegetables', color: 'hsl(var(--chart-2))' },
-  'Livestock': { label: 'Livestock', color: 'hsl(var(--chart-3))' },
+  Livestock: { label: 'Livestock', color: 'hsl(var(--chart-3))' },
   'Marine Fishery': { label: 'Marine Fishery', color: 'hsl(var(--chart-4))' },
-  'Plantation': { label: 'Plantation', color: 'hsl(var(--chart-5))' },
+  Plantation: { label: 'Plantation', color: 'hsl(var(--chart-5))' },
   'Forestry Products': { label: 'Forestry Products', color: 'hsl(var(--chart-1))' },
 } satisfies import('@/components/ui/chart').ChartConfig;
 
@@ -96,7 +96,7 @@ export default function SellerDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim'].includes(s)) return 'secondary';
+        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim', 'receipt confirmed', 'penerimaan dikonfirmasi'].includes(s)) return 'default';
         if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
         return 'outline';
     }
@@ -116,15 +116,21 @@ export default function SellerDashboardPage() {
     const salesByCategory = useMemo(() => {
         const soldProducts = sellerProducts.filter(p => p.status === 'Ended');
         const categoryData = soldProducts.reduce((acc, product) => {
-            if (!acc[product.category]) {
-                acc[product.category] = 0;
+            const category = product.category;
+            if (!acc[category]) {
+                acc[category] = { value: 0 };
             }
-            acc[product.category] += product.price;
+            acc[category].value += product.price;
             return acc;
-        }, {} as Record<string, number>);
+        }, {} as Record<string, { value: number }>);
         
-        return Object.entries(categoryData).map(([name, value]) => ({ name, value, fill: `var(--color-${name})`}));
-    }, [sellerProducts]);
+        return Object.entries(categoryData).map(([name, data]) => ({ 
+            name, 
+            value: data.value, 
+            fill: chartConfig[name as keyof typeof chartConfig]?.color || chartConfig.sales.color,
+            label: t(name.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'), name)
+        }));
+    }, [sellerProducts, t, language]);
 
     return (
         <>
@@ -242,10 +248,21 @@ export default function SellerDashboardPage() {
                             className="mx-auto aspect-square w-full max-w-[300px]"
                         >
                             <RechartsPieChart>
-                                <ChartTooltip content={<ChartTooltipContent nameKey="value" hideLabel />} />
-                                <Pie data={salesByCategory} dataKey="value" nameKey="name" innerRadius={60}>
-                                    {salesByCategory.map((entry) => (
-                                        <Cell key={`cell-${entry.name}`} fill={entry.fill} />
+                                <ChartTooltip 
+                                    cursor={false}
+                                    content={<ChartTooltipContent 
+                                        hideLabel 
+                                        formatter={(value, name) => [formatCurrency(value as number), name]} 
+                                    />} 
+                                />
+                                <Pie 
+                                    data={salesByCategory} 
+                                    dataKey="value" 
+                                    nameKey="label" 
+                                    innerRadius={60}
+                                >
+                                    {salesByCategory.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.fill} />
                                     ))}
                                 </Pie>
                             </RechartsPieChart>
