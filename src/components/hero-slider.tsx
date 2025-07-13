@@ -9,17 +9,20 @@ import { useI18n } from '@/context/i18n';
 
 const heroSlides = [
   {
-    src: '/images/hero1.png',
+    src: 'https://placehold.co/1600x900.png',
+    aiHint: 'farm field',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle',
   },
   {
-    src: '/images/hero2.png',
+    src: 'https://placehold.co/1600x900.png',
+    aiHint: 'agriculture technology',
     titleKey: 'hero_title_2',
     subtitleKey: 'hero_subtitle_2',
   },
   {
-    src: '/images/hero3.png',
+    src: 'https://placehold.co/1600x900.png',
+    aiHint: 'seafood market',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3',
   },
@@ -42,6 +45,7 @@ export default function HeroSlider() {
                 <Image
                   src={slide.src}
                   alt={t(slide.titleKey as any)}
+                  data-ai-hint={slide.aiHint}
                   fill
                   sizes="100vw"
                   className="object-cover w-full h-full brightness-50"
