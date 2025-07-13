@@ -441,5 +441,8 @@
   "benefit_guaranteed_quality_desc": "Every producer is verified to ensure top-tier product quality.",
   "benefit_transparent_transaction_title": "Transparent Transactions",
   "benefit_transparent_transaction_desc": "Enjoy a clear and secure bidding and payment process.",
-  "learn_about_export_program": "Learn About Export Program"
+  "learn_about_export_program": "Learn About Export Program",
+  "all_categories": "All Categories",
+  "no_auctions_found": "No auctions found.",
+  "try_different_search": "Try adjusting your search or category filters."
 }

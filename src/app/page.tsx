@@ -1,25 +1,54 @@
 
 'use client';
 
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 import HeroSlider from '@/components/hero-slider';
 import { DirectFromProducer } from '@/components/direct-from-producer';
 import { productDatabase } from '@/lib/mock-data';
 
+const categories = [
+    { key: "all", label: "All Categories" },
+    { key: "grains", label: "Grains" },
+    { key: "livestock", label: "Livestock" },
+    { key: "fruits_vegetables", label: "Fruits & Vegetables" },
+    { key: "plantation", label: "Plantation" },
+    { key: "marine_fishery", label: "Marine Fishery" },
+    { key: "inland_fishery", label: "Inland Fishery" },
+    { key: "forestry_products", label: "Forestry Products" },
+];
+
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
-  const featuredAuctions = productDatabase.getProductsByStatus('Active');
+  const allActiveAuctions = productDatabase.getProductsByStatus('Active');
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+
+  const featuredAuctions = useMemo(() => {
+    return allActiveAuctions.filter(item => {
+      const nameMatches = language === 'id'
+        ? item.name_id.toLowerCase().includes(searchTerm.toLowerCase())
+        : item.name.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const categoryMatches = selectedCategory === 'All Categories' || item.category === selectedCategory;
+
+      return nameMatches && categoryMatches;
+    });
+  }, [allActiveAuctions, searchTerm, selectedCategory, language]);
+
 
   const getHighestBidder = (bidders: {name: string, bid: number, avatar: string}[]) => {
     if (!bidders || bidders.length === 0) return null;
@@ -51,7 +80,29 @@ export default function Home() {
       <section id="featured-auctions" className="py-12 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
-            <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
+            <p className="text-center text-muted-foreground mt-2 mb-8">{t('featured_auctions_subtitle')}</p>
+            
+            <div className="max-w-3xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Input 
+                    placeholder={t('find_products_desc')}
+                    className="md:col-span-2 text-base"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Select onValueChange={setSelectedCategory} defaultValue="All Categories">
+                    <SelectTrigger>
+                        <SelectValue placeholder={t('select_category_placeholder')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {categories.map((cat) => (
+                           <SelectItem key={cat.key} value={cat.label}>
+                                {cat.key === 'all' ? t('all_categories', 'All Categories') : t(cat.key as any)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {featuredAuctions.map((item) => {
                     const highestBidder = getHighestBidder(item.bidders || []);
@@ -101,6 +152,12 @@ export default function Home() {
                     );
                 })}
             </div>
+             {featuredAuctions.length === 0 && (
+                <div className="text-center py-16 text-muted-foreground">
+                    <p className="text-lg font-medium">{t('no_auctions_found', 'No auctions found.')}</p>
+                    <p>{t('try_different_search', 'Try adjusting your search or category filters.')}</p>
+                </div>
+            )}
         </div>
       </section>
 
