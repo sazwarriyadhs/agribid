@@ -128,7 +128,7 @@ export default function Home() {
             >
                 <CarouselContent className="h-full">
                     {heroSlides.map((slide, index) => (
-                        <CarouselItem key={index} className="h-full">
+                        <CarouselItem key={index} className="h-full relative">
                             <div className="relative w-full h-full flex items-center justify-center text-center">
                                 <Image
                                     src={slide.src}
@@ -301,3 +301,6 @@ export default function Home() {
 
     
 
+
+
+    
