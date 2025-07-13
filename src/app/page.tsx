@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 import HeroSlider from '@/components/hero-slider';
+import { DirectFromProducer } from '@/components/direct-from-producer';
 
 const featuredAuctions = [
     {
@@ -167,6 +168,9 @@ export default function Home() {
       </section>
 
       <FeaturedCommodities />
+      
+      <DirectFromProducer />
+
       <FeaturedProcessedProducts />
 
       <section className="py-16 md:py-24 bg-background">

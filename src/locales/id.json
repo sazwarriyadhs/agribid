@@ -432,5 +432,14 @@
   "payment_instruction_title": "Instruksi Pembayaran",
   "payment_instruction_desc": "Instruksi pembayaran akan diberikan setelah akun Anda disetujui oleh admin.",
   "registration_submitted_title": "Pendaftaran Terkirim",
-  "registration_submitted_desc": "Akun Anda sedang menunggu persetujuan admin. Anda akan diberi tahu setelah aktivasi."
+  "registration_submitted_desc": "Akun Anda sedang menunggu persetujuan admin. Anda akan diberi tahu setelah aktivasi.",
+  "direct_from_producer_title": "Langsung dari Produsen ke Pasar Global",
+  "direct_from_producer_desc": "Platform kami memotong perantara, menghubungkan Anda langsung dengan produsen terverifikasi untuk mendapatkan produk segar dan berkualitas ekspor.",
+  "benefit_supply_chain_title": "Potong Rantai Pasokan",
+  "benefit_supply_chain_desc": "Kurangi biaya dan waktu dengan bertransaksi langsung dengan produsen.",
+  "benefit_guaranteed_quality_title": "Kualitas Terjamin",
+  "benefit_guaranteed_quality_desc": "Setiap produsen diverifikasi untuk memastikan kualitas produk terbaik.",
+  "benefit_transparent_transaction_title": "Transaksi Transparan",
+  "benefit_transparent_transaction_desc": "Nikmati proses penawaran dan pembayaran yang jelas dan aman.",
+  "learn_about_export_program": "Pelajari Program Ekspor"
 }

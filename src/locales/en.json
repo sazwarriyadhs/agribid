@@ -432,5 +432,14 @@
   "payment_instruction_title": "Payment Instruction",
   "payment_instruction_desc": "Payment instructions will be provided after your account has been approved by the admin.",
   "registration_submitted_title": "Registration Submitted",
-  "registration_submitted_desc": "Your account is pending admin approval. You will be notified upon activation."
+  "registration_submitted_desc": "Your account is pending admin approval. You will be notified upon activation.",
+  "direct_from_producer_title": "Direct from Producer to Global Market",
+  "direct_from_producer_desc": "Our platform cuts out the middleman, connecting you directly with verified producers for fresh, export-quality goods.",
+  "benefit_supply_chain_title": "Cut the Supply Chain",
+  "benefit_supply_chain_desc": "Reduce costs and time by transacting directly with producers.",
+  "benefit_guaranteed_quality_title": "Guaranteed Quality",
+  "benefit_guaranteed_quality_desc": "Every producer is verified to ensure top-tier product quality.",
+  "benefit_transparent_transaction_title": "Transparent Transactions",
+  "benefit_transparent_transaction_desc": "Enjoy a clear and secure bidding and payment process.",
+  "learn_about_export_program": "Learn About Export Program"
 }
