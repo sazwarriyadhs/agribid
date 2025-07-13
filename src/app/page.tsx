@@ -133,8 +133,9 @@ export default function Home() {
                                 src={slide.src}
                                 alt={t(slide.titleKey as any)}
                                 data-ai-hint={slide.aiHint}
-                                fill
-                                className="object-cover -z-10 brightness-50"
+                                layout="fill"
+                                objectFit="cover"
+                                className="-z-10 brightness-50"
                             />
                             <div className="container px-4 md:px-6 animate-fade-in-up">
                                 <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight">
@@ -291,5 +292,7 @@ export default function Home() {
 
 
 
+
+    
 
     
