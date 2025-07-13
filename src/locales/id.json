@@ -396,5 +396,15 @@
   "delivery_marked_desc": "Pesanan {{orderId}} telah ditandai terkirim. Menunggu konfirmasi pembeli.",
   "report_sent_title": "Laporan Terkirim",
   "report_sent_desc": "Laporan status untuk pesanan {{orderId}} telah dikirim ke admin.",
-  "status_receipt_confirmed": "Penerimaan Dikonfirmasi"
+  "status_receipt_confirmed": "Penerimaan Dikonfirmasi",
+  "delivery_order_letter": "Surat Tugas Pengiriman",
+  "view_delivery_order": "Lihat Surat Tugas",
+  "sender": "Pengirim",
+  "recipient": "Penerima",
+  "shipment_details": "Detail Pengiriman",
+  "goods_as_per_auction": "Barang sesuai perjanjian lelang {{auctionId}}",
+  "delivery_order_terms": "Dokumen ini menyatakan bahwa barang yang tercantum di atas telah diberangkatkan untuk pengiriman. Harap tunjukkan dokumen ini saat tiba. Ini bukan faktur pajak.",
+  "sender_signature": "Tanda Tangan Pengirim",
+  "carrier_signature": "Tanda Tangan Pembawa",
+  "recipient_signature": "Tanda Tangan Penerima"
 }

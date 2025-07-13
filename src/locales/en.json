@@ -396,5 +396,15 @@
   "delivery_marked_desc": "Order {{orderId}} has been marked as delivered. Waiting for buyer confirmation.",
   "report_sent_title": "Report Sent",
   "report_sent_desc": "A status report for order {{orderId}} has been sent to the admin.",
-  "status_receipt_confirmed": "Receipt Confirmed"
+  "status_receipt_confirmed": "Receipt Confirmed",
+  "delivery_order_letter": "Delivery Order Letter",
+  "view_delivery_order": "View Delivery Order",
+  "sender": "Sender",
+  "recipient": "Recipient",
+  "shipment_details": "Shipment Details",
+  "goods_as_per_auction": "Goods as per auction agreement {{auctionId}}",
+  "delivery_order_terms": "This document certifies that the goods listed above have been dispatched for delivery. Please present this document upon arrival. This is not a tax invoice.",
+  "sender_signature": "Sender Signature",
+  "carrier_signature": "Carrier Signature",
+  "recipient_signature": "Recipient Signature"
 }

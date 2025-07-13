@@ -6,18 +6,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Truck, PackageCheck, Package, ArrowRight, CheckCircle, FileSignature } from "lucide-react"
+import { Truck, PackageCheck, Package, ArrowRight, CheckCircle, FileSignature, FileText } from "lucide-react"
 import { useI18n } from "@/context/i18n";
-import Link from 'next/link';
 import { useAuth } from "@/context/auth";
 import { dashboardLabel } from "@/config/sidebar";
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { DeliveryOrder } from '@/components/delivery-order';
+
 
 const initialShippingOrders = [
-    { id: 'ORD-WHEAT-001', product: 'Organic Wheat Harvest', product_id: 'Panen Gandum Organik', origin: 'Green Valley Farms, Kansas', destination: 'Bakery Co., Chicago', status: 'Pending Acceptance', status_id: 'Menunggu Penerimaan' },
-    { id: 'ORD-SALMON-002', product: 'Fresh Atlantic Salmon', product_id: 'Salmon Atlantik Segar', origin: 'Ocean Fresh, Bali', destination: 'Seafood World, Jakarta', status: 'In Transit', status_id: 'Dalam Perjalanan' },
-    { id: 'ORD-PALM-003', product: 'Palm Oil Kernels', product_id: 'Biji Kelapa Sawit', origin: 'Nusantara Palms, Sumatra', destination: 'Bio Oils, Surabaya', status: 'Delivered', status_id: 'Terkirim' },
-    { id: 'ORD-COFFEE-004', product: 'Robusta Coffee Beans', product_id: 'Biji Kopi Robusta', origin: 'Kintamani Highlands', destination: 'Global Coffee Inc., Singapore', status: 'Receipt Confirmed', status_id: 'Penerimaan Dikonfirmasi' },
+    { id: 'ORD-WHEAT-001', product: 'Organic Wheat Harvest', product_id: 'Panen Gandum Organik', origin: 'Green Valley Farms, Kansas', destination: 'Bakery Co., Chicago', seller: 'Green Valley Farms', buyer: 'Bakery Co.', status: 'Pending Acceptance', status_id: 'Menunggu Penerimaan' },
+    { id: 'ORD-SALMON-002', product: 'Fresh Atlantic Salmon', product_id: 'Salmon Atlantik Segar', origin: 'Ocean Fresh, Bali', destination: 'Seafood World, Jakarta', seller: 'Ocean Fresh Exporters', buyer: 'Seafood World', status: 'In Transit', status_id: 'Dalam Perjalanan' },
+    { id: 'ORD-PALM-003', product: 'Palm Oil Kernels', product_id: 'Biji Kelapa Sawit', origin: 'Nusantara Palms, Sumatra', destination: 'Bio Oils, Surabaya', seller: 'Nusantara Palms', buyer: 'Bio Oils', status: 'Delivered', status_id: 'Terkirim' },
+    { id: 'ORD-COFFEE-004', product: 'Robusta Coffee Beans', product_id: 'Biji Kopi Robusta', origin: 'Kintamani Highlands', destination: 'Global Coffee Inc., Singapore', seller: 'Mentored Coffee Group', buyer: 'Global Coffee Inc.', status: 'Receipt Confirmed', status_id: 'Penerimaan Dikonfirmasi' },
 ];
 
 export default function VendorDashboardPage() {
@@ -126,24 +128,37 @@ export default function VendorDashboardPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right space-x-2">
-                                        {order.status === 'Pending Acceptance' && (
+                                        {order.status === 'Pending Acceptance' ? (
                                             <Button size="sm" onClick={() => handleUpdateStatus(order.id, 'In Transit', 'Dalam Perjalanan')}>
                                                 <Truck className="mr-2 h-4 w-4"/>{t('accept_job', 'Accept Job')}
                                             </Button>
-                                        )}
-                                         {order.status === 'In Transit' && (
-                                            <Button size="sm" onClick={() => handleUpdateStatus(order.id, 'Delivered', 'Terkirim')}>
-                                                <CheckCircle className="mr-2 h-4 w-4"/>{t('mark_as_delivered')}
-                                            </Button>
-                                         )}
-                                        {order.status === 'Delivered' && (
+                                        ) : order.status === 'In Transit' ? (
+                                            <>
+                                                <Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <Button size="sm" variant="outline">
+                                                            <FileText className="mr-2 h-4 w-4"/> {t('view_delivery_order', 'View Delivery Order')}
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="max-w-2xl">
+                                                        <DialogHeader>
+                                                            <DialogTitle>{t('delivery_order_letter', 'Delivery Order Letter')}</DialogTitle>
+                                                            <DialogDescription>{order.id}</DialogDescription>
+                                                        </DialogHeader>
+                                                        <DeliveryOrder order={order} />
+                                                    </DialogContent>
+                                                </Dialog>
+                                                <Button size="sm" onClick={() => handleUpdateStatus(order.id, 'Delivered', 'Terkirim')}>
+                                                    <CheckCircle className="mr-2 h-4 w-4"/>{t('mark_as_delivered')}
+                                                </Button>
+                                            </>
+                                         ) : order.status === 'Delivered' ? (
                                             <span className="text-xs text-muted-foreground italic">{t('waiting_for_buyer_confirmation')}</span>
-                                        )}
-                                        {order.status === 'Receipt Confirmed' && (
+                                         ) : order.status === 'Receipt Confirmed' ? (
                                              <Button size="sm" onClick={() => handleReportToAdmin(order.id)}>
                                                 <FileSignature className="mr-2 h-4 w-4"/>{t('report_to_admin')}
                                             </Button>
-                                        )}
+                                         ) : null }
                                     </TableCell>
                                 </TableRow>
                             ))}
