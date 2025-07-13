@@ -9,22 +9,22 @@ import { useI18n } from '@/context/i18n';
 
 const heroSlides = [
   {
-    src: 'https://placehold.co/1584x1056?text=Hero+Slide+1',
+    src: '/images/hero1.png',
     aiHint: 'farmer field sunrise',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle',
   },
   {
-    src: 'https://placehold.co/1584x1056?text=Hero+Slide+2',
-    aiHint: 'agricultural trade market',
-    titleKey: 'hero_title_2',
-    subtitleKey: 'hero_subtitle_2',
-  },
-  {
-    src: 'https://placehold.co/1584x1056?text=Hero+Slide+3',
+    src: '/images/hero3.png',
     aiHint: 'fresh produce export logistics',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3',
+  },
+  {
+    src: '/images/hero2.png',
+    aiHint: 'agricultural trade market',
+    titleKey: 'hero_title_2',
+    subtitleKey: 'hero_subtitle_2',
   },
 ];
 
