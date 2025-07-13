@@ -15,7 +15,8 @@ import { Upload, Sparkles, Send, Loader2, Save, Info } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { getMockProducts } from '@/app/dashboard/seller/page';
+import { productDatabase, Product } from '@/lib/mock-data';
+import { useAuth } from '@/context/auth';
 
 const categories = [
     { key: "grains", label: "Grains" },
@@ -31,6 +32,7 @@ function SellPageContents() {
     const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
     const searchParams = useSearchParams();
+    const { user } = useAuth();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [isEditMode, setIsEditMode] = useState(false);
@@ -52,21 +54,19 @@ function SellPageContents() {
     useEffect(() => {
         const editId = searchParams.get('edit');
         if (editId) {
-            const products = getMockProducts();
-            const productToEdit = products.find(p => p.id === editId);
+            const productToEdit = productDatabase.getProductById(editId);
             if (productToEdit) {
                 setIsEditMode(true);
                 setProductId(productToEdit.id);
                 setProductName(language === 'id' ? productToEdit.name_id : productToEdit.name);
                 setDescription(productToEdit.description);
                 setCategory(productToEdit.category);
-                setQuantity(productToEdit.quantity);
-                setShelfLife(productToEdit.shelfLife);
-                setPackaging(productToEdit.packaging);
-                // In a real app, you would fetch the image data URI if it's not already available
-                setImagePreview(`https://placehold.co/600x400.png`); 
-                setImageDataUri(`https://placehold.co/600x400.png`);
-                setPrice(productToEdit.price);
+                setQuantity(productToEdit.quantity || '');
+                setShelfLife(productToEdit.shelfLife || '');
+                setPackaging(productToEdit.packaging || '');
+                setImagePreview(productToEdit.image); 
+                setImageDataUri(productToEdit.image);
+                setPrice(productToEdit.currentBid);
             }
         }
     }, [searchParams, language]);
@@ -122,34 +122,59 @@ function SellPageContents() {
         }
     };
 
+    const resetForm = () => {
+        setProductName('');
+        setDescription('');
+        setCategory('');
+        setQuantity('');
+        setShelfLife('');
+        setPackaging('');
+        setImagePreview(null);
+        setImageDataUri(null);
+        setPrice('');
+        if(fileInputRef.current) fileInputRef.current.value = '';
+    }
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
         
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        const productData: Partial<Product> = {
+            name: productName,
+            name_id: productName, // Simple duplication for mock data
+            description: description,
+            category: category,
+            quantity: quantity,
+            shelfLife: shelfLife,
+            packaging: packaging,
+            image: imageDataUri || 'https://placehold.co/600x400.png',
+            aiHint: 'product',
+            currentBid: Number(price),
+            seller: user?.name || 'Anonymous Producer',
+            seller_id: user?.name || 'Produsen Anonim',
+        };
 
-        if (isEditMode) {
+
+        if (isEditMode && productId) {
+            productDatabase.updateProduct(productId, productData);
             toast({
                 title: t('product_updated_title', 'Product Updated'),
                 description: t('product_updated_desc', `"${productName}" has been successfully updated.`),
             });
         } else {
+            productDatabase.addProduct({
+                ...productData,
+                status: 'Pending',
+                status_id: 'Menunggu'
+            });
             toast({
                 title: t('product_submitted_title'),
                 description: t('product_submitted_desc'),
             });
-            // Reset form only on create
-            setProductName('');
-            setDescription('');
-            setCategory('');
-            setQuantity('');
-            setShelfLife('');
-            setPackaging('');
-            setImagePreview(null);
-            setImageDataUri(null);
-            setPrice('');
-            if(fileInputRef.current) fileInputRef.current.value = '';
+            resetForm();
         }
 
         setIsSubmitting(false);
@@ -175,7 +200,7 @@ function SellPageContents() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="category">{t('category')}</Label>
-                                <Select onValueChange={setCategory} value={category}>
+                                <Select onValueChange={setCategory} value={category} required>
                                     <SelectTrigger id="category">
                                         <SelectValue placeholder={t('select_category_placeholder')} />
                                     </SelectTrigger>

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -15,6 +15,7 @@ import { useAuth } from '@/context/auth';
 import { dashboardLabel } from '@/config/sidebar';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Line, XAxis, YAxis, CartesianGrid, LineChart as RechartsLineChart } from "recharts"
+import { productDatabase } from '@/lib/mock-data';
 
 const stats = [
     { title: "total_users", value: "1,250", icon: Users },
@@ -27,11 +28,6 @@ const financialStats = [
     { title: "transaction_volume", value: 875000, icon: Banknote },
     { title: "pending_payouts", value: 3, icon: CircleHelp },
 ]
-
-const initialPendingProducts = [
-    { id: 'PROD-004', name: 'Robusta Coffee Beans', name_id: 'Biji Kopi Robusta', producer: 'Kintamani Highlands', image: 'https://placehold.co/100x100.png', aiHint: 'coffee beans', category: 'Plantation' },
-    { id: 'PROD-005', name: 'Frozen Tuna Loin', name_id: 'Loin Tuna Beku', producer: 'Bahari Seafood', image: 'https://placehold.co/100x100.png', aiHint: 'tuna loin', category: 'Marine Fishery' },
-];
 
 const initialAllUsers = [
     { id: 'USR-001', name: 'John Farmer', role: 'Producer', status: 'Active' },
@@ -73,22 +69,37 @@ export default function AdminDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
     const { user } = useAuth();
-    const [pendingProducts, setPendingProducts] = useState(initialPendingProducts);
+    const [pendingProducts, setPendingProducts] = useState(productDatabase.getProductsByStatus('Pending'));
     const [allUsers, setAllUsers] = useState(initialAllUsers);
     const [transactions, setTransactions] = useState(initialTransactions);
     const [shippingReports, setShippingReports] = useState(initialShippingReports);
     
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('admin_dashboard_title') : t('admin_dashboard_title');
+    
+    useEffect(() => {
+        const unsubscribe = productDatabase.subscribe(() => {
+            setPendingProducts(productDatabase.getProductsByStatus('Pending'));
+        });
+        return () => unsubscribe();
+    }, []);
 
     const handleProductVerification = (productId: string, action: 'approve' | 'reject') => {
         const product = pendingProducts.find(p => p.id === productId);
         if (!product) return;
 
-        toast({
-            title: action === 'approve' ? t('product_approved') : t('product_rejected'),
-            description: `${language === 'id' ? product.name_id : product.name} has been ${action === 'approve' ? 'approved' : 'rejected'}.`,
-        });
-        setPendingProducts(currentProducts => currentProducts.filter(p => p.id !== productId));
+        if (action === 'approve') {
+            productDatabase.updateProductStatus(productId, 'Active');
+            toast({
+                title: t('product_approved'),
+                description: `${language === 'id' ? product.name_id : product.name} has been approved and is now live.`,
+            });
+        } else {
+            productDatabase.updateProductStatus(productId, 'Rejected');
+            toast({
+                title: t('product_rejected'),
+                description: `${language === 'id' ? product.name_id : product.name} has been rejected.`,
+            });
+        }
     };
 
     const handleUserAction = (userId: string, action: 'suspend' | 'delete') => {
@@ -292,7 +303,7 @@ export default function AdminDashboardPage() {
                                                    <span className="text-xs text-muted-foreground">{t(prod.category.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'))}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell>{prod.producer}</TableCell>
+                                            <TableCell>{prod.seller}</TableCell>
                                             <TableCell className="text-right space-x-2">
                                                 <Button variant="outline" size="icon" className="h-8 w-8 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900 border-green-300 dark:border-green-700" onClick={() => handleProductVerification(prod.id, 'approve')}><Check className="h-4 w-4"/></Button>
                                                 <Button variant="outline" size="icon" className="h-8 w-8 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900 border-red-300 dark:border-red-700" onClick={() => handleProductVerification(prod.id, 'reject')}><X className="h-4 w-4"/></Button>

@@ -15,55 +15,18 @@ import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 import HeroSlider from '@/components/hero-slider';
 import { DirectFromProducer } from '@/components/direct-from-producer';
+import { productDatabase } from '@/lib/mock-data';
 
-const featuredAuctions = [
-    {
-      id: '1',
-      name: 'Organic Wheat Harvest',
-      name_id: 'Panen Gandum Organik',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'wheat field',
-      seller: 'Green Valley Farms',
-      seller_id: 'Green Valley Farms',
-      currentBid: 4500,
-      bidders: [
-        { name: 'Bakery Co.', bid: 4500, avatar: 'B' },
-        { name: 'Mill & Co.', bid: 4400, avatar: 'M' },
-        { name: 'Artisan Breads', bid: 4300, avatar: 'A' },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Fresh Atlantic Salmon',
-      name_id: 'Salmon Atlantik Segar',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'salmon seafood',
-      seller: 'Ocean Fresh',
-      seller_id: 'Ocean Fresh',
-      currentBid: 1200,
-      bidders: [
-        { name: 'Seafood World', bid: 1200, avatar: 'S' },
-        { name: 'Fine Dining Group', bid: 1150, avatar: 'F' },
-        { name: 'Sushi Express', bid: 1100, avatar: 'S' },
-      ],
-    },
-    {
-      id: '3',
-      name: 'Palm Oil Kernels',
-      name_id: 'Biji Kelapa Sawit',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'palm oil plantation',
-      seller: 'Nusantara Palms',
-      seller_id: 'Nusantara Palms',
-      currentBid: 850,
-      bidders: [
-        { name: 'Bio-Fuels Inc.', bid: 850, avatar: 'B' },
-        { name: 'Commodity Traders', bid: 800, avatar: 'C' },
-      ],
-    },
-];
+export default function Home() {
+  const { t, formatCurrency, language } = useI18n();
+  const featuredAuctions = productDatabase.getProductsByStatus('Active');
 
-const howItWorks = [
+  const getHighestBidder = (bidders: {name: string, bid: number, avatar: string}[]) => {
+    if (!bidders || bidders.length === 0) return null;
+    return bidders.sort((a, b) => b.bid - a.bid)[0];
+  };
+
+  const howItWorks = [
     {
         icon: Search,
         title: "find_products_title",
@@ -79,15 +42,7 @@ const howItWorks = [
         title: "win_ship_title",
         description: "win_ship_desc"
     }
-];
-
-export default function Home() {
-  const { t, formatCurrency, language } = useI18n();
-
-  const getHighestBidder = (bidders: {name: string, bid: number, avatar: string}[]) => {
-    if (!bidders || bidders.length === 0) return null;
-    return bidders.sort((a, b) => b.bid - a.bid)[0];
-  };
+  ];
 
   return (
     <div className="flex flex-col">
@@ -99,7 +54,7 @@ export default function Home() {
             <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {featuredAuctions.map((item) => {
-                    const highestBidder = getHighestBidder(item.bidders);
+                    const highestBidder = getHighestBidder(item.bidders || []);
                     return (
                         <Card key={item.id} className="overflow-hidden flex flex-col">
                             <div className="aspect-video overflow-hidden">
