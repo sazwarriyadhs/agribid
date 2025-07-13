@@ -10,13 +10,10 @@ import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown } from 'lu
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
-import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
-import HeroSlider from '@/components/hero-slider'; // Import HeroSlider
+import HeroSlider from '@/components/hero-slider';
 
 const featuredAuctions = [
     {
@@ -93,7 +90,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <HeroSlider /> {/* Use the imported HeroSlider component */}
+      <HeroSlider />
 
       <section id="featured-auctions" className="py-12 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
