@@ -80,8 +80,8 @@
   "login_success_desc": "Selamat datang kembali di AgriBid!",
   "logout_success_title": "Berhasil Keluar",
   "logout_success_desc": "Anda telah berhasil keluar.",
-  "featured_commodities_title": "Komoditas Pertanian Unggulan",
-  "featured_commodities_subtitle": "Jelajahi produk-produk pertanian terkemuka di Indonesia.",
+  "featured_commodities_title": "Komoditas Perkebunan Unggulan",
+  "featured_commodities_subtitle": "Jelajahi produk-produk perkebunan terkemuka di Indonesia.",
   "rice": "Padi",
   "palm_oil": "Kelapa Sawit",
   "coffee": "Kopi",
@@ -444,5 +444,6 @@
   "learn_about_export_program": "Pelajari Program Ekspor",
   "all_categories": "Semua Kategori",
   "no_auctions_found": "Tidak ada lelang yang ditemukan.",
-  "try_different_search": "Coba sesuaikan pencarian atau filter kategori Anda."
+  "try_different_search": "Coba sesuaikan pencarian atau filter kategori Anda.",
+  "view_member_card": "Lihat Kartu Anggota"
 }
