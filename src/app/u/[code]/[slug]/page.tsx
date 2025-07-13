@@ -1,4 +1,3 @@
-
 'use client'
 import {
   Card,
@@ -20,7 +19,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
+import { useAuth } from '@/context/auth';
 
 
 const auctionHistory = [
@@ -29,25 +29,30 @@ const auctionHistory = [
     { id: '3', item: 'Palm Oil Kernels', item_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 m³', category: 'Plantation' },
 ];
 
-// In a real app, you would fetch this data based on the code/slug
-const userProfile = {
-    code: 'P001',
-    slug: 'jessica-sutrisno',
-    name: 'Jessica Sutrisno',
-    email: 'jessica.sutrisno@email.com',
-    role: 'Producer',
-    role_id: 'Produsen',
-    avatarUrl: 'https://placehold.co/150x150.png',
-    avatarFallback: 'JS'
-}
+export default function ProfilePage() {
+    const { t, language } = useI18n();
+    const { user } = useAuth();
+    const params = useParams();
 
+    if (!user) {
+        // In a real app, you might redirect to login or show a public version.
+        // For now, we'll just show a loading state or a "not found" message.
+        return notFound();
+    }
+    
+    // Simulate fetching user profile based on params, but for the demo, we use the logged-in user.
+    // The check `user.name === params.slug` would be a real-world validation.
+    const userProfile = {
+        code: `U-${user.id.slice(0, 4).toUpperCase()}`,
+        slug: user.name,
+        name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/ /g, ' '),
+        email: user.email,
+        role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
+        role_id: t(`role_${user.role}`),
+        avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
+        avatarFallback: user.name.charAt(0).toUpperCase()
+    };
 
-export default function ProfilePage({ params }: { params: { code: string, slug: string } }) {
-    const { t, formatCurrency, language } = useI18n();
-
-    // In a real app, you'd fetch the user by code and slug and return 404 if not found.
-    // The check is removed to resolve a Next.js warning about direct param access.
-    // For demo purposes, we will allow any code/slug to render this static profile.
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();

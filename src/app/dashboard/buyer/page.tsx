@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -30,7 +31,7 @@ export default function BuyerDashboardPage() {
 
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('buyer_dashboard_title') : t('buyer_dashboard_title');
 
-    const getStatusVariant = (status: string) => {
+    const getStatusVariant = (status: string | null) => {
         const s = status ? status.toLowerCase() : '';
         if (['active', 'winning', 'verified', 'unggul'].includes(s)) return 'default';
         if (['ended', 'won', 'menang', 'selesai', 'terverifikasi'].includes(s)) return 'secondary';
@@ -167,7 +168,7 @@ export default function BuyerDashboardPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {buyerHistory.filter(o => o.status === 'Won').map((order) => (
+                            {buyerHistory.filter(o => ['Won', 'Menang'].includes(o.status) || ['Won', 'Menang'].includes(o.status_id)).map((order) => (
                                 <TableRow key={order.id}>
                                     <TableCell className="font-medium">{language === 'id' ? order.item_id : order.item}</TableCell>
                                     <TableCell>

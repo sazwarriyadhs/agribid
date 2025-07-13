@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useI18n } from '@/context/i18n';
@@ -10,27 +9,19 @@ import { AgriBidLogo } from './icons';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { QrCode } from 'lucide-react';
 import QRCode from 'qrcode.react';
+import { useAuth } from '@/context/auth';
 
-const cardInfo = {
+const staticCardInfo = {
     name: "JESSICA SUTRISNO",
     role: "Producer",
     role_id: "Produsen",
     id: "DP248017356",
-    code: "P001", // Producer code
-    slug: "jessica-sutrisno", // URL-friendly slug
+    code: "P001",
+    slug: "jessica-sutrisno",
     expires: "30/04/2025",
     avatarUrl: 'https://placehold.co/150x150.png',
     avatarFallback: 'JS'
 }
-
-const qrCodeData = JSON.stringify({
-    userId: cardInfo.id,
-    name: cardInfo.name,
-    validUntil: cardInfo.expires,
-    code: cardInfo.code,
-    slug: cardInfo.slug,
-    role: cardInfo.role
-});
 
 const regulations = [
     "regulation_1",
@@ -42,6 +33,29 @@ const regulations = [
 
 export function MembershipBenefits() {
     const { t, language } = useI18n();
+    const { user } = useAuth();
+
+    // Use logged-in user data if available, otherwise use static data
+    const cardInfo = user ? {
+        name: user.name.toUpperCase().replace(/-/g, ' '),
+        role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
+        role_id: t(`role_${user.role}`),
+        id: `U-${user.id.slice(0, 4).toUpperCase()}${Date.now().toString().slice(-4)}`,
+        code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
+        slug: user.name,
+        expires: "30/04/2025",
+        avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
+        avatarFallback: user.name.charAt(0).toUpperCase()
+    } : staticCardInfo;
+
+    const qrCodeData = JSON.stringify({
+        userId: cardInfo.id,
+        name: cardInfo.name,
+        validUntil: cardInfo.expires,
+        code: cardInfo.code,
+        slug: cardInfo.slug,
+        role: user ? user.role : 'producer' // Use abstract role for QR
+    });
 
     return (
         <section className="py-16 md:py-24 bg-secondary/50">

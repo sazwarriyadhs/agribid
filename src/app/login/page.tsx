@@ -57,7 +57,7 @@ export default function LoginPage() {
   };
 
   const handleQrScanSuccess = (data: string) => {
-    console.log('Scanned QR Data:', data);
+    setIsQrScannerOpen(false);
     try {
         const qrData = JSON.parse(data);
         if (qrData.userId && qrData.name && qrData.code && qrData.slug && qrData.role) {
@@ -80,7 +80,6 @@ export default function LoginPage() {
             description: 'Kode QR tidak valid atau kedaluwarsa.',
         });
     }
-    setIsQrScannerOpen(false);
   };
 
   return (
