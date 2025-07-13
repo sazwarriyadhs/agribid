@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState } from "react";
@@ -20,6 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { useParams } from "next/navigation";
 
 
 // Mock data for a shipment. In a real app, this would be fetched based on the [id].
@@ -45,7 +47,8 @@ const shipmentData = {
 }
 
 
-export default function ShipmentTrackingPage({ params }: { params: { id: string } }) {
+export default function ShipmentTrackingPage() {
+    const params = useParams();
     const { t, language } = useI18n();
     const { toast } = useToast();
     const [isConfirmed, setIsConfirmed] = useState(false);

@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react'
 import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useParams } from 'next/navigation'
 
 const initialAuctionItem = {
   id: '1',
@@ -31,7 +32,7 @@ const initialAuctionItem = {
   origin_id: 'Kansas, AS',
   shipping: 'FOB (Freight on Board). Buyer arranges shipping from our facility.',
   shipping_id: 'FOB (Freight on Board). Pembeli mengatur pengiriman dari fasilitas kami.',
-  quantity: '10 Tons',
+  quantity: '10 Ton',
   quantity_id: '10 Ton',
   shelfLife: 'Up to 12 months if stored properly.',
   shelfLife_id: 'Hingga 12 bulan jika disimpan dengan benar.',
@@ -48,7 +49,8 @@ const initialBidHistory = [
   { user: 'Global Grains', avatar: 'G', bid: 4000, time: '3 hours ago', time_id: '3 jam yang lalu' },
 ]
 
-export default function AuctionPage({ params }: { params: { id: string } }) {
+export default function AuctionPage() {
+  const params = useParams();
   const [timeLeft, setTimeLeft] = useState('');
   const [auctionItem, setAuctionItem] = useState(initialAuctionItem);
   const [bidHistory, setBidHistory] = useState(initialBidHistory);

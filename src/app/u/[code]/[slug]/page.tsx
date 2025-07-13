@@ -41,10 +41,15 @@ export default function ProfilePage() {
         return notFound();
     }
     
+    // Simple check to ensure the user is viewing their own profile based on the URL
+    if (user.name !== params.slug) {
+        return notFound();
+    }
+
     const userProfile = {
         code: `U-${user.id.slice(0, 4).toUpperCase()}`,
         slug: user.name,
-        name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/ /g, ' '),
+        name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' '),
         email: user.email,
         role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
         role_id: t(`role_${user.role}`),
@@ -52,10 +57,6 @@ export default function ProfilePage() {
         avatarFallback: user.name.charAt(0).toUpperCase()
     };
     
-    // Simple check to ensure the user is viewing their own profile based on the URL
-    if (userProfile.slug !== params.slug) {
-        return notFound();
-    }
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
