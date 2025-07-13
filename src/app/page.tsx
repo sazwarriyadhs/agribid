@@ -20,7 +20,47 @@ import { DirectFromProducer } from '@/components/direct-from-producer';
 
 // TODO: Connect to the database and fetch real data.
 // This is placeholder data.
-const allActiveAuctions: any[] = []; 
+const allActiveAuctions = [
+    {
+      id: '1',
+      name: 'Organic Wheat Harvest',
+      name_id: 'Panen Gandum Organik',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'organic wheat',
+      seller: 'Green Valley Farms',
+      seller_id: 'Peternakan Lembah Hijau',
+      currentBid: 4500,
+      bidders: [
+        { name: 'Bakery Co.', bid: 4500, avatar: 'B' },
+        { name: 'Mill & Co.', bid: 4400, avatar: 'M' },
+      ],
+      category: 'Grains'
+    },
+    {
+      id: '2',
+      name: 'Fresh Atlantic Salmon',
+      name_id: 'Salmon Atlantik Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'atlantic salmon',
+      seller: 'Ocean Fresh Exporters',
+      seller_id: 'Eksportir Samudera Segar',
+      currentBid: 1200,
+      bidders: [{ name: 'Seafood World', bid: 1200, avatar: 'S' }],
+      category: 'Marine Fishery'
+    },
+    {
+      id: '3',
+      name: 'Arabica Coffee Beans',
+      name_id: 'Biji Kopi Arabika',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'coffee beans',
+      seller: 'Highland Coffee',
+      seller_id: 'Kopi Dataran Tinggi',
+      currentBid: 3200,
+      bidders: [{ name: 'Global Coffee Inc.', bid: 3200, avatar: 'G' }],
+      category: 'Plantation'
+    },
+];
 
 const categories = [
     { key: "all", label: "All Categories" },
