@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useParams } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 
 // Mock data for a shipment. In a real app, this would be fetched based on the [id].
