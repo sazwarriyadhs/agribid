@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <section className="w-full text-white">
-        <div className="w-full max-w-[1024px] h-[90vh] md:h-[1080px] mx-auto overflow-hidden">
+        <div className="w-full aspect-w-16 aspect-h-9">
             <Carousel 
                 opts={{ loop: true }}
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -135,21 +135,21 @@ export default function Home() {
                                     alt={t(slide.titleKey as any)}
                                     data-ai-hint={slide.aiHint}
                                     layout="fill"
-                                    objectFit="contain"
-                                    className="-z-10"
+                                    objectFit="cover"
+                                    className="-z-10 brightness-50"
                                 />
                                 <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
-                                    <h1 className="text-xl md:text-3xl font-headline font-bold tracking-tight">
+                                    <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
                                         {t(slide.titleKey as any)}
                                     </h1>
-                                    <p className="mt-2 max-w-2xl mx-auto text-sm md:text-base text-primary-foreground/90">
+                                    <p className="mt-4 max-w-3xl mx-auto text-lg text-primary-foreground/90">
                                         {t(slide.subtitleKey as any)}
                                     </p>
-                                    <div className="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
-                                        <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                                    <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+                                        <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                                         <Link href="#featured-auctions">{t('browse_auctions')}</Link>
                                         </Button>
-                                        <Button asChild size="sm" variant="secondary">
+                                        <Button asChild size="lg" variant="secondary">
                                         <Link href="/signup">{t('become_a_producer')}</Link>
                                         </Button>
                                     </div>
@@ -302,6 +302,8 @@ export default function Home() {
     
 
 
+
+    
 
     
 
