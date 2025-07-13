@@ -135,7 +135,7 @@ export default function Home() {
                                     alt={t(slide.titleKey as any)}
                                     data-ai-hint={slide.aiHint}
                                     layout="fill"
-                                    objectFit="cover"
+                                    objectFit="none"
                                     className="-z-10 brightness-50"
                                 />
                                 <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
@@ -284,27 +284,5 @@ export default function Home() {
       </section>
     </div>
   );
-
-    
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-    
-
-
-
-    
-
-    
 
     
