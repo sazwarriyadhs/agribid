@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Gavel, Heart, Info, Timer, Banknote, Package, Clock, Shield } from 'lucide-react'
+import { Gavel, Heart, Info, Timer, Banknote, Package, Clock, Shield, ShieldCheck } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
@@ -37,6 +37,8 @@ const initialAuctionItem = {
   shelfLife_id: 'Hingga 12 bulan jika disimpan dengan benar.',
   packaging: 'Packed in 50kg polypropylene bags.',
   packaging_id: 'Dikemas dalam karung polipropilena 50kg.',
+  guarantee: 'Product quality is guaranteed to match the description. Full refund available if the product is not as described upon receival, subject to verification.',
+  guarantee_id: 'Kualitas produk dijamin sesuai dengan deskripsi. Pengembalian dana penuh tersedia jika produk tidak sesuai deskripsi saat diterima, tergantung pada verifikasi.',
 }
 
 const initialBidHistory = [
@@ -239,6 +241,15 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
                                     </AlertDescription>
                                 </Alert>
                             </div>
+                            <div className="border-t pt-4">
+                                <Alert variant="secondary">
+                                    <ShieldCheck className="h-4 w-4"/>
+                                    <AlertTitle className="font-semibold">{t('guarantee_and_warranty_title', 'Guarantee & Warranty')}</AlertTitle>
+                                    <AlertDescription>
+                                        {language === 'id' ? auctionItem.guarantee_id : auctionItem.guarantee}
+                                    </AlertDescription>
+                                </Alert>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -278,5 +289,3 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
-
-    
