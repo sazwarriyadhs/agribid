@@ -15,16 +15,16 @@ const heroSlides = [
     subtitleKey: 'hero_subtitle',
   },
   {
-    src: '/images/hero3.png',
-    aiHint: 'fresh produce export logistics',
-    titleKey: 'hero_title_3',
-    subtitleKey: 'hero_subtitle_3',
-  },
-  {
     src: '/images/hero2.png',
     aiHint: 'agricultural trade market',
     titleKey: 'hero_title_2',
     subtitleKey: 'hero_subtitle_2',
+  },
+  {
+    src: '/images/hero3.png',
+    aiHint: 'fresh produce export logistics',
+    titleKey: 'hero_title_3',
+    subtitleKey: 'hero_subtitle_3',
   },
 ];
 
