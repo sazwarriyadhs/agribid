@@ -383,5 +383,18 @@
   "export_req_2_title": "Certifications",
   "export_req_2_desc": "Relevant certifications such as Halal, Organic, HACCP, or GAP are often required by international buyers.",
   "export_req_3_title": "Packaging & Labeling",
-  "export_req_3_desc": "Packaging must be durable, suitable for long-distance shipping, and labeled according to the destination country's regulations."
+  "export_req_3_desc": "Packaging must be durable, suitable for long-distance shipping, and labeled according to the destination country's regulations.",
+  "no_pending_payments": "No pending payments found.",
+  "latest_shipping_reports": "Latest Shipping Reports",
+  "latest_shipping_reports_desc": "Monitor recent shipping status updates from vendors.",
+  "order_id": "Order ID",
+  "vendor": "Vendor",
+  "mark_as_delivered": "Mark as Delivered",
+  "waiting_for_buyer_confirmation": "Waiting for buyer confirmation...",
+  "report_to_admin": "Report to Admin",
+  "delivery_marked_title": "Delivery Marked",
+  "delivery_marked_desc": "Order {{orderId}} has been marked as delivered. Waiting for buyer confirmation.",
+  "report_sent_title": "Report Sent",
+  "report_sent_desc": "A status report for order {{orderId}} has been sent to the admin.",
+  "status_receipt_confirmed": "Receipt Confirmed"
 }

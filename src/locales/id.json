@@ -383,5 +383,18 @@
   "export_req_2_title": "Sertifikasi",
   "export_req_2_desc": "Sertifikasi yang relevan seperti Halal, Organik, HACCP, atau GAP sering kali diperlukan oleh pembeli internasional.",
   "export_req_3_title": "Pengemasan & Pelabelan",
-  "export_req_3_desc": "Pengemasan harus tahan lama, sesuai untuk pengiriman jarak jauh, dan dilabeli sesuai dengan peraturan negara tujuan."
+  "export_req_3_desc": "Pengemasan harus tahan lama, sesuai untuk pengiriman jarak jauh, dan dilabeli sesuai dengan peraturan negara tujuan.",
+  "no_pending_payments": "Tidak ada pembayaran yang tertunda.",
+  "latest_shipping_reports": "Laporan Pengiriman Terbaru",
+  "latest_shipping_reports_desc": "Pantau pembaruan status pengiriman terbaru dari para vendor.",
+  "order_id": "ID Pesanan",
+  "vendor": "Vendor",
+  "mark_as_delivered": "Tandai Telah Terkirim",
+  "waiting_for_buyer_confirmation": "Menunggu konfirmasi pembeli...",
+  "report_to_admin": "Lapor ke Admin",
+  "delivery_marked_title": "Pengiriman Ditandai",
+  "delivery_marked_desc": "Pesanan {{orderId}} telah ditandai terkirim. Menunggu konfirmasi pembeli.",
+  "report_sent_title": "Laporan Terkirim",
+  "report_sent_desc": "Laporan status untuk pesanan {{orderId}} telah dikirim ke admin.",
+  "status_receipt_confirmed": "Penerimaan Dikonfirmasi"
 }

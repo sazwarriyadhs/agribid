@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign } from "lucide-react"
+import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Image from "next/image";
 import { useToast } from '@/hooks/use-toast';
@@ -47,6 +47,11 @@ const initialTransactions = [
     { id: 'TRX-004', user: 'Seafood World', amount: 3500, status: 'Completed', status_id: 'Selesai', date: '2024-07-18' },
 ];
 
+const initialShippingReports = [
+    { orderId: 'ORD-WHEAT-001', vendor: 'FarmFresh Logistics', reportedStatus: 'Delivered', reportedStatus_id: 'Terkirim', time: '5 mins ago', time_id: '5 menit lalu' },
+    { orderId: 'ORD-SALMON-002', vendor: 'Oceanic Shipping', reportedStatus: 'In Transit', reportedStatus_id: 'Dalam Perjalanan', time: '1 hour ago', time_id: '1 jam lalu'},
+];
+
 const chartData = [
   { month: "Jan", month_id: "Jan", revenue: 12000 },
   { month: "Feb", month_id: "Feb", revenue: 18000 },
@@ -71,6 +76,7 @@ export default function AdminDashboardPage() {
     const [pendingProducts, setPendingProducts] = useState(initialPendingProducts);
     const [allUsers, setAllUsers] = useState(initialAllUsers);
     const [transactions, setTransactions] = useState(initialTransactions);
+    const [shippingReports, setShippingReports] = useState(initialShippingReports);
     
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('admin_dashboard_title') : t('admin_dashboard_title');
 
@@ -112,7 +118,7 @@ export default function AdminDashboardPage() {
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
-        if (['active', 'completed', 'selesai'].includes(s)) return 'default';
+        if (['active', 'completed', 'selesai', 'in transit', 'dalam perjalanan', 'delivered', 'terkirim'].includes(s)) return 'default';
         if (['suspended', 'rejected', 'ditolak'].includes(s)) return 'destructive';
         if (['pending', 'menunggu'].includes(s)) return 'secondary';
         return 'outline';
@@ -147,174 +153,207 @@ export default function AdminDashboardPage() {
                 ))}
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-                <Card className="lg:col-span-3" id="financial-reports">
-                    <CardHeader>
-                        <CardTitle>{t('financial_overview_title')}</CardTitle>
-                        <CardDescription>{t('financial_overview_desc')}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="grid gap-4 md:grid-cols-3">
-                           {financialStats.map(stat => (
-                                <Card key={stat.title}>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">{t(stat.title as any)}</CardTitle>
-                                    <stat.icon className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">
-                                        {typeof stat.value === 'number' ? formatCurrency(stat.value) : stat.value}
-                                    </div>
-                                </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                         <Card>
-                            <CardHeader>
-                                <CardTitle>{t('monthly_revenue_title')}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="h-80 w-full">
-                                <ChartContainer config={chartConfig}>
-                                    <RechartsLineChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey={(d) => language === 'id' ? d.month_id : d.month} tickLine={false} axisLine={false} />
-                                        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => formatCurrency(value).replace(/\.00$/, '')} />
-                                        <ChartTooltip content={<ChartTooltipContent />} />
-                                        <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                                    </RechartsLineChart>
-                                </ChartContainer>
-                            </CardContent>
-                        </Card>
-                    </CardContent>
-                </Card>
-
-                <Card className="lg:col-span-3" id="payment-management">
-                    <CardHeader>
-                        <CardTitle>{t('payment_management_title')}</CardTitle>
-                        <CardDescription>{t('payment_management_desc')}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>{t('transaction_id')}</TableHead>
-                                    <TableHead>{t('user')}</TableHead>
-                                    <TableHead>{t('amount')}</TableHead>
-                                    <TableHead>{t('status')}</TableHead>
-                                    <TableHead>{t('date')}</TableHead>
-                                    <TableHead className="text-right">{t('actions')}</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {transactions.map(tx => (
-                                    <TableRow key={tx.id}>
-                                        <TableCell className="font-mono">{tx.id}</TableCell>
-                                        <TableCell>{tx.user}</TableCell>
-                                        <TableCell>{formatCurrency(tx.amount)}</TableCell>
-                                        <TableCell>
-                                            <Badge variant={getStatusVariant(language === 'id' ? tx.status_id : tx.status)}>
-                                                {getStatusText(language === 'id' ? tx.status_id : tx.status)}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>{tx.date}</TableCell>
-                                        <TableCell className="text-right">
-                                            {tx.status === 'Pending' && (
-                                                <Button size="sm" onClick={() => handlePaymentAction(tx.id)}><Check className="mr-2 h-4 w-4"/>{t('mark_as_paid')}</Button>
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-8">
+                <div className="lg:col-span-3 space-y-8">
+                    <Card id="financial-reports">
+                        <CardHeader>
+                            <CardTitle>{t('financial_overview_title')}</CardTitle>
+                            <CardDescription>{t('financial_overview_desc')}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="grid gap-4 md:grid-cols-3">
+                               {financialStats.map(stat => (
+                                    <Card key={stat.title}>
+                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium">{t(stat.title as any)}</CardTitle>
+                                        <stat.icon className="h-4 w-4 text-muted-foreground" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-2xl font-bold">
+                                            {typeof stat.value === 'number' ? formatCurrency(stat.value) : stat.value}
+                                        </div>
+                                    </CardContent>
+                                    </Card>
                                 ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+                            </div>
+                             <Card>
+                                <CardHeader>
+                                    <CardTitle>{t('monthly_revenue_title')}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="h-80 w-full">
+                                    <ChartContainer config={chartConfig}>
+                                        <RechartsLineChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey={(d) => language === 'id' ? d.month_id : d.month} tickLine={false} axisLine={false} />
+                                            <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => formatCurrency(value).replace(/\.00$/, '')} />
+                                            <ChartTooltip content={<ChartTooltipContent />} />
+                                            <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                                        </RechartsLineChart>
+                                    </ChartContainer>
+                                </CardContent>
+                            </Card>
+                        </CardContent>
+                    </Card>
 
-                <Card className="lg:col-span-3">
-                    <CardHeader>
-                        <CardTitle>{t('pending_product_verifications')}</CardTitle>
-                        <CardDescription>{t('pending_product_verifications_desc')}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>{t('product')}</TableHead>
-                                    <TableHead>{t('producer')}</TableHead>
-                                    <TableHead>{t('category')}</TableHead>
-                                    <TableHead className="text-right">{t('actions')}</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                               {pendingProducts.length > 0 ? pendingProducts.map((prod) => (
-                                    <TableRow key={prod.id}>
-                                        <TableCell className="font-medium flex items-center gap-3">
-                                            <Image src={prod.image} alt={language === 'id' ? prod.name_id : prod.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint={prod.aiHint} />
-                                            {language === 'id' ? prod.name_id : prod.name}
-                                        </TableCell>
-                                        <TableCell>{prod.producer}</TableCell>
-                                        <TableCell>{t(prod.category.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'))}</TableCell>
-                                        <TableCell className="text-right space-x-2">
-                                            <Button variant="outline" size="sm" className="bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900 border-green-300 dark:border-green-700" onClick={() => handleProductVerification(prod.id, 'approve')}><Check className="mr-2 h-4 w-4"/>{t('approve')}</Button>
-                                            <Button variant="outline" size="sm" className="bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900 border-red-300 dark:border-red-700" onClick={() => handleProductVerification(prod.id, 'reject')}><X className="mr-2 h-4 w-4"/>{t('reject')}</Button>
-                                        </TableCell>
+                    <Card id="payment-management">
+                        <CardHeader>
+                            <CardTitle>{t('payment_management_title')}</CardTitle>
+                            <CardDescription>{t('payment_management_desc')}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t('transaction_id')}</TableHead>
+                                        <TableHead>{t('user')}</TableHead>
+                                        <TableHead>{t('amount')}</TableHead>
+                                        <TableHead>{t('status')}</TableHead>
+                                        <TableHead className="text-right">{t('actions')}</TableHead>
                                     </TableRow>
-                               )) : (
-                                <TableRow>
-                                    <TableCell colSpan={4} className="text-center h-24">{t('no_pending_products')}</TableCell>
-                                </TableRow>
-                               )}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+                                </TableHeader>
+                                <TableBody>
+                                    {transactions.filter(tx => tx.status === 'Pending').map(tx => (
+                                        <TableRow key={tx.id}>
+                                            <TableCell className="font-mono">{tx.id}</TableCell>
+                                            <TableCell>{tx.user}</TableCell>
+                                            <TableCell>{formatCurrency(tx.amount)}</TableCell>
+                                            <TableCell>
+                                                <Badge variant={getStatusVariant(language === 'id' ? tx.status_id : tx.status)}>
+                                                    {getStatusText(language === 'id' ? tx.status_id : tx.status)}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <Button size="sm" onClick={() => handlePaymentAction(tx.id)}><Check className="mr-2 h-4 w-4"/>{t('mark_as_paid')}</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {transactions.filter(tx => tx.status === 'Pending').length === 0 && (
+                                        <TableRow><TableCell colSpan={5} className="h-24 text-center">{t('no_pending_payments')}</TableCell></TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </div>
+                
+                <div className="lg:col-span-2 space-y-8">
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>{t('latest_shipping_reports')}</CardTitle>
+                            <CardDescription>{t('latest_shipping_reports_desc')}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                           <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t('order_id', 'Order ID')}</TableHead>
+                                        <TableHead>{t('vendor', 'Vendor')}</TableHead>
+                                        <TableHead>{t('status')}</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {shippingReports.map(report => (
+                                        <TableRow key={report.orderId}>
+                                            <TableCell className="font-mono">{report.orderId}</TableCell>
+                                            <TableCell>{report.vendor}</TableCell>
+                                            <TableCell>
+                                                <Badge variant={getStatusVariant(language === 'id' ? report.reportedStatus_id : report.reportedStatus)}>
+                                                    {getStatusText(language === 'id' ? report.reportedStatus_id : report.reportedStatus)}
+                                                </Badge>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                           </Table>
+                        </CardContent>
+                    </Card>
 
-                <Card className="lg:col-span-3">
-                    <CardHeader>
-                        <CardTitle>{t('user_management')}</CardTitle>
-                        <CardDescription>{t('user_management_desc')}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                         <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>{t('user')}</TableHead>
-                                    <TableHead>{t('role')}</TableHead>
-                                    <TableHead>{t('status')}</TableHead>
-                                    <TableHead className="text-right">{t('actions')}</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                               {allUsers.map((user) => (
-                                    <TableRow key={user.id}>
-                                        <TableCell className="font-medium">{user.name}</TableCell>
-                                        <TableCell>{getRoleText(user.role)}</TableCell>
-                                        <TableCell><Badge variant={getStatusVariant(user.status)}>{getStatusText(user.status)}</Badge></TableCell>
-                                        <TableCell className="text-right">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                                        <span className="sr-only">Open menu</span>
-                                                        <MoreHorizontal className="h-4 w-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{t('pending_product_verifications')}</CardTitle>
+                            <CardDescription>{t('pending_product_verifications_desc')}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t('product')}</TableHead>
+                                        <TableHead>{t('producer')}</TableHead>
+                                        <TableHead className="text-right">{t('actions')}</TableHead>
                                     </TableRow>
-                               ))}
-                            </TableBody>
-                         </Table>
-                    </CardContent>
-                </Card>
+                                </TableHeader>
+                                <TableBody>
+                                   {pendingProducts.length > 0 ? pendingProducts.map((prod) => (
+                                        <TableRow key={prod.id}>
+                                            <TableCell className="font-medium flex items-center gap-3">
+                                                <Image src={prod.image} alt={language === 'id' ? prod.name_id : prod.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint={prod.aiHint} />
+                                                <div className="flex flex-col">
+                                                   <span>{language === 'id' ? prod.name_id : prod.name}</span>
+                                                   <span className="text-xs text-muted-foreground">{t(prod.category.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_'))}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>{prod.producer}</TableCell>
+                                            <TableCell className="text-right space-x-2">
+                                                <Button variant="outline" size="icon" className="h-8 w-8 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900 border-green-300 dark:border-green-700" onClick={() => handleProductVerification(prod.id, 'approve')}><Check className="h-4 w-4"/></Button>
+                                                <Button variant="outline" size="icon" className="h-8 w-8 bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900 border-red-300 dark:border-red-700" onClick={() => handleProductVerification(prod.id, 'reject')}><X className="h-4 w-4"/></Button>
+                                            </TableCell>
+                                        </TableRow>
+                                   )) : (
+                                    <TableRow>
+                                        <TableCell colSpan={3} className="text-center h-24">{t('no_pending_products')}</TableCell>
+                                    </TableRow>
+                                   )}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{t('user_management')}</CardTitle>
+                            <CardDescription>{t('user_management_desc')}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                             <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t('user')}</TableHead>
+                                        <TableHead>{t('role')}</TableHead>
+                                        <TableHead>{t('status')}</TableHead>
+                                        <TableHead className="text-right">{t('actions')}</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                   {allUsers.map((user) => (
+                                        <TableRow key={user.id}>
+                                            <TableCell className="font-medium">{user.name}</TableCell>
+                                            <TableCell>{getRoleText(user.role)}</TableCell>
+                                            <TableCell><Badge variant={getStatusVariant(user.status)}>{getStatusText(user.status)}</Badge></TableCell>
+                                            <TableCell className="text-right">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" className="h-8 w-8 p-0">
+                                                            <span className="sr-only">Open menu</span>
+                                                            <MoreHorizontal className="h-4 w-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
+                                                        <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
+                                   ))}
+                                </TableBody>
+                             </Table>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </>
     )
 }
-
-    
