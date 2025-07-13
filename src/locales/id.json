@@ -322,6 +322,7 @@
   "high_demand": "Permintaan Tinggi",
   "stable_demand": "Permintaan Stabil",
   "growing_demand": "Permintaan Tumbuh",
+  "demandKey": "Permintaan",
   "top_destinations": "Tujuan Utama",
   "log_in_to_check_eligibility": "Anda harus masuk untuk memeriksa kelayakan.",
   "financial_reports": "Laporan Keuangan",

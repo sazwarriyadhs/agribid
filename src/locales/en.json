@@ -322,6 +322,7 @@
   "high_demand": "High Demand",
   "stable_demand": "Stable Demand",
   "growing_demand": "Growing Demand",
+  "demandKey": "Demand",
   "top_destinations": "Top Destinations",
   "log_in_to_check_eligibility": "You must be logged in to check eligibility.",
   "financial_reports": "Financial Reports",

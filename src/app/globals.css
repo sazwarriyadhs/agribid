@@ -1,3 +1,4 @@
+@import 'ol/ol.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -85,4 +86,11 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.map-tooltip {
+  @apply bg-popover text-popover-foreground rounded-md shadow-lg p-2 text-xs border border-border;
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -120%);
 }
