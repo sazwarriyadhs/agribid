@@ -1,3 +1,4 @@
+
 'use client'
 
 import Link from 'next/link';
@@ -19,19 +20,16 @@ import { GlobalDemand } from '@/components/global-demand';
 const heroSlides = [
   {
     src: '/images/hero1.jpeg',
-    aiHint: 'farm sunset',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle'
   },
   {
     src: '/images/hero2.jpeg',
-    aiHint: 'rice paddy',
     titleKey: 'hero_title_2',
     subtitleKey: 'hero_subtitle_2'
   },
   {
     src: '/images/hero3.jpeg',
-    aiHint: 'fishing boat',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3'
   }
@@ -112,7 +110,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-       <section className="w-full text-white">
+      <section className="w-full text-white">
         <div className="w-full max-w-[1024px] h-[1080px] mx-auto overflow-hidden">
           <Carousel
             opts={{ loop: true }}
@@ -126,7 +124,6 @@ export default function Home() {
                     <Image
                       src={slide.src}
                       alt={t(slide.titleKey as any, 'Pasar Digital Produk Segar')}
-                      data-ai-hint={slide.aiHint}
                       fill
                       className="object-cover brightness-50"
                       priority={index === 0}
