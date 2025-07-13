@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <section className="w-full text-white">
-        <div className="w-full max-w-[1024px] h-[1080px] mx-auto overflow-hidden">
+        <div className="w-full max-w-[1024px] h-[90vh] md:h-[1080px] mx-auto overflow-hidden">
             <Carousel 
                 opts={{ loop: true }}
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
