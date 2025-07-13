@@ -119,7 +119,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[90vh] text-white">
+      <section className="relative w-full h-screen text-white">
         <Carousel 
             opts={{ loop: true }}
             plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
@@ -161,7 +161,7 @@ export default function Home() {
         </Carousel>
       </section>
 
-      <section id="featured-auctions" className="py-16 md:py-24 bg-background">
+      <section id="featured-auctions" className="py-12 md:py-16 bg-background">
         <div className="container px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
           <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
@@ -290,3 +290,6 @@ export default function Home() {
 
 
 
+
+
+    
