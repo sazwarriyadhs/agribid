@@ -13,10 +13,59 @@ export interface Product {
     bidders?: { name: string, bid: number, avatar: string }[];
     description: string;
     category: string;
-    quantity?: string;
-    shelfLife?: string;
-    packaging?: string;
+    quantity: string;
+    shelfLife: string;
+    packaging: string;
 }
+
+const productsByRole = {
+  petani: [
+    { id: 'PROD-P01', name: 'Padi Organik', name_id: 'Padi Organik', status: 'Active', status_id: 'Aktif', stock: '15 Ton', category: 'Grains', description: 'Padi organik varietas unggul dari sawah subur.', price: 500, seller: 'Petani Jaya' },
+    { id: 'PROD-P02', name: 'Cabai Merah Keriting', name_id: 'Cabai Merah Keriting', status: 'Ended', status_id: 'Selesai', stock: '500 Kg', category: 'Fruits & Vegetables', description: 'Cabai merah keriting segar, tingkat kepedasan tinggi.', price: 200, seller: 'Petani Jaya' },
+    { id: 'PROD-P03', name: 'Jagung Manis', name_id: 'Jagung Manis', status: 'Pending', status_id: 'Menunggu', stock: '5 Ton', category: 'Fruits & Vegetables', description: 'Jagung manis kualitas ekspor.', price: 150, seller: 'Petani Jaya' },
+  ],
+  nelayan: [
+    { id: 'PROD-N01', name: 'Tuna Sirip Kuning Segar', name_id: 'Tuna Sirip Kuning Segar', status: 'Active', status_id: 'Aktif', stock: '2 Ton', category: 'Marine Fishery', description: 'Tuna segar, ditangkap secara berkelanjutan.', price: 8000, seller: 'Nelayan Makmur' },
+    { id: 'PROD-N02', name: 'Cumi-cumi Beku', name_id: 'Cumi-cumi Beku', status: 'Active', status_id: 'Aktif', stock: '1.5 Ton', category: 'Marine Fishery', description: 'Cumi-cumi beku, kualitas ekspor.', price: 3000, seller: 'Nelayan Makmur' },
+    { id: 'PROD-N03', name: 'Lobster Mutiara Hidup', name_id: 'Lobster Mutiara Hidup', status: 'Ended', status_id: 'Selesai', stock: '300 Kg', category: 'Marine Fishery', description: 'Lobster mutiara hidup untuk pasar premium.', price: 25000, seller: 'Nelayan Makmur' },
+  ],
+  peternak: [
+    { id: 'PROD-T01', name: 'Sapi Limousin', name_id: 'Sapi Limousin', status: 'Active', status_id: 'Aktif', stock: '20 Ekor', category: 'Livestock', description: 'Sapi limousin jantan, berat rata-rata 500kg.', price: 10000, seller: 'Peternak Sentosa' },
+    { id: 'PROD-T02', name: 'Ayam Broiler', name_id: 'Ayam Broiler', status: 'Pending', status_id: 'Menunggu', stock: '500 Ekor', category: 'Livestock', description: 'Ayam broiler siap potong, berat rata-rata 1.5kg.', price: 1000, seller: 'Peternak Sentosa' },
+    { id: 'PROD-T03', name: 'Susu Sapi Segar', name_id: 'Susu Sapi Segar', status: 'Ended', status_id: 'Selesai', stock: '1000 Liter', category: 'Livestock', description: 'Susu sapi segar hasil pemerahan pagi.', price: 500, seller: 'Peternak Sentosa' },
+  ],
+  'pengolah-hasil-hutan': [
+    { id: 'PROD-H01', name: 'Kayu Jati Gelondongan', name_id: 'Kayu Jati Gelondongan', status: 'Active', status_id: 'Aktif', stock: '10 m³', category: 'Forestry Products', description: 'Kayu jati gelondongan dari hutan rakyat terverifikasi.', price: 7000, seller: 'Hutan Lestari' },
+    { id: 'PROD-H02', name: 'Getah Pinus', name_id: 'Getah Pinus', status: 'Ended', status_id: 'Selesai', stock: '5 Ton', category: 'Forestry Products', description: 'Getah pinus kualitas super.', price: 1200, seller: 'Hutan Lestari' },
+  ],
+  peladang: [
+     { id: 'PROD-L01', name: 'Kopi Robusta Lampung', name_id: 'Kopi Robusta Lampung', status: 'Active', status_id: 'Aktif', stock: '5 Ton', category: 'Plantation', description: 'Biji kopi robusta Lampung, petik merah.', price: 2500, seller: 'Ladang Subur' },
+     { id: 'PROD-L02', name: 'Biji Kelapa Sawit', name_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 Ton', category: 'Plantation', description: 'Tandan buah segar (TBS) kelapa sawit.', price: 4000, seller: 'Ladang Subur' },
+  ],
+  'green-valley-farms': [
+      { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton', category: 'Grains', description: 'High quality wheat', price: 4500, seller: 'Green Valley Farms' }
+  ]
+};
+
+const initialProducts: Product[] = Object.values(productsByRole).flat().map(p => ({
+    id: p.id,
+    name: p.name,
+    name_id: p.name_id,
+    status: p.status as Product['status'],
+    status_id: p.status_id as Product['status_id'],
+    image: `https://placehold.co/600x400.png?text=${p.name.replace(/ /g, '+')}`,
+    aiHint: p.name.toLowerCase(),
+    seller: p.seller,
+    seller_id: p.seller,
+    currentBid: p.price,
+    bidders: [],
+    description: p.description,
+    category: p.category,
+    quantity: p.stock,
+    shelfLife: 'N/A',
+    packaging: 'N/A'
+}));
+
 
 // This acts as a simple in-memory, observable database for our products.
 class ProductDatabase {
@@ -24,92 +73,7 @@ class ProductDatabase {
     private subscribers: (() => void)[] = [];
 
     constructor() {
-        this.products = [
-            {
-              id: '1',
-              name: 'Organic Wheat Harvest',
-              name_id: 'Panen Gandum Organik',
-              status: 'Active',
-              status_id: 'Aktif',
-              image: 'https://placehold.co/600x400.png',
-              aiHint: 'wheat field',
-              seller: 'Green Valley Farms',
-              seller_id: 'Green Valley Farms',
-              currentBid: 4500,
-              description: 'High quality wheat',
-              category: 'Grains',
-              bidders: [
-                { name: 'Bakery Co.', bid: 4500, avatar: 'B' },
-                { name: 'Mill & Co.', bid: 4400, avatar: 'M' },
-                { name: 'Artisan Breads', bid: 4300, avatar: 'A' },
-              ],
-            },
-            {
-              id: '2',
-              name: 'Fresh Atlantic Salmon',
-              name_id: 'Salmon Atlantik Segar',
-              status: 'Active',
-              status_id: 'Aktif',
-              image: 'https://placehold.co/600x400.png',
-              aiHint: 'salmon seafood',
-              seller: 'Ocean Fresh',
-              seller_id: 'Ocean Fresh',
-              currentBid: 1200,
-              description: 'Sustainably farmed salmon',
-              category: 'Marine Fishery',
-              bidders: [
-                { name: 'Seafood World', bid: 1200, avatar: 'S' },
-                { name: 'Fine Dining Group', bid: 1150, avatar: 'F' },
-                { name: 'Sushi Express', bid: 1100, avatar: 'S' },
-              ],
-            },
-            {
-              id: '3',
-              name: 'Palm Oil Kernels',
-              name_id: 'Biji Kelapa Sawit',
-              status: 'Active',
-              status_id: 'Aktif',
-              image: 'https://placehold.co/600x400.png',
-              aiHint: 'palm oil plantation',
-              seller: 'Nusantara Palms',
-              seller_id: 'Nusantara Palms',
-              currentBid: 850,
-              description: 'High yield palm oil kernels',
-              category: 'Plantation',
-              bidders: [
-                { name: 'Bio-Fuels Inc.', bid: 850, avatar: 'B' },
-                { name: 'Commodity Traders', bid: 800, avatar: 'C' },
-              ],
-            },
-             { 
-                id: 'PROD-004', 
-                name: 'Robusta Coffee Beans', 
-                name_id: 'Biji Kopi Robusta', 
-                status: 'Pending',
-                status_id: 'Menunggu',
-                seller: 'Kintamani Highlands', 
-                seller_id: 'Kintamani Highlands',
-                image: 'https://placehold.co/100x100.png', 
-                aiHint: 'coffee beans', 
-                category: 'Plantation',
-                description: 'Authentic robusta beans',
-                currentBid: 2000
-            },
-            { 
-                id: 'PROD-005', 
-                name: 'Frozen Tuna Loin', 
-                name_id: 'Loin Tuna Beku', 
-                status: 'Pending',
-                status_id: 'Menunggu',
-                seller: 'Bahari Seafood', 
-                seller_id: 'Bahari Seafood',
-                image: 'https://placehold.co/100x100.png', 
-                aiHint: 'tuna loin', 
-                category: 'Marine Fishery',
-                description: 'Premium frozen tuna',
-                currentBid: 5000
-            },
-        ];
+        this.products = initialProducts;
     }
 
     private notifySubscribers() {
@@ -150,9 +114,9 @@ class ProductDatabase {
             currentBid: productData.currentBid || 0,
             description: productData.description || '',
             category: productData.category || 'Uncategorized',
-            quantity: productData.quantity,
-            shelfLife: productData.shelfLife,
-            packaging: productData.packaging,
+            quantity: productData.quantity || 'N/A',
+            shelfLife: productData.shelfLife || 'N/A',
+            packaging: productData.packaging || 'N/A',
         };
         this.products.push(newProduct);
         this.notifySubscribers();
@@ -175,6 +139,14 @@ class ProductDatabase {
         }
         const status_id = statusMap[status] as Product['status_id'];
         this.updateProduct(id, { status, status_id });
+    }
+
+    deleteProduct(id: string) {
+        const productIndex = this.products.findIndex(p => p.id === id);
+        if (productIndex > -1) {
+            this.products.splice(productIndex, 1);
+            this.notifySubscribers();
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 import type { LucideIcon } from 'lucide-react';
 import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck, ShoppingCart } from 'lucide-react';
 
-export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter";
+export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter" | "producer";
 
 export interface NavItem {
   name: string;
@@ -13,6 +13,10 @@ export interface NavItem {
 
 export const sidebarByRole: Record<Role, NavItem[]> = {
   seller: [ 
+    { name: "Dashboard", path: "/dashboard/seller", icon: LayoutDashboard, labelKey: 'dashboard' },
+    { name: "Create New Auction", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
+  ],
+  producer: [ // producer is an alias for seller
     { name: "Dashboard", path: "/dashboard/seller", icon: LayoutDashboard, labelKey: 'dashboard' },
     { name: "Create New Auction", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
   ],
@@ -48,6 +52,9 @@ export const dashboardLabel: { [key: string]: string } = {
   "pengolah hasil hutan": "Dashboard Kehutanan",
   eksportir: "Dashboard Ekspor",
   mitra: "Dashboard Vendor",
+  vendor: "Dashboard Vendor",
+  producer: "Dashboard Produsen",
+  seller: "Dashboard Penjual",
   buyer: "Dashboard Pembeli",
   default: "Dashboard"
 };

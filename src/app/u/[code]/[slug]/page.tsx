@@ -22,13 +22,8 @@ import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
+import { productDatabase, Product } from '@/lib/mock-data';
 
-
-const auctionHistory = [
-    { id: '1', item: 'Organic Wheat Harvest', item_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton', category: 'Grains' },
-    { id: '2', item: 'Fresh Atlantic Salmon', item_id: 'Salmon Atlantik Segar', status: 'Ended', status_id: 'Selesai', stock: '5 Ton', category: 'Marine Fishery' },
-    { id: '3', item: 'Palm Oil Kernels', item_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 m³', category: 'Plantation' },
-];
 
 export default function ProfilePage() {
     const { t, language } = useI18n();
@@ -42,9 +37,12 @@ export default function ProfilePage() {
     }
     
     // Simple check to ensure the user is viewing their own profile based on the URL
-    if (user.name !== params.slug) {
+    if (user.name.toLowerCase() !== (params.slug as string).toLowerCase()) {
         return notFound();
     }
+    
+    // Filter products by the current user
+    const userProducts = productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user.name);
 
     const userProfile = {
         code: `U-${user.id.slice(0, 4).toUpperCase()}`,
@@ -66,7 +64,7 @@ export default function ProfilePage() {
         return 'outline';
     }
 
-    const getStatusText = (item: { status: string, status_id: string }) => {
+    const getStatusText = (item: Product) => {
         const currentStatus = language === 'id' ? item.status_id : item.status;
         const statusKey = `status_${currentStatus.toLowerCase().replace(/ /g, '_')}`;
         return t(statusKey, currentStatus);
@@ -105,21 +103,27 @@ export default function ProfilePage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {auctionHistory.map((item) => (
+                            {userProducts.length > 0 ? userProducts.map((item) => (
                                 <TableRow key={item.id}>
                                     <TableCell className="font-medium">
                                         <Link href={`/auctions/${item.id}`} className="hover:underline">
-                                            {language === 'id' ? item.item_id : item.item}
+                                            {language === 'id' ? item.name_id : item.name}
                                         </Link>
                                     </TableCell>
                                     <TableCell>
-                                        {item.stock}
+                                        {item.quantity}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <Badge variant={getStatusVariant(language === 'id' ? item.status_id : item.status)}>{getStatusText(item)}</Badge>
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )) : (
+                                <TableRow>
+                                    <TableCell colSpan={3} className="h-24 text-center">
+                                        {t('no_products_found', 'No products listed yet.')}
+                                    </TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </CardContent>

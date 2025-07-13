@@ -16,36 +16,8 @@ import { useAuth } from "@/context/auth";
 import { dashboardLabel } from "@/config/sidebar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Pie, Cell, PieChart as RechartsPieChart } from "recharts"
+import { productDatabase } from "@/lib/mock-data";
 
-
-const productsByRole = {
-  petani: [
-    { id: 'PROD-P01', name: 'Padi Organik', name_id: 'Padi Organik', status: 'Active', status_id: 'Aktif', stock: '15 Ton', category: 'Grains', description: 'Padi organik varietas unggul dari sawah subur.', price: 500, quantity: '15 Ton', shelfLife: '12 bulan', packaging: 'Karung 50kg' },
-    { id: 'PROD-P02', name: 'Cabai Merah Keriting', name_id: 'Cabai Merah Keriting', status: 'Ended', status_id: 'Selesai', stock: '500 Kg', category: 'Fruits & Vegetables', description: 'Cabai merah keriting segar, tingkat kepedasan tinggi.', price: 200, quantity: '500 Kg', shelfLife: '1 minggu', packaging: 'Kardus berventilasi' },
-    { id: 'PROD-P03', name: 'Jagung Manis', name_id: 'Jagung Manis', status: 'Pending', status_id: 'Menunggu', stock: '5 Ton', category: 'Fruits & Vegetables', description: 'Jagung manis kualitas ekspor.', price: 150, quantity: '5 Ton', shelfLife: '5 hari', packaging: 'Kardus' },
-  ],
-  nelayan: [
-    { id: 'PROD-N01', name: 'Tuna Sirip Kuning Segar', name_id: 'Tuna Sirip Kuning Segar', status: 'Active', status_id: 'Aktif', stock: '2 Ton', category: 'Marine Fishery', description: 'Tuna segar, ditangkap secara berkelanjutan.', price: 8000, quantity: '2 Ton', shelfLife: '3 hari (dingin)', packaging: 'Kotak styrofoam dengan es' },
-    { id: 'PROD-N02', name: 'Cumi-cumi Beku', name_id: 'Cumi-cumi Beku', status: 'Active', status_id: 'Aktif', stock: '1.5 Ton', category: 'Marine Fishery', description: 'Cumi-cumi beku, kualitas ekspor.', price: 3000, quantity: '1.5 Ton', shelfLife: '6 bulan (beku)', packaging: 'Blok beku dalam kardus' },
-    { id: 'PROD-N03', name: 'Lobster Mutiara Hidup', name_id: 'Lobster Mutiara Hidup', status: 'Ended', status_id: 'Selesai', stock: '300 Kg', category: 'Marine Fishery', description: 'Lobster mutiara hidup untuk pasar premium.', price: 25000, quantity: '300 Kg', shelfLife: '24 jam (hidup)', packaging: 'Kotak berventilasi dengan kain basah' },
-  ],
-  peternak: [
-    { id: 'PROD-T01', name: 'Sapi Limousin', name_id: 'Sapi Limousin', status: 'Active', status_id: 'Aktif', stock: '20 Ekor', category: 'Livestock', description: 'Sapi limousin jantan, berat rata-rata 500kg.', price: 10000, quantity: '20 Ekor', shelfLife: 'N/A', packaging: 'Truk ternak' },
-    { id: 'PROD-T02', name: 'Ayam Broiler', name_id: 'Ayam Broiler', status: 'Pending', status_id: 'Menunggu', stock: '500 Ekor', category: 'Livestock', description: 'Ayam broiler siap potong, berat rata-rata 1.5kg.', price: 1000, quantity: '500 Ekor', shelfLife: 'N/A', packaging: 'Krat ayam' },
-    { id: 'PROD-T03', name: 'Susu Sapi Segar', name_id: 'Susu Sapi Segar', status: 'Ended', status_id: 'Selesai', stock: '1000 Liter', category: 'Livestock', description: 'Susu sapi segar hasil pemerahan pagi.', price: 500, quantity: '1000 Liter', shelfLife: '3 hari (dingin)', packaging: 'Jerigen stainless steel' },
-  ],
-  'pengolah hasil hutan': [
-    { id: 'PROD-H01', name: 'Kayu Jati Gelondongan', name_id: 'Kayu Jati Gelondongan', status: 'Active', status_id: 'Aktif', stock: '10 m³', category: 'Forestry Products', description: 'Kayu jati gelondongan dari hutan rakyat terverifikasi.', price: 7000, quantity: '10 m³', shelfLife: 'N/A', packaging: 'Truk logging' },
-    { id: 'PROD-H02', name: 'Getah Pinus', name_id: 'Getah Pinus', status: 'Ended', status_id: 'Selesai', stock: '5 Ton', category: 'Forestry Products', description: 'Getah pinus kualitas super.', price: 1200, quantity: '5 Ton', shelfLife: '12 bulan', packaging: 'Drum baja' },
-  ],
-  peladang: [
-     { id: 'PROD-L01', name: 'Kopi Robusta Lampung', name_id: 'Kopi Robusta Lampung', status: 'Active', status_id: 'Aktif', stock: '5 Ton', category: 'Plantation', description: 'Biji kopi robusta Lampung, petik merah.', price: 2500, quantity: '5 Ton', shelfLife: '24 bulan', packaging: 'Karung goni' },
-     { id: 'PROD-L02', name: 'Biji Kelapa Sawit', name_id: 'Biji Kelapa Sawit', status: 'Pending', status_id: 'Menunggu', stock: '20 Ton', category: 'Plantation', description: 'Tandan buah segar (TBS) kelapa sawit.', price: 4000, quantity: '20 Ton', shelfLife: '48 jam', packaging: 'Truk dump' },
-  ],
-  default: [
-    { id: '1', name: 'Organic Wheat Harvest', name_id: 'Panen Gandum Organik', status: 'Active', status_id: 'Aktif', stock: '10 Ton', category: 'Grains', description: 'Premium quality organic hard red winter wheat...', price: 4500, quantity: '10 Ton', shelfLife: '12 bulan', packaging: 'Karung 50kg' },
-  ]
-};
 
 const chartConfig = {
   sales: {
@@ -60,32 +32,34 @@ const chartConfig = {
 } satisfies import('@/components/ui/chart').ChartConfig;
 
 
-export function getMockProducts() {
-    const allProducts = Object.values(productsByRole).flat();
-    return allProducts;
-}
-
-
 export default function SellerDashboardPage() {
     const { t, language, formatCurrency } = useI18n();
     const { toast } = useToast();
     const { user } = useAuth();
     
-    const [sellerProducts, setSellerProducts] = useState(productsByRole.default);
-
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('seller_dashboard_title') : t('seller_dashboard_title');
     
+    // Get all products and filter them by the current seller.
+    // In a real app, this would be a proper DB query.
+    const allProducts = productDatabase.getProducts();
+    const [sellerProducts, setSellerProducts] = useState(
+        allProducts.filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user?.name)
+    );
+    
     useEffect(() => {
-        if (user?.name && user.name in productsByRole) {
-            setSellerProducts(productsByRole[user.name as keyof typeof productsByRole]);
-        } else {
-            setSellerProducts(productsByRole.default);
-        }
-    }, [user]);
+        // Subscribe to changes in the database to keep the UI in sync
+        const unsubscribe = productDatabase.subscribe(() => {
+             setSellerProducts(
+                productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user?.name)
+             );
+        });
+        return () => unsubscribe();
+    }, [user?.name]);
+
 
     const handleDeleteProduct = (productId: string) => {
         const product = sellerProducts.find(p => p.id === productId);
-        setSellerProducts(sellerProducts.filter(p => p.id !== productId));
+        productDatabase.deleteProduct(productId); // This will trigger the subscription and update state
         toast({
             title: t('delete_product_title', 'Product Deleted'),
             description: t('delete_product_desc', `"${language === 'id' ? product?.name_id : product?.name}" has been successfully deleted.`, { productName: language === 'id' ? product?.name_id : product?.name }),
@@ -97,7 +71,7 @@ export default function SellerDashboardPage() {
         const s = status.toLowerCase();
         if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
         if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim', 'receipt confirmed', 'penerimaan dikonfirmasi'].includes(s)) return 'default';
-        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan'].includes(s)) return 'destructive';
+        if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan', 'rejected', 'ditolak'].includes(s)) return 'destructive';
         return 'outline';
     }
 
@@ -109,7 +83,7 @@ export default function SellerDashboardPage() {
     const stats = useMemo(() => {
         const activeAuctions = sellerProducts.filter(p => p.status === 'Active').length;
         const productsSold = sellerProducts.filter(p => p.status === 'Ended');
-        const grossRevenue = productsSold.reduce((acc, p) => acc + p.price, 0);
+        const grossRevenue = productsSold.reduce((acc, p) => acc + p.currentBid, 0);
         return { activeAuctions, productsSold: productsSold.length, grossRevenue };
     }, [sellerProducts]);
 
@@ -120,7 +94,7 @@ export default function SellerDashboardPage() {
             if (!acc[category]) {
                 acc[category] = { value: 0 };
             }
-            acc[category].value += product.price;
+            acc[category].value += product.currentBid;
             return acc;
         }, {} as Record<string, { value: number }>);
         
@@ -187,11 +161,11 @@ export default function SellerDashboardPage() {
                         </TableRow>
                         </TableHeader>
                         <TableBody>
-                        {sellerProducts.map((prod) => (
+                        {sellerProducts.length > 0 ? sellerProducts.map((prod) => (
                             <TableRow key={prod.id}>
                             <TableCell className="font-medium">{language === 'id' ? prod.name_id : prod.name}</TableCell>
                             <TableCell><Badge variant={getStatusVariant(language === 'id' ? prod.status_id : prod.status)}>{getStatusText(prod)}</Badge></TableCell>
-                            <TableCell>{prod.stock}</TableCell>
+                            <TableCell>{prod.quantity}</TableCell>
                             <TableCell className="text-right">
                                  <AlertDialog>
                                     <DropdownMenu>
@@ -232,7 +206,11 @@ export default function SellerDashboardPage() {
                                  </AlertDialog>
                             </TableCell>
                             </TableRow>
-                        ))}
+                        )) : (
+                            <TableRow>
+                                <TableCell colSpan={4} className="text-center h-24">{t('no_products_found', 'No products found.')}</TableCell>
+                            </TableRow>
+                        )}
                         </TableBody>
                     </Table>
                     </CardContent>
@@ -243,30 +221,37 @@ export default function SellerDashboardPage() {
                         <CardDescription>{t('sales_by_category_desc', 'Revenue distribution from sold products.')}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex items-center justify-center">
-                        <ChartContainer
-                            config={chartConfig}
-                            className="mx-auto aspect-square w-full max-w-[300px]"
-                        >
-                            <RechartsPieChart>
-                                <ChartTooltip 
-                                    cursor={false}
-                                    content={<ChartTooltipContent 
-                                        hideLabel 
-                                        formatter={(value, name) => [formatCurrency(value as number), name]} 
-                                    />} 
-                                />
-                                <Pie 
-                                    data={salesByCategory} 
-                                    dataKey="value" 
-                                    nameKey="label" 
-                                    innerRadius={60}
-                                >
-                                    {salesByCategory.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                                    ))}
-                                </Pie>
-                            </RechartsPieChart>
-                        </ChartContainer>
+                        {salesByCategory.length > 0 ? (
+                            <ChartContainer
+                                config={chartConfig}
+                                className="mx-auto aspect-square w-full max-w-[300px]"
+                            >
+                                <RechartsPieChart>
+                                    <ChartTooltip 
+                                        cursor={false}
+                                        content={<ChartTooltipContent 
+                                            hideLabel 
+                                            formatter={(value, name) => [formatCurrency(value as number), name]} 
+                                        />} 
+                                    />
+                                    <Pie 
+                                        data={salesByCategory} 
+                                        dataKey="value" 
+                                        nameKey="label" 
+                                        innerRadius={60}
+                                    >
+                                        {salesByCategory.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                                        ))}
+                                    </Pie>
+                                </RechartsPieChart>
+                            </ChartContainer>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+                                <PieChart className="h-12 w-12 mb-4" />
+                                <p>{t('no_sales_data', 'No sales data yet.')}</p>
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
             </div>

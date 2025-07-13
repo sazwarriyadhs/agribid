@@ -7,40 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Gavel, Heart, Info, Timer, Banknote, Package, Clock, Shield, ShieldCheck } from 'lucide-react'
+import { Gavel, Heart, Info, Timer, Banknote, Package, Clock, Shield, ShieldCheck, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useParams } from 'next/navigation'
-
-const initialAuctionItem = {
-  id: '1',
-  name: 'Organic Wheat Harvest - 10 Tons',
-  name_id: 'Panen Gandum Organik - 10 Ton',
-  image: 'https://placehold.co/800x600.png',
-  aiHint: 'wheat harvest',
-  seller: 'Green Valley Farms',
-  seller_id: 'Green Valley Farms',
-  currentBid: 4500,
-  startingBid: 1000,
-  bidIncrement: 100,
-  endDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
-  description: 'Premium quality organic hard red winter wheat, harvested this season. Perfect for artisan breads and high-quality flour production. Protein content: 14.5%. Moisture: 11%.',
-  description_id: 'Gandum musim dingin merah keras organik kualitas premium, dipanen musim ini. Sempurna untuk roti artisan dan produksi tepung berkualitas tinggi. Kadar protein: 14,5%. Kelembaban: 11%.',
-  origin: 'Kansas, USA',
-  origin_id: 'Kansas, AS',
-  shipping: 'FOB (Freight on Board). Buyer arranges shipping from our facility.',
-  shipping_id: 'FOB (Freight on Board). Pembeli mengatur pengiriman dari fasilitas kami.',
-  quantity: '10 Ton',
-  quantity_id: '10 Ton',
-  shelfLife: 'Up to 12 months if stored properly.',
-  shelfLife_id: 'Hingga 12 bulan jika disimpan dengan benar.',
-  packaging: 'Packed in 50kg polypropylene bags.',
-  packaging_id: 'Dikemas dalam karung polipropilena 50kg.',
-  guarantee: 'Product quality is guaranteed to match the description. Full refund available if the product is not as described upon receival, subject to verification.',
-  guarantee_id: 'Kualitas produk dijamin sesuai dengan deskripsi. Pengembalian dana penuh tersedia jika produk tidak sesuai deskripsi saat diterima, tergantung pada verifikasi.',
-}
+import { useParams, notFound } from 'next/navigation'
+import { productDatabase } from '@/lib/mock-data'
 
 const initialBidHistory = [
   { user: 'Bakery Co.', avatar: 'B', bid: 4500, time: '2 minutes ago', time_id: '2 menit yang lalu' },
@@ -51,19 +24,24 @@ const initialBidHistory = [
 
 export default function AuctionPage() {
   const params = useParams();
-  const [timeLeft, setTimeLeft] = useState('');
-  const [auctionItem, setAuctionItem] = useState(initialAuctionItem);
-  const [bidHistory, setBidHistory] = useState(initialBidHistory);
-  const [bidAmount, setBidAmount] = useState<number | string>('');
   const { toast } = useToast();
   const { t, formatCurrency, language } = useI18n();
   
-  const minBidAmount = auctionItem.currentBid + auctionItem.bidIncrement;
+  const auctionItem = productDatabase.getProductById(params.id as string);
+
+  const [timeLeft, setTimeLeft] = useState('');
+  const [currentBid, setCurrentBid] = useState(auctionItem?.currentBid || 0);
+  const [bidHistory, setBidHistory] = useState(initialBidHistory);
+  const [bidAmount, setBidAmount] = useState<number | string>('');
+  
+  const endDate = new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days from now, for demo
+  const bidIncrement = 100; // For demo
+  const minBidAmount = currentBid + bidIncrement;
 
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const distance = auctionItem.endDate.getTime() - now;
+      const distance = endDate.getTime() - now;
       
       if (distance < 0) {
         clearInterval(timer);
@@ -84,8 +62,20 @@ export default function AuctionPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [t, language, auctionItem.endDate]);
-
+  }, [t, language, endDate]);
+  
+  if (!auctionItem) {
+    return (
+        <div className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
+            <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4"/>
+                <AlertTitle>Auction Not Found</AlertTitle>
+                <AlertDescription>The auction you are looking for does not exist or has been removed.</AlertDescription>
+            </Alert>
+        </div>
+    )
+  }
+  
   const handlePlaceBid = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -120,7 +110,7 @@ export default function AuctionPage() {
         time_id: 'Baru saja'
     };
 
-    setAuctionItem(prev => ({ ...prev, currentBid: bidValue }));
+    setCurrentBid(bidValue);
     setBidHistory(prev => [newBid, ...prev]);
     setBidAmount(''); // Reset input
 
@@ -155,7 +145,7 @@ export default function AuctionPage() {
                     <div className="flex justify-between items-center bg-primary/10 p-4 rounded-lg">
                         <div>
                             <p className="text-sm text-muted-foreground">{t('current_bid')}</p>
-                            <p className="text-4xl font-bold text-primary">{formatCurrency(auctionItem.currentBid)}</p>
+                            <p className="text-4xl font-bold text-primary">{formatCurrency(currentBid)}</p>
                         </div>
                         <div className="text-right">
                              <p className="text-sm text-muted-foreground flex items-center justify-end gap-2"><Timer className="w-4 h-4"/> {t('time_left')}</p>
@@ -170,7 +160,7 @@ export default function AuctionPage() {
                             value={bidAmount}
                             onChange={(e) => setBidAmount(e.target.value)}
                             min={minBidAmount}
-                            step={auctionItem.bidIncrement}
+                            step={bidIncrement}
                         />
                         <Button size="lg" className="w-full h-12 text-lg" type="submit">
                             <Gavel className="mr-2 h-5 w-5" />
@@ -178,7 +168,7 @@ export default function AuctionPage() {
                         </Button>
                     </form>
                     <div className="text-xs text-muted-foreground text-center">
-                        {t('min_bid_increment')}: {formatCurrency(auctionItem.bidIncrement)}. {t('all_bids_final')}
+                        {t('min_bid_increment')}: {formatCurrency(bidIncrement)}. {t('all_bids_final')}
                     </div>
                 </CardContent>
                 <CardFooter>
@@ -196,7 +186,7 @@ export default function AuctionPage() {
                 <TabsContent value="details">
                      <Card>
                         <CardContent className="pt-6 space-y-4 text-sm">
-                            <p>{language === 'id' ? auctionItem.description_id : auctionItem.description}</p>
+                            <p>{auctionItem.description}</p>
                             
                             <div className="border-t pt-4">
                                 <h3 className="font-semibold text-base mb-2">{t('product_specifications', 'Product Specifications')}</h3>
@@ -205,21 +195,21 @@ export default function AuctionPage() {
                                         <Package className="h-5 w-5 mt-0.5 text-primary"/>
                                         <div>
                                             <p className="font-medium text-muted-foreground">{t('quantity')}</p>
-                                            <p>{language === 'id' ? auctionItem.quantity_id : auctionItem.quantity}</p>
+                                            <p>{auctionItem.quantity}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <Clock className="h-5 w-5 mt-0.5 text-primary"/>
                                         <div>
                                             <p className="font-medium text-muted-foreground">{t('shelf_life')}</p>
-                                            <p>{language === 'id' ? auctionItem.shelfLife_id : auctionItem.shelfLife}</p>
+                                            <p>{auctionItem.shelfLife}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <Shield className="h-5 w-5 mt-0.5 text-primary"/>
                                         <div>
                                             <p className="font-medium text-muted-foreground">{t('packaging')}</p>
-                                            <p>{language === 'id' ? auctionItem.packaging_id : auctionItem.packaging}</p>
+                                            <p>{auctionItem.packaging}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -228,15 +218,15 @@ export default function AuctionPage() {
                             <div className="grid grid-cols-2 gap-4 border-t pt-4">
                                 <div>
                                     <p className="font-medium text-muted-foreground">{t('origin')}</p>
-                                    <p>{language === 'id' ? auctionItem.origin_id : auctionItem.origin}</p>
+                                    <p>N/A</p>
                                 </div>
                                  <div>
                                     <p className="font-medium text-muted-foreground">{t('starting_bid')}</p>
-                                    <p>{formatCurrency(auctionItem.startingBid)}</p>
+                                    <p>{formatCurrency(auctionItem.currentBid)}</p>
                                 </div>
                                 <div>
                                     <p className="font-medium text-muted-foreground">{t('shipping_terms')}</p>
-                                    <p>{language === 'id' ? auctionItem.shipping_id : auctionItem.shipping}</p>
+                                    <p>FOB</p>
                                 </div>
                                  <div>
                                     <p className="font-medium text-muted-foreground">{t('auction_id')}</p>
@@ -257,7 +247,7 @@ export default function AuctionPage() {
                                     <ShieldCheck className="h-4 w-4"/>
                                     <AlertTitle className="font-semibold">{t('guarantee_and_warranty_title', 'Guarantee & Warranty')}</AlertTitle>
                                     <AlertDescription>
-                                        {language === 'id' ? auctionItem.guarantee_id : auctionItem.guarantee}
+                                       N/A
                                     </AlertDescription>
                                 </Alert>
                             </div>
