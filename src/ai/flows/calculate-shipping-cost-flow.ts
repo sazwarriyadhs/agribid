@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to calculate estimated shipping costs.
@@ -10,14 +11,14 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const CalculateShippingCostInputSchema = z.object({
+const CalculateShippingCostInputSchema = z.object({
   origin: z.string().describe('The starting point of the shipment (city or region).'),
   destination: z.string().describe('The destination of the shipment (city or region).'),
   productDetails: z.string().describe('Details of the product being shipped, including name, quantity, weight, and any special handling requirements (e.g., "10 Tons of Organic Wheat in 50kg bags", "2 Tons of Fresh Salmon, requires refrigeration").'),
 });
 export type CalculateShippingCostInput = z.infer<typeof CalculateShippingCostInputSchema>;
 
-export const CalculateShippingCostOutputSchema = z.object({
+const CalculateShippingCostOutputSchema = z.object({
   estimatedCost: z.number().describe('The estimated shipping cost in USD.'),
   reasoning: z.string().describe('A brief explanation of how the cost was estimated, considering distance, weight, volume, and product type.'),
 });
