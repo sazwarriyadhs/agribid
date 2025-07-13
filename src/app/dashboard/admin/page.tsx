@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks } from "lucide-react"
+import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks, Contact } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Image from "next/image";
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +15,9 @@ import { useAuth } from '@/context/auth';
 import { dashboardLabel } from '@/config/sidebar';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Line, XAxis, YAxis, CartesianGrid, LineChart as RechartsLineChart } from "recharts"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { MemberCard } from '@/components/member-card';
+
 
 const stats = [
     { title: "total_users", value: "1,250", icon: Users },
@@ -29,7 +32,13 @@ const financialStats = [
 ]
 
 // TODO: Connect to the database and fetch real data from the 'users' table.
-const initialAllUsers: any[] = [];
+const initialAllUsers: any[] = [
+    { id: 'usr_1', name: 'Petani Jaya', email: 'petani@agribid.com', role: 'seller', status: 'Active' },
+    { id: 'usr_2', name: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active' },
+    { id: 'usr_3', name: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active' },
+    { id: 'usr_4', name: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended' },
+    { id: 'usr_5', name: 'Nelayan Makmur', email: 'nelayan@agribid.com', role: 'seller', status: 'Active' },
+];
 
 // TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
 const initialTransactions: any[] = [];
@@ -271,6 +280,9 @@ export default function AdminDashboardPage() {
                                             </TableCell>
                                         </TableRow>
                                     ))}
+                                    {shippingReports.length === 0 && (
+                                        <TableRow><TableCell colSpan={3} className="h-24 text-center">No shipping reports.</TableCell></TableRow>
+                                    )}
                                 </TableBody>
                            </Table>
                         </CardContent>
@@ -338,24 +350,35 @@ export default function AdminDashboardPage() {
                                             <TableCell>{getRoleText(user.role)}</TableCell>
                                             <TableCell><Badge variant={getStatusVariant(user.status)}>{getStatusText(user.status)}</Badge></TableCell>
                                             <TableCell className="text-right">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" className="h-8 w-8 p-0">
-                                                            <span className="sr-only">Open menu</span>
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
-                                                        <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                                <Dialog>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                <span className="sr-only">Open menu</span>
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
+                                                            <DropdownMenuSeparator />
+                                                            <DialogTrigger asChild>
+                                                                <DropdownMenuItem><Contact className="mr-2 h-4 w-4"/> View Member Card</DropdownMenuItem>
+                                                            </DialogTrigger>
+                                                            <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
+                                                            <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                    <DialogContent className="max-w-4xl bg-transparent border-none shadow-none p-0">
+                                                        <MemberCard user={user} />
+                                                    </DialogContent>
+                                                </Dialog>
                                             </TableCell>
                                         </TableRow>
                                    ))}
+                                    {allUsers.length === 0 && (
+                                        <TableRow><TableCell colSpan={4} className="h-24 text-center">No users found.</TableCell></TableRow>
+                                    )}
                                 </TableBody>
                              </Table>
                         </CardContent>
