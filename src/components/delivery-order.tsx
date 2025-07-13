@@ -13,6 +13,9 @@ interface DeliveryOrderProps {
         destination: string;
         seller: string;
         buyer: string;
+        quantity: string;
+        shelfLife: string;
+        packaging: string;
     }
 }
 
@@ -49,14 +52,26 @@ export function DeliveryOrder({ order }: DeliveryOrderProps) {
                 <table className="w-full">
                     <thead className="text-left bg-gray-100">
                         <tr>
-                            <th className="p-2 font-semibold">{t('product', 'Product')}</th>
+                            <th className="p-2 font-semibold w-1/3">{t('product', 'Product')}</th>
                             <th className="p-2 font-semibold">{t('description', 'Description')}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr className="border-b">
-                            <td className="p-2 align-top">{language === 'id' ? order.product_id : order.product}</td>
+                            <td className="p-2 align-top font-medium">{language === 'id' ? order.product_id : order.product}</td>
                             <td className="p-2 align-top">{t('goods_as_per_auction', 'Goods as per auction agreement {{auctionId}}', { auctionId: order.id.replace('ORD-','') })}</td>
+                        </tr>
+                        <tr className="border-b">
+                            <td className="p-2 align-top font-medium">{t('quantity', 'Quantity / Volume')}</td>
+                            <td className="p-2 align-top">{order.quantity}</td>
+                        </tr>
+                        <tr className="border-b">
+                            <td className="p-2 align-top font-medium">{t('shelf_life', 'Product Durability / Shelf Life')}</td>
+                            <td className="p-2 align-top">{order.shelfLife}</td>
+                        </tr>
+                        <tr className="border-b">
+                            <td className="p-2 align-top font-medium">{t('packaging', 'Packaging Details')}</td>
+                            <td className="p-2 align-top">{order.packaging}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -86,4 +101,3 @@ export function DeliveryOrder({ order }: DeliveryOrderProps) {
         </div>
     );
 }
-

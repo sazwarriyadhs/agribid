@@ -16,10 +16,10 @@ import { DeliveryOrder } from '@/components/delivery-order';
 
 
 const initialShippingOrders = [
-    { id: 'ORD-WHEAT-001', product: 'Organic Wheat Harvest', product_id: 'Panen Gandum Organik', origin: 'Green Valley Farms, Kansas', destination: 'Bakery Co., Chicago', seller: 'Green Valley Farms', buyer: 'Bakery Co.', status: 'Pending Acceptance', status_id: 'Menunggu Penerimaan' },
-    { id: 'ORD-SALMON-002', product: 'Fresh Atlantic Salmon', product_id: 'Salmon Atlantik Segar', origin: 'Ocean Fresh, Bali', destination: 'Seafood World, Jakarta', seller: 'Ocean Fresh Exporters', buyer: 'Seafood World', status: 'In Transit', status_id: 'Dalam Perjalanan' },
-    { id: 'ORD-PALM-003', product: 'Palm Oil Kernels', product_id: 'Biji Kelapa Sawit', origin: 'Nusantara Palms, Sumatra', destination: 'Bio Oils, Surabaya', seller: 'Nusantara Palms', buyer: 'Bio Oils', status: 'Delivered', status_id: 'Terkirim' },
-    { id: 'ORD-COFFEE-004', product: 'Robusta Coffee Beans', product_id: 'Biji Kopi Robusta', origin: 'Kintamani Highlands', destination: 'Global Coffee Inc., Singapore', seller: 'Mentored Coffee Group', buyer: 'Global Coffee Inc.', status: 'Receipt Confirmed', status_id: 'Penerimaan Dikonfirmasi' },
+    { id: 'ORD-WHEAT-001', product: 'Organic Wheat Harvest', product_id: 'Panen Gandum Organik', origin: 'Green Valley Farms, Kansas', destination: 'Bakery Co., Chicago', seller: 'Green Valley Farms', buyer: 'Bakery Co.', status: 'Pending Acceptance', status_id: 'Menunggu Penerimaan', quantity: '10 Ton', shelfLife: '12 months', packaging: '50kg polypropylene bags' },
+    { id: 'ORD-SALMON-002', product: 'Fresh Atlantic Salmon', product_id: 'Salmon Atlantik Segar', origin: 'Ocean Fresh, Bali', destination: 'Seafood World, Jakarta', seller: 'Ocean Fresh Exporters', buyer: 'Seafood World', status: 'In Transit', status_id: 'Dalam Perjalanan', quantity: '5 Ton', shelfLife: '3 days (refrigerated)', packaging: 'Styrofoam boxes with ice' },
+    { id: 'ORD-PALM-003', product: 'Palm Oil Kernels', product_id: 'Biji Kelapa Sawit', origin: 'Nusantara Palms, Sumatra', destination: 'Bio Oils, Surabaya', seller: 'Nusantara Palms', buyer: 'Bio Oils', status: 'Delivered', status_id: 'Terkirim', quantity: '20 m³', shelfLife: 'N/A', packaging: 'Bulk in dump truck' },
+    { id: 'ORD-COFFEE-004', product: 'Robusta Coffee Beans', product_id: 'Biji Kopi Robusta', origin: 'Kintamani Highlands', destination: 'Global Coffee Inc., Singapore', seller: 'Mentored Coffee Group', buyer: 'Global Coffee Inc.', status: 'Receipt Confirmed', status_id: 'Penerimaan Dikonfirmasi', quantity: '5 Ton', shelfLife: '24 months', packaging: 'Gunnysacks' },
 ];
 
 export default function VendorDashboardPage() {
