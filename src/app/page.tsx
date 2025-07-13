@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -126,9 +127,6 @@ export default function Home() {
                       alt={t(slide.titleKey as any, "Hero image")}
                       fill
                       className="object-cover w-full h-full brightness-50"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = slide.fallback;
-                      }}
                       priority={index === 0}
                     />
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 p-8">
