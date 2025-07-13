@@ -16,27 +16,7 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
-
-const heroSlides = [
-  {
-    src: '/images/hero1.jpeg',
-    fallback: 'https://source.unsplash.com/1600x900/?farm',
-    titleKey: 'hero_title',
-    subtitleKey: 'hero_subtitle',
-  },
-  {
-    src: '/images/hero2.jpeg',
-    fallback: 'https://source.unsplash.com/1600x900/?agriculture',
-    titleKey: 'hero_title_2',
-    subtitleKey: 'hero_subtitle_2',
-  },
-  {
-    src: '/images/hero3.jpeg',
-    fallback: 'https://source.unsplash.com/1600x900/?market',
-    titleKey: 'hero_title_3',
-    subtitleKey: 'hero_subtitle_3',
-  },
-];
+import HeroSlider from '@/components/hero-slider'; // Import HeroSlider
 
 const featuredAuctions = [
     {
@@ -113,49 +93,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[90vh] lg:h-screen text-white">
-          <Carousel
-            opts={{ loop: true }}
-            plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
-            className="absolute inset-0 w-full h-full"
-          >
-            <CarouselContent className="h-full">
-              {heroSlides.map((slide, index) => (
-                <CarouselItem key={index} className="relative w-full h-full">
-                  <Image
-                      src={slide.src}
-                      alt={t(slide.titleKey as any, "Hero image")}
-                      fill
-                      className="object-cover w-full h-full brightness-50"
-                      priority={index === 0}
-                    />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 p-8">
-                      <div className="max-w-3xl">
-                        <h1 className="text-3xl md:text-5xl font-headline font-bold tracking-tight">
-                          {t(slide.titleKey as any)}
-                        </h1>
-                        <p className="mt-4 text-lg text-primary-foreground/90">
-                          {t(slide.subtitleKey as any)}
-                        </p>
-                        <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                          <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                            <Link href="#featured-auctions">{t('browse_auctions')}</Link>
-                          </Button>
-                          <Button asChild size="lg" variant="secondary">
-                            <Link href="/signup">{t('become_a_producer')}</Link>
-                          </Button>
-                        </div>
-                      </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
-            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
-          </Carousel>
-      </section>
+      <HeroSlider /> {/* Use the imported HeroSlider component */}
 
-      <section id="featured-auctions" className="py-12 md:py-24 bg-background mt-[-20px] md:mt-[-40px] relative z-10 rounded-t-2xl">
+      <section id="featured-auctions" className="py-12 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
             <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
