@@ -111,7 +111,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <section className="w-full text-white">
-        <div className="w-full max-w-[1024px] h-[100vh] md:h-[1080px] mx-auto">
+        <div className="w-full h-[90vh] lg:h-screen">
           <Carousel
             opts={{ loop: true }}
             plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
@@ -123,7 +123,7 @@ export default function Home() {
                   <div className="relative w-full h-full">
                     <Image
                       src={slide.src}
-                      alt={t(slide.titleKey as any, "Pasar Digital Produk Segar")}
+                      alt={t(slide.titleKey as any, "Hero image")}
                       fill
                       className="object-cover w-full h-full brightness-50"
                       priority={index === 0}
@@ -156,7 +156,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="featured-auctions" className="py-12 md:py-24 bg-background pt-4 md:pt-10 pb-12">
+      <section id="featured-auctions" className="py-12 md:py-24 bg-background mt-[-20px] md:mt-[-40px] relative z-10 rounded-t-2xl">
         <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
             <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
