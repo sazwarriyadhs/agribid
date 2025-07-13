@@ -120,11 +120,11 @@ export default function Home() {
   return (
     <div className="flex flex-col">
        <section className="w-full text-white">
-        <div className="relative w-full aspect-[4/3] md:aspect-video lg:aspect-[21/9]">
+        <div className="w-full aspect-[2/3] md:aspect-[4/3] lg:aspect-[21/9]">
             <Carousel 
                 opts={{ loop: true }}
                 plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
-                className="absolute inset-0 w-full h-full"
+                className="w-full h-full"
             >
                 <CarouselContent className="h-full">
                     {heroSlides.map((slide, index) => (
@@ -300,3 +300,4 @@ export default function Home() {
     
 
     
+
