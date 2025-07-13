@@ -1,4 +1,3 @@
-
 'use client'
 
 import Link from 'next/link';
@@ -17,273 +16,239 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 
-
 const heroSlides = [
+  {
+    src: '/images/hero1.jpeg',
+    aiHint: 'farm sunset',
+    titleKey: 'hero_title',
+    subtitleKey: 'hero_subtitle'
+  },
+  {
+    src: '/images/hero2.jpeg',
+    aiHint: 'rice paddy',
+    titleKey: 'hero_title_2',
+    subtitleKey: 'hero_subtitle_2'
+  },
+  {
+    src: '/images/hero3.jpeg',
+    aiHint: 'fishing boat',
+    titleKey: 'hero_title_3',
+    subtitleKey: 'hero_subtitle_3'
+  }
+];
+
+const featuredAuctions = [
     {
-        src: '/images/hero1.jpeg',
-        aiHint: 'farm sunset',
-        titleKey: 'hero_title',
-        subtitleKey: 'hero_subtitle'
+      id: '1',
+      name: 'Organic Wheat Harvest',
+      name_id: 'Panen Gandum Organik',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'wheat field',
+      seller: 'Green Valley Farms',
+      seller_id: 'Green Valley Farms',
+      currentBid: 4500,
+      bidders: [
+        { name: 'Bakery Co.', bid: 4500, avatar: 'B' },
+        { name: 'Mill & Co.', bid: 4400, avatar: 'M' },
+        { name: 'Artisan Breads', bid: 4300, avatar: 'A' },
+      ],
     },
     {
-        src: '/images/hero2.jpeg',
-        aiHint: 'rice paddy',
-        titleKey: 'hero_title_2',
-        subtitleKey: 'hero_subtitle_2'
+      id: '2',
+      name: 'Fresh Atlantic Salmon',
+      name_id: 'Salmon Atlantik Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'salmon seafood',
+      seller: 'Ocean Fresh',
+      seller_id: 'Ocean Fresh',
+      currentBid: 1200,
+      bidders: [
+        { name: 'Seafood World', bid: 1200, avatar: 'S' },
+        { name: 'Fine Dining Group', bid: 1150, avatar: 'F' },
+        { name: 'Sushi Express', bid: 1100, avatar: 'S' },
+      ],
     },
     {
-        src: '/images/hero3.jpeg',
-        aiHint: 'fishing boat',
-        titleKey: 'hero_title_3',
-        subtitleKey: 'hero_subtitle_3'
+      id: '3',
+      name: 'Palm Oil Kernels',
+      name_id: 'Biji Kelapa Sawit',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'palm oil plantation',
+      seller: 'Nusantara Palms',
+      seller_id: 'Nusantara Palms',
+      currentBid: 850,
+      bidders: [
+        { name: 'Bio-Fuels Inc.', bid: 850, avatar: 'B' },
+        { name: 'Commodity Traders', bid: 800, avatar: 'C' },
+      ],
+    },
+];
+
+const howItWorks = [
+    {
+        icon: Search,
+        title: "find_products_title",
+        description: "find_products_desc"
+    },
+    {
+        icon: Gavel,
+        title: "place_bids_title",
+        description: "place_bids_desc"
+    },
+    {
+        icon: Plane,
+        title: "win_ship_title",
+        description: "win_ship_desc"
     }
 ];
 
-
-const featuredAuctions = [
-  {
-    id: '1',
-    name: 'Organic Wheat Harvest',
-    name_id: 'Panen Gandum Organik',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'wheat field',
-    category: 'Grains',
-    category_id: 'Biji-bijian',
-    seller: 'Green Valley Farms',
-    bidders: [
-        { name: 'Bakery Co.', bid: 4500 },
-        { name: 'Milling Co.', bid: 4450 },
-        { name: 'Artisan Breads', bid: 4400 },
-    ]
-  },
-  {
-    id: '2',
-    name: 'Fresh Atlantic Salmon',
-    name_id: 'Salmon Atlantik Segar',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'fresh salmon',
-    category: 'Marine Fishery',
-    category_id: 'Perikanan Laut',
-    seller: 'Ocean Fresh Exporters',
-    bidders: [
-        { name: 'Seafood World', bid: 1200 },
-        { name: 'Global Fish Market', bid: 1150 },
-        { name: 'Restaurant Supply', bid: 1100 },
-    ]
-  },
-  {
-    id: '3',
-    name: 'Palm Oil Kernels',
-    name_id: 'Biji Kelapa Sawit',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'palm oil plantation',
-    category: 'Plantation',
-    category_id: 'Perkebunan',
-    seller: 'Nusantara Palms',
-    bidders: [
-        { name: 'Bio Oils', bid: 850 },
-        { name: 'Tropic Oil', bid: 800 },
-        { name: 'Global Commodities', bid: 780 },
-    ]
-  },
-    {
-    id: '4',
-    name: 'Teak Wood Logs',
-    name_id: 'Kayu Jati Gelondongan',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'teak wood',
-    category: 'Forestry Products',
-    category_id: 'Hasil Hutan',
-    seller: 'Java Timber',
-    bidders: [
-        { name: 'Lumber Inc.', bid: 7800 },
-        { name: 'Wood World', bid: 7700 },
-        { name: 'Furniture Makers', bid: 7650 },
-    ]
-  },
-];
-
-const partners = [
-    { name: 'FarmFresh Logistics', logo: Tractor },
-    { name: 'CropCare Fertilizers', logo: Wheat },
-    { name: 'Oceanic Shipping', logo: Fish },
-    { name: 'Agri-Finance Corp', logo: Handshake },
-]
-
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
-  
-  const getHighestBidder = (bidders: {name: string, bid: number}[]) => {
-      return bidders.sort((a, b) => b.bid - a.bid)[0];
-  }
+
+  const getHighestBidder = (bidders: {name: string, bid: number, avatar: string}[]) => {
+    if (!bidders || bidders.length === 0) return null;
+    return bidders.sort((a, b) => b.bid - a.bid)[0];
+  };
 
   return (
     <div className="flex flex-col">
       <section className="w-full text-white">
-        <div className="w-full max-w-[1024px] h-[90vh] md:h-[1080px] mx-auto">
-            <Carousel 
-                opts={{ loop: true }}
-                plugins={[ Autoplay({ delay: 5000, stopOnInteraction: false }) ]}
-                className="w-full h-full"
-            >
-                <CarouselContent className="h-full">
-                    {heroSlides.map((slide, index) => (
-                        <CarouselItem key={index} className="relative h-full">
-                            <div className="relative w-full h-full flex items-center justify-center text-center bg-black">
-                                <Image
-                                    src={slide.src}
-                                    alt={t(slide.titleKey as any)}
-                                    data-ai-hint={slide.aiHint}
-                                    layout="fill"
-                                    objectFit="contain"
-                                    className="-z-10"
-                                />
-                                <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
-                                    <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
-                                        {t(slide.titleKey as any)}
-                                    </h1>
-                                    <p className="mt-4 max-w-3xl mx-auto text-lg text-primary-foreground/90">
-                                        {t(slide.subtitleKey as any)}
-                                    </p>
-                                    <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                                        <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                                        <Link href="#featured-auctions">{t('browse_auctions')}</Link>
-                                        </Button>
-                                        <Button asChild size="lg" variant="secondary">
-                                        <Link href="/signup">{t('become_a_producer')}</Link>
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
-                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
-            </Carousel>
+        <div className="w-full max-w-[1024px] h-[1080px] mx-auto overflow-hidden">
+          <Carousel
+            opts={{ loop: true }}
+            plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
+            className="w-full h-full"
+          >
+            <CarouselContent className="h-full">
+              {heroSlides.map((slide, index) => (
+                <CarouselItem key={index} className="relative h-full">
+                  <div className="relative w-full h-full flex items-center justify-center text-center bg-black">
+                    <Image
+                      src={slide.src}
+                      alt={t(slide.titleKey)}
+                      data-ai-hint={slide.aiHint}
+                      fill
+                      className="object-contain -z-10"
+                    />
+                    <div className="absolute bottom-10 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
+                      <h1 className="text-2xl md:text-4xl font-headline font-bold tracking-tight">
+                        {t(slide.titleKey)}
+                      </h1>
+                      <p className="mt-4 max-w-3xl mx-auto text-lg text-primary-foreground/90">
+                        {t(slide.subtitleKey)}
+                      </p>
+                      <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+                        <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <Link href="#featured-auctions">{t('browse_auctions')}</Link>
+                        </Button>
+                        <Button asChild size="lg" variant="secondary">
+                          <Link href="/signup">{t('become_a_producer')}</Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+          </Carousel>
         </div>
       </section>
 
-      <section id="featured-auctions" className="py-12 md:py-16 bg-background mt-[-20px] md:mt-[-40px] relative z-10">
+      <section id="featured-auctions" className="py-16 md:py-24 bg-background relative z-10 mt-[-20px] md:mt-[-40px]">
         <div className="container px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
-          <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredAuctions.map((auction) => {
-              const highestBidder = getHighestBidder(auction.bidders);
-              const otherBidders = auction.bidders.filter(b => b.name !== highestBidder.name).slice(0,2);
+            <h2 className="text-3xl font-bold text-center font-headline">{t('featured_auctions')}</h2>
+            <p className="text-center text-muted-foreground mt-2 mb-12">{t('featured_auctions_subtitle')}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredAuctions.map((item) => {
+                    const highestBidder = getHighestBidder(item.bidders);
+                    return (
+                        <Card key={item.id} className="overflow-hidden flex flex-col">
+                            <div className="aspect-video overflow-hidden">
+                                <Image
+                                    src={item.image}
+                                    alt={language === 'id' ? item.name_id : item.name}
+                                    data-ai-hint={item.aiHint}
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-full object-cover transition-transform hover:scale-105"
+                                />
+                            </div>
+                            <CardHeader>
+                                <CardTitle className="font-headline text-xl h-14">{language === 'id' ? item.name_id : item.name}</CardTitle>
+                                <div className="flex justify-between items-center text-sm text-muted-foreground">
+                                    <span>{t('sold_by')}: <span className="font-medium text-primary">{language === 'id' ? item.seller_id : item.seller}</span></span>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="flex-grow">
+                                <div className="space-y-2">
+                                     <div>
+                                        <p className="text-sm text-muted-foreground">{t('current_bid')}</p>
+                                        <p className="text-2xl font-bold text-primary">{formatCurrency(item.currentBid)}</p>
+                                    </div>
+                                    {highestBidder && (
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">{t('highest_bid')}</p>
+                                            <div className="flex items-center gap-2">
+                                                <Avatar className="h-6 w-6 text-xs">
+                                                    <AvatarFallback>{highestBidder.avatar}</AvatarFallback>
+                                                </Avatar>
+                                                <span className="font-semibold">{highestBidder.name}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild className="w-full">
+                                    <Link href={`/auctions/${item.id}`}>{t('view_auction')}</Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    );
+                })}
+            </div>
+        </div>
+      </section>
 
-              return (
-              <Card key={auction.id} className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                <CardHeader className="p-0">
-                  <div className="relative h-48 w-full">
-                    <Image src={auction.image} alt={language === 'id' ? auction.name_id : auction.name} data-ai-hint={auction.aiHint} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
-                    <Badge className="absolute top-2 right-2 bg-primary/80 backdrop-blur-sm">{language === 'id' ? auction.category_id : auction.category}</Badge>
-                  </div>
-                  <div className="p-6 pb-2">
-                    <CardTitle className="text-xl font-semibold leading-snug">{language === 'id' ? auction.name_id : auction.name}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-grow space-y-4">
-                  <div className="bg-primary/10 border-2 border-primary/20 rounded-lg p-3">
-                      <div className="flex justify-between items-center">
-                          <p className="text-xs text-primary font-semibold">{t('highest_bid')}</p>
-                          <Crown className="w-5 h-5 text-amber-500" />
-                      </div>
-                      <p className="text-2xl font-bold text-primary">{formatCurrency(highestBidder.bid)}</p>
-                      <p className="text-sm text-muted-foreground">{highestBidder.name}</p>
-                  </div>
-                  <div className="space-y-2">
-                      {otherBidders.map((bidder, i) => (
-                           <div key={i} className="flex justify-between items-center text-sm p-2 rounded-md bg-secondary/50">
-                               <div className="flex items-center gap-2 text-muted-foreground">
-                                   <Avatar className="h-6 w-6 text-xs">
-                                        <AvatarFallback>{bidder.name.charAt(0)}</AvatarFallback>
-                                   </Avatar>
-                                   <span>{bidder.name}</span>
-                               </div>
-                               <span className="font-mono text-foreground">{formatCurrency(bidder.bid)}</span>
-                           </div>
-                      ))}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild className="w-full bg-primary hover:bg-primary/90">
-                    <Link href={`/auctions/${auction.id}`}>{t('view_auction')}</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            )})}
-          </div>
+      <section className="py-16 md:py-24 bg-secondary/50">
+        <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold text-center font-headline">{t('how_it_works_title')}</h2>
+            <p className="text-center text-muted-foreground mt-2 mb-12">{t('how_it_works_subtitle')}</p>
+            <div className="grid md:grid-cols-3 gap-8 text-center">
+                {howItWorks.map((step, index) => (
+                    <div key={index} className="flex flex-col items-center">
+                        <div className="bg-primary/10 p-4 rounded-full mb-4">
+                           <step.icon className="h-10 w-10 text-primary" />
+                        </div>
+                        <h3 className="text-xl font-bold font-headline">{t(step.title as any)}</h3>
+                        <p className="text-muted-foreground mt-2">{t(step.description as any)}</p>
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
 
       <FeaturedCommodities />
-      
       <FeaturedProcessedProducts />
-      
-      <GlobalDemand />
 
       <section className="py-16 md:py-24 bg-background">
-        <div className="container px-4 md:px-6">
-           <h2 className="text-3xl font-bold text-center font-headline">{t('how_it_works_title')}</h2>
-           <p className="text-center text-muted-foreground mt-2 mb-12">{t('how_it_works_subtitle')}</p>
-           <div className="grid md:grid-cols-3 gap-8 text-center">
-             <div className="flex flex-col items-center">
-               <div className="bg-primary/10 p-4 rounded-full mb-4"><Search className="h-10 w-10 text-primary" /></div>
-               <h3 className="text-xl font-semibold font-headline">{t('find_products_title')}</h3>
-               <p className="text-muted-foreground mt-2">{t('find_products_desc')}</p>
-             </div>
-             <div className="flex flex-col items-center">
-                <div className="bg-primary/10 p-4 rounded-full mb-4"><Gavel className="h-10 w-10 text-primary" /></div>
-               <h3 className="text-xl font-semibold font-headline">{t('place_bids_title')}</h3>
-               <p className="text-muted-foreground mt-2">{t('place_bids_desc')}</p>
-             </div>
-             <div className="flex flex-col items-center">
-                <div className="bg-primary/10 p-4 rounded-full mb-4"><Handshake className="h-10 w-10 text-primary" /></div>
-               <h3 className="text-xl font-semibold font-headline">{t('win_ship_title')}</h3>
-               <p className="text-muted-foreground mt-2">{t('win_ship_desc')}</p>
-             </div>
-           </div>
-        </div>
+          <div className="container px-4 md:px-6 text-center">
+              <div className="inline-block bg-primary/10 p-4 rounded-full mb-4">
+                  <Crown className="h-12 w-12 text-primary" />
+              </div>
+              <h2 className="text-3xl font-bold font-headline">{t('export_feature_title')}</h2>
+              <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">{t('export_feature_desc')}</p>
+              <Button asChild size="lg" className="mt-6">
+                  <Link href="/export-partner">{t('learn_more_and_apply')}</Link>
+              </Button>
+          </div>
       </section>
 
       <MembershipBenefits />
-      
-      <section className="py-16 md:py-24 bg-secondary/50">
-        <div className="container grid md:grid-cols-2 gap-12 items-center">
-            <div className="flex flex-col items-start text-left">
-                <div className="bg-primary/10 p-3 rounded-full mb-4">
-                    <Plane className="h-8 w-8 text-primary" />
-                </div>
-                <h2 className="text-3xl font-bold font-headline">{t('export_feature_title')}</h2>
-                <p className="text-muted-foreground mt-4 mb-6">{t('export_feature_desc')}</p>
-                <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <Link href="/export-partner">{t('learn_more_and_apply')}</Link>
-                </Button>
-            </div>
-             <div className="relative h-80 rounded-xl overflow-hidden">
-                <Image src="/images/global.jpg" alt={t('export_feature_title')} data-ai-hint="cargo ship port" layout="fill" className="object-cover" />
-             </div>
-        </div>
-      </section>
+      <GlobalDemand />
 
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center font-headline">{t('trusted_partners_title')}</h2>
-          <p className="text-center text-muted-foreground mt-2 mb-12">{t('trusted_partners_subtitle')}</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8">
-            {partners.map(p => (
-                <div key={p.name} className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
-                    <p.logo className="h-8 w-8 text-primary"/>
-                    <span className="text-lg font-medium">{p.name}</span>
-                </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
-
-    
-
+}
