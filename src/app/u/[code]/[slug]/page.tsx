@@ -1,3 +1,4 @@
+
 'use client'
 import {
   Card,
@@ -14,12 +15,12 @@ import {
     TableHeader,
     TableRow,
   } from '@/components/ui/table';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
-import { notFound, useParams } from 'next/navigation';
+import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
 
 
@@ -40,8 +41,6 @@ export default function ProfilePage() {
         return notFound();
     }
     
-    // Simulate fetching user profile based on params, but for the demo, we use the logged-in user.
-    // The check `user.name === params.slug` would be a real-world validation.
     const userProfile = {
         code: `U-${user.id.slice(0, 4).toUpperCase()}`,
         slug: user.name,
@@ -52,7 +51,11 @@ export default function ProfilePage() {
         avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
         avatarFallback: user.name.charAt(0).toUpperCase()
     };
-
+    
+    // Simple check to ensure the user is viewing their own profile based on the URL
+    if (userProfile.slug !== params.slug) {
+        return notFound();
+    }
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -74,7 +77,7 @@ export default function ProfilePage() {
         <Card className="w-full md:w-1/3 text-center md:text-left">
           <CardHeader className="items-center">
             <Avatar className="h-24 w-24 mb-4">
-              <AvatarImage src={userProfile.avatarUrl} />
+              <AvatarImage src={userProfile.avatarUrl} alt={userProfile.name} />
               <AvatarFallback>{userProfile.avatarFallback}</AvatarFallback>
             </Avatar>
             <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>

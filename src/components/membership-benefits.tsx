@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useI18n } from '@/context/i18n';
@@ -18,6 +19,7 @@ const staticCardInfo = {
     id: "DP248017356",
     code: "P001",
     slug: "jessica-sutrisno",
+    role_slug: "producer",
     expires: "30/04/2025",
     avatarUrl: 'https://placehold.co/150x150.png',
     avatarFallback: 'JS'
@@ -43,6 +45,7 @@ export function MembershipBenefits() {
         id: `U-${user.id.slice(0, 4).toUpperCase()}${Date.now().toString().slice(-4)}`,
         code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
         slug: user.name,
+        role_slug: user.role,
         expires: "30/04/2025",
         avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
         avatarFallback: user.name.charAt(0).toUpperCase()
@@ -54,7 +57,7 @@ export function MembershipBenefits() {
         validUntil: cardInfo.expires,
         code: cardInfo.code,
         slug: cardInfo.slug,
-        role: user ? user.role : 'producer' // Use abstract role for QR
+        role: cardInfo.role_slug
     });
 
     return (
