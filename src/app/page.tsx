@@ -1,3 +1,4 @@
+
 'use client'
 
 import Link from 'next/link';
@@ -129,7 +130,7 @@ export default function Home() {
                     fill
                     className="object-cover brightness-50"
                   />
-                  <div className="absolute inset-0 flex flex-col items-center justify-end text-center bg-black/40 p-8">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 p-8">
                     <div className="max-w-3xl">
                       <h1 className="text-3xl md:text-5xl font-headline font-bold tracking-tight">
                         {t(slide.titleKey as any)}
