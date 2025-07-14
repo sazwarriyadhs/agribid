@@ -41,7 +41,9 @@ const initialAllUsers: any[] = [
 ];
 
 // TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
-const initialTransactions: any[] = [];
+const initialTransactions: any[] = [
+    { id: 'TX-99-1', user: 'Petani Jaya', amount: 450, status: 'Pending', status_id: 'Menunggu' }, // 10% of 4500 from seller dashboard
+];
 
 // TODO: Connect to the database and fetch real data from a 'shipments' or similar table.
 const initialShippingReports: any[] = [];

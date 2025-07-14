@@ -20,6 +20,7 @@ const initialShippingOrders = [
     { id: 'ORD-SALMON-002', product: 'Fresh Atlantic Salmon', product_id: 'Salmon Atlantik Segar', origin: 'Ocean Fresh, Bali', destination: 'Seafood World, Jakarta', seller: 'Ocean Fresh Exporters', buyer: 'Seafood World', status: 'In Transit', status_id: 'Dalam Perjalanan', quantity: '5 Ton', shelfLife: '3 days (refrigerated)', packaging: 'Styrofoam boxes with ice' },
     { id: 'ORD-PALM-003', product: 'Palm Oil Kernels', product_id: 'Biji Kelapa Sawit', origin: 'Nusantara Palms, Sumatra', destination: 'Bio Oils, Surabaya', seller: 'Nusantara Palms', buyer: 'Bio Oils', status: 'Delivered', status_id: 'Terkirim', quantity: '20 m³', shelfLife: 'N/A', packaging: 'Bulk in dump truck' },
     { id: 'ORD-COFFEE-004', product: 'Robusta Coffee Beans', product_id: 'Biji Kopi Robusta', origin: 'Kintamani Highlands', destination: 'Global Coffee Inc., Singapore', seller: 'Mentored Coffee Group', buyer: 'Global Coffee Inc.', status: 'Receipt Confirmed', status_id: 'Penerimaan Dikonfirmasi', quantity: '5 Ton', shelfLife: '24 months', packaging: 'Gunnysacks' },
+    { id: 'ORD-99-1', product: 'Panen Gandum Berkualitas', product_id: 'Panen Gandum Berkualitas', origin: 'Sawah Petani Jaya', destination: 'Gudang Pembeli, Jakarta', seller: 'Petani Jaya', buyer: 'Bakery Co.', status: 'Pending Acceptance', status_id: 'Menunggu Penerimaan', quantity: '10 Ton', shelfLife: '12 bulan', packaging: 'Karung 50kg' },
 ];
 
 export default function VendorDashboardPage() {

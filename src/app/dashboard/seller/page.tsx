@@ -29,6 +29,50 @@ const chartConfig = {
   'Forestry Products': { label: 'Forestry Products', color: 'hsl(var(--chart-1))' },
 } satisfies import('@/components/ui/chart').ChartConfig;
 
+// TODO: Connect to the database and fetch products for the current user.
+const initialSellerProducts = [
+    { 
+        id: '1', 
+        name: 'Lelang Cabai Organik', 
+        name_id: 'Lelang Cabai Organik', 
+        status: 'Active', 
+        status_id: 'Aktif', 
+        quantity: '1 Ton', 
+        category: 'Fruits & Vegetables',
+        currentBid: 30000
+    },
+    { 
+        id: '2', 
+        name: 'Lelang Jagung Manis', 
+        name_id: 'Lelang Jagung Manis', 
+        status: 'Active', 
+        status_id: 'Aktif', 
+        quantity: '5 Ton', 
+        category: 'Grains',
+        currentBid: 15000
+    },
+    { 
+        id: '99',
+        name: 'Panen Gandum Berkualitas',
+        name_id: 'Panen Gandum Berkualitas',
+        status: 'Ended',
+        status_id: 'Selesai',
+        quantity: '10 Ton',
+        category: 'Grains',
+        currentBid: 4500, // This is the final price
+    },
+    { 
+        id: '98',
+        name: 'Bawang Merah Super',
+        name_id: 'Bawang Merah Super',
+        status: 'Pending',
+        status_id: 'Menunggu',
+        quantity: '2 Ton',
+        category: 'Fruits & Vegetables',
+        currentBid: 1800,
+    }
+];
+
 
 export default function SellerDashboardPage() {
     const { t, language, formatCurrency } = useI18n();
@@ -37,8 +81,7 @@ export default function SellerDashboardPage() {
     
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('seller_dashboard_title') : t('seller_dashboard_title');
     
-    // TODO: Connect to the database and fetch products for the current user.
-    const [sellerProducts, setSellerProducts] = useState<any[]>([]);
+    const [sellerProducts, setSellerProducts] = useState<any[]>(initialSellerProducts);
     
     // useEffect(() => {
     //     // Subscribe to changes in the database to keep the UI in sync
@@ -65,7 +108,7 @@ export default function SellerDashboardPage() {
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
         if (['active', 'winning', 'verified', 'aktif'].includes(s)) return 'default';
-        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim', 'receipt confirmed', 'penerimaan dikonfirmasi'].includes(s)) return 'default';
+        if (['ended', 'won', 'delivered', 'selesai', 'menang', 'terverifikasi', 'terkirim', 'receipt confirmed', 'penerimaan dikonfirmasi'].includes(s)) return 'secondary';
         if (['pending', 'outbid', 'suspended', 'menunggu', 'kalah', 'ditangguhkan', 'rejected', 'ditolak'].includes(s)) return 'destructive';
         return 'outline';
     }
