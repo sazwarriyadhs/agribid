@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks, Contact } from "lucide-react"
+import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks, Contact, ShieldCheck, FileText, Calendar, Wallet } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Image from "next/image";
 import { useToast } from '@/hooks/use-toast';
@@ -33,11 +33,11 @@ const financialStats = [
 
 // TODO: Connect to the database and fetch real data from the 'users' table.
 const initialAllUsers: any[] = [
-    { id: 'usr_1', name: 'Petani Jaya', email: 'petani@agribid.com', role: 'seller', status: 'Active' },
-    { id: 'usr_2', name: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active' },
-    { id: 'usr_3', name: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active' },
-    { id: 'usr_4', name: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended' },
-    { id: 'usr_5', name: 'Nelayan Makmur', email: 'nelayan@agribid.com', role: 'seller', status: 'Active' },
+    { id: 'usr_1', name: 'Petani Jaya', email: 'petani@agribid.com', role: 'seller', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01' },
+    { id: 'usr_2', name: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15' },
+    { id: 'usr_3', name: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20' },
+    { id: 'usr_4', name: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10' },
+    { id: 'usr_5', name: 'Nelayan Makmur', email: 'nelayan@agribid.com', role: 'seller', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null },
 ];
 
 // TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
@@ -106,24 +106,28 @@ export default function AdminDashboardPage() {
         }
     };
 
-    const handleUserAction = (userId: string, action: 'suspend' | 'delete') => {
-        // TODO: Implement a server action to update the user status or delete the user from the database.
-        const user = allUsers.find(u => u.id === userId);
-        if (!user) return;
-
-        if (action === 'suspend') {
-            toast({
-                title: t('suspend_user'),
-                description: `${user.name} has been suspended.`,
-            });
-            setAllUsers(users => users.map(u => u.id === userId ? { ...u, status: 'Suspended' } : u));
-        } else if (action === 'delete') {
+    const handleUserAction = (userId: string, action: 'suspend' | 'delete' | 'verify') => {
+        const userToUpdate = allUsers.find(u => u.id === userId);
+        if (!userToUpdate) return;
+    
+        const newStatus = action === 'verify' ? 'Active' : action === 'suspend' ? 'Suspended' : userToUpdate.status;
+    
+        if (action === 'delete') {
             toast({
                 title: t('delete_user'),
-                description: `${user.name} has been deleted.`,
+                description: `${userToUpdate.name} has been deleted.`,
                 variant: 'destructive'
             });
             setAllUsers(users => users.filter(u => u.id !== userId));
+        } else {
+            const titleKey = action === 'verify' ? 'user_verified_title' : 'suspend_user';
+            const descKey = action === 'verify' ? 'user_verified_desc' : 'user_suspended_desc';
+            
+            toast({
+                title: t(titleKey),
+                description: t(descKey, { userName: userToUpdate.name }),
+            });
+            setAllUsers(users => users.map(u => u.id === userId ? { ...u, status: newStatus } : u));
         }
     };
     
@@ -134,10 +138,10 @@ export default function AdminDashboardPage() {
     }
 
     const getStatusVariant = (status: string) => {
-        const s = status.toLowerCase();
-        if (['active', 'completed', 'selesai', 'in transit', 'dalam perjalanan', 'delivered', 'terkirim'].includes(s)) return 'default';
+        const s = status.toLowerCase().replace(/ /g, '_');
+        if (['active', 'completed', 'selesai', 'in_transit', 'dalam_perjalanan', 'delivered', 'terkirim', 'paid'].includes(s)) return 'default';
         if (['suspended', 'rejected', 'ditolak'].includes(s)) return 'destructive';
-        if (['pending', 'menunggu'].includes(s)) return 'secondary';
+        if (['pending', 'menunggu', 'pending_verification', 'unpaid'].includes(s)) return 'secondary';
         return 'outline';
     }
     
@@ -346,7 +350,10 @@ export default function AdminDashboardPage() {
                                 <TableBody>
                                    {allUsers.map((user) => (
                                         <TableRow key={user.id}>
-                                            <TableCell className="font-medium">{user.name}</TableCell>
+                                            <TableCell className="font-medium">
+                                                <p>{user.name}</p>
+                                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                                            </TableCell>
                                             <TableCell>{getRoleText(user.role)}</TableCell>
                                             <TableCell><Badge variant={getStatusVariant(user.status)}>{getStatusText(user.status)}</Badge></TableCell>
                                             <TableCell className="text-right">
@@ -360,17 +367,52 @@ export default function AdminDashboardPage() {
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
-                                                            <DropdownMenuSeparator />
                                                             <DialogTrigger asChild>
-                                                                <DropdownMenuItem><Contact className="mr-2 h-4 w-4"/> View Member Card</DropdownMenuItem>
+                                                                <DropdownMenuItem>
+                                                                    <ShieldCheck className="mr-2 h-4 w-4" />
+                                                                    <span>{t('verify_membership', 'Verify Membership')}</span>
+                                                                </DropdownMenuItem>
                                                             </DialogTrigger>
-                                                            <DropdownMenuItem>{t('view_details')}</DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
                                                             <DropdownMenuItem onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend_user')}</DropdownMenuItem>
                                                             <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10" onClick={() => handleUserAction(user.id, 'delete')}>{t('delete_user')}</DropdownMenuItem>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
-                                                    <DialogContent className="max-w-4xl bg-transparent border-none shadow-none p-0">
-                                                        <MemberCard user={user} />
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>{t('membership_verification_title', 'Membership Verification')}</DialogTitle>
+                                                            <DialogDescription>{t('membership_verification_desc', 'Review user details and update their membership status.')}</DialogDescription>
+                                                        </DialogHeader>
+                                                        <div className="space-y-4 py-4 text-sm">
+                                                            <div className="flex items-center">
+                                                                <span className="w-1/3 text-muted-foreground">{t('user')}</span>
+                                                                <span className="font-semibold">{user.name} ({user.email})</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <span className="w-1/3 text-muted-foreground">{t('role')}</span>
+                                                                <span>{getRoleText(user.role)}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <span className="w-1/3 text-muted-foreground">{t('registration_date')}</span>
+                                                                <span>{user.registrationDate || 'N/A'}</span>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <span className="w-1/3 text-muted-foreground">{t('payment_status', 'Payment Status')}</span>
+                                                                <Badge variant={getStatusVariant(user.paymentStatus)}>{getStatusText(user.paymentStatus)}</Badge>
+                                                            </div>
+                                                             <div className="flex items-center">
+                                                                <span className="w-1/3 text-muted-foreground">{t('membership_status', 'Membership Status')}</span>
+                                                                <Badge variant={getStatusVariant(user.status)}>{getStatusText(user.status)}</Badge>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <span className="w-1/3 text-muted-foreground">{t('documents', 'Documents')}</span>
+                                                                <Button variant="link" size="sm" className="p-0 h-auto"><FileText className="mr-2 h-4 w-4"/> {t('view_documents', 'View Documents')}</Button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex justify-end gap-2 pt-4 border-t">
+                                                            <Button variant="destructive" onClick={() => handleUserAction(user.id, 'suspend')}>{t('suspend', 'Suspend')}</Button>
+                                                            <Button variant="default" onClick={() => handleUserAction(user.id, 'verify')}>{t('verify_and_activate', 'Verify & Activate')}</Button>
+                                                        </div>
                                                     </DialogContent>
                                                 </Dialog>
                                             </TableCell>
