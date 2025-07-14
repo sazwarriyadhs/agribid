@@ -23,6 +23,8 @@ import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
 import { MemberCard } from '@/components/member-card';
+import { Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // TODO: Connect to the database and fetch the user's products.
 const userProducts: any[] = [];
@@ -31,6 +33,7 @@ export default function ProfilePage() {
     const { t, language } = useI18n();
     const { user } = useAuth();
     const params = useParams();
+    const { toast } = useToast();
 
     if (!user) {
         // In a real app, you might redirect to login or show a public version.
@@ -53,6 +56,14 @@ export default function ProfilePage() {
         avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
         avatarFallback: user.name.charAt(0).toUpperCase()
     };
+
+    const handleDownloadCard = () => {
+        // TODO: Implement actual PDF generation and download logic (e.g., using jsPDF)
+        toast({
+            title: "Download Feature",
+            description: "PDF download functionality is not yet implemented."
+        })
+    }
     
 
     const getStatusVariant = (status: string) => {
@@ -97,10 +108,14 @@ export default function ProfilePage() {
                     <CardTitle className="font-headline">{t('membership_card')}</CardTitle>
                     <CardDescription>{t('membership_card_subtitle')}</CardDescription>
                 </CardHeader>
-                <CardContent className="flex items-center justify-center">
+                <CardContent className="flex flex-col items-center justify-center gap-6">
                    <div className="w-full max-w-[350px]">
                      <MemberCard user={user} />
                    </div>
+                   <Button onClick={handleDownloadCard}>
+                       <Download className="mr-2 h-4 w-4" />
+                       {t('download_as_pdf', 'Download as PDF')}
+                   </Button>
                 </CardContent>
             </Card>
             {user.role === 'seller' && (

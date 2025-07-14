@@ -72,7 +72,7 @@ export function MemberCard({ user }: MemberCardProps) {
                     </div>
                     <div className="flex justify-center my-4">
                         <Avatar className="h-28 w-28 border-4 border-card shadow-md">
-                            <AvatarImage src={cardInfo.avatarUrl} data-ai-hint="woman portrait" />
+                            <AvatarImage src={cardInfo.avatarUrl} data-ai-hint="portrait photo" />
                             <AvatarFallback>{cardInfo.avatarFallback}</AvatarFallback>
                         </Avatar>
                     </div>
