@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Bell, User, LogOut, LayoutDashboard, Settings, Globe, ChevronDown, Plane } from 'lucide-react';
+import { Bell, User, LogOut, LayoutDashboard, Settings, Globe, ChevronDown, Plane, Contact2 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useI18n } from '@/context/i18n';
 import { useAuth } from '@/context/auth';
 import { SidebarTrigger } from './ui/sidebar';
+import { AppHeader } from './header';
 
 const notifications = [
     { title: "Outbid!", description: "You've been outbid on 'Organic Wheat Harvest'." },
@@ -113,7 +114,7 @@ export function DashboardHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild><Link href={`/dashboard/${user.role}`}><LayoutDashboard className="mr-2 h-4 w-4" /><span>{t('dashboard')}</span></Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link href={profileUrl}><User className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href={profileUrl}><Contact2 className="mr-2 h-4 w-4" /><span>{t('profile')}</span></Link></DropdownMenuItem>
                 <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>{t('settings')}</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
@@ -123,14 +124,7 @@ export function DashboardHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-2">
-              <Button asChild variant="outline">
-                <Link href="/login">{t('log_in')}</Link>
-              </Button>
-              <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                 <Link href="/signup">{t('sign_up')}</Link>
-              </Button>
-            </div>
+             <AppHeader />
           )}
         </div>
       </div>

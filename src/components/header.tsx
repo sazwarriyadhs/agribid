@@ -27,7 +27,7 @@ export function AppHeader() {
   const pathname = usePathname();
   
   // Hide the header on dashboard pages
-  if (pathname.startsWith('/dashboard')) {
+  if (pathname.startsWith('/dashboard') || /^\/u\//.test(pathname)) {
       return null;
   }
 

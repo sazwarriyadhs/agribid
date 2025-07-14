@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
+import { MemberCard } from '@/components/member-card';
 
 // TODO: Connect to the database and fetch the user's products.
 const userProducts: any[] = [];
@@ -38,12 +39,10 @@ export default function ProfilePage() {
     }
     
     // Simple check to ensure the user is viewing their own profile based on the URL
-    if (user.name.toLowerCase() !== (params.slug as string).toLowerCase()) {
+    if (user.id !== params.code) {
         return notFound();
     }
     
-    // const userProducts = productDatabase.getProducts().filter(p => p.seller.toLowerCase().replace(/ /g, '-') === user.name);
-
     const userProfile = {
         code: `U-${user.id.slice(0, 4).toUpperCase()}`,
         slug: user.name,
@@ -71,63 +70,81 @@ export default function ProfilePage() {
     }
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-8 md:py-12">
-      <div className="flex flex-col items-center md:flex-row md:items-start gap-8">
-        <Card className="w-full md:w-1/3 text-center md:text-left">
-          <CardHeader className="items-center">
-            <Avatar className="h-24 w-24 mb-4">
-              <AvatarImage src={userProfile.avatarUrl} alt={userProfile.name} />
-              <AvatarFallback>{userProfile.avatarFallback}</AvatarFallback>
-            </Avatar>
-            <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>
-            <CardDescription>{userProfile.email}</CardDescription>
-            <Badge variant="outline" className="mt-2">{language === 'id' ? userProfile.role_id : userProfile.role}</Badge>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <Button className="w-full">{t('edit_profile')}</Button>
-          </CardContent>
-        </Card>
-        <div className="w-full md:w-2/3">
-            <Card>
+    <div className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1">
+            <Card className="sticky top-20">
+              <CardHeader className="items-center text-center">
+                <Avatar className="h-24 w-24 mb-4">
+                  <AvatarImage src={userProfile.avatarUrl} alt={userProfile.name} />
+                  <AvatarFallback>{userProfile.avatarFallback}</AvatarFallback>
+                </Avatar>
+                <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>
+                <CardDescription>{userProfile.email}</CardDescription>
+                <Badge variant="outline" className="mt-2">{language === 'id' ? userProfile.role_id : userProfile.role}</Badge>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-2">
+                <Button className="w-full">{t('edit_profile')}</Button>
+                 <Button asChild variant="outline" className="w-full">
+                    <Link href={`/dashboard/${user.role}`}>{t('dashboard')}</Link>
+                 </Button>
+              </CardContent>
+            </Card>
+        </div>
+        <div className="lg:col-span-2 space-y-8">
+             <Card>
                 <CardHeader>
-                    <CardTitle className="font-headline">{t('my_products')}</CardTitle>
-                    <CardDescription>{t('my_products_desc')}</CardDescription>
+                    <CardTitle className="font-headline">{t('membership_card')}</CardTitle>
+                    <CardDescription>{t('membership_card_subtitle')}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                            <TableHead>{t('product')}</TableHead>
-                            <TableHead>{t('stock')}</TableHead>
-                            <TableHead className="text-right">{t('status')}</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {userProducts.length > 0 ? userProducts.map((item) => (
-                                <TableRow key={item.id}>
-                                    <TableCell className="font-medium">
-                                        <Link href={`/auctions/${item.id}`} className="hover:underline">
-                                            {language === 'id' ? item.name_id : item.name}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell>
-                                        {item.quantity}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <Badge variant={getStatusVariant(language === 'id' ? item.status_id : item.status)}>{getStatusText(item)}</Badge>
-                                    </TableCell>
-                                </TableRow>
-                            )) : (
-                                <TableRow>
-                                    <TableCell colSpan={3} className="h-24 text-center">
-                                        {t('no_products_found', 'No products listed yet.')}
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                <CardContent className="flex items-center justify-center">
+                   <div className="w-full max-w-[350px]">
+                     <MemberCard user={user} />
+                   </div>
                 </CardContent>
             </Card>
+            {user.role === 'seller' && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline">{t('my_products')}</CardTitle>
+                        <CardDescription>{t('my_products_desc')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                <TableHead>{t('product')}</TableHead>
+                                <TableHead>{t('stock')}</TableHead>
+                                <TableHead className="text-right">{t('status')}</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {userProducts.length > 0 ? userProducts.map((item) => (
+                                    <TableRow key={item.id}>
+                                        <TableCell className="font-medium">
+                                            <Link href={`/auctions/${item.id}`} className="hover:underline">
+                                                {language === 'id' ? item.name_id : item.name}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell>
+                                            {item.quantity}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <Badge variant={getStatusVariant(language === 'id' ? item.status_id : item.status)}>{getStatusText(item)}</Badge>
+                                        </TableCell>
+                                    </TableRow>
+                                )) : (
+                                    <TableRow>
+                                        <TableCell colSpan={3} className="h-24 text-center">
+                                            {t('no_products_found', 'No products listed yet.')}
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            )}
         </div>
       </div>
     </div>
