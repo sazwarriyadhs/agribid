@@ -44,39 +44,23 @@ const regulations = [
 
 export function MemberCardFront({ user }: MemberCardProps) {
     const { t, language } = useI18n();
+    const isValidRole = allowedRoles.includes(user.role as Role);
 
-    const cardRef = useRef<HTMLDivElement>(null);
-    const handleDownload = () => {
-        if (cardRef.current) {
-            html2canvas(cardRef.current, {
-                useCORS: true,
-                backgroundColor: null,
-                scale: 2 // Increase resolution
-            }).then((canvas) => {
-                const link = document.createElement('a');
-                link.download = `agribid-member-card-${user.slug}-front.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
-    };
+    if (!isValidRole) {
+      return (
+        <div className="p-4 text-red-500 font-medium bg-destructive/10 rounded-lg border border-destructive">
+          ⚠️ Peran <strong>{user.role}</strong> tidak valid. Kartu tidak bisa ditampilkan.
+        </div>
+      );
+    }
 
     return (
-        <div ref={cardRef} className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
-            <div className="bg-primary/20 text-primary-foreground text-center relative h-36 w-full">
-              <Image
-                src="/images/kartu.png"
-                alt="Member Card"
-                fill
-                className="object-cover"
-              />
-              <p className="absolute inset-0 flex items-center justify-center font-bold text-lg tracking-wider text-primary z-10">
-                {t('membership_card')}
-              </p>
+        <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
+             <div className="bg-primary/10 text-primary-foreground text-center relative h-28 w-full p-4 flex items-center justify-center">
+                <AgriBidLogo className="h-16" />
             </div>
             <div className="p-6 flex flex-col flex-grow">
-                 <div className="flex justify-between items-start">
-                    <AgriBidLogo className="h-12" />
+                 <div className="flex justify-end items-start -mt-12">
                      <Badge variant={user.verified ? "default" : "destructive"}>
                         {user.verified ? (
                             <ShieldCheck className="mr-2 h-4 w-4" />
@@ -86,8 +70,8 @@ export function MemberCardFront({ user }: MemberCardProps) {
                         {t(user.verified ? 'status_verified' : 'status_unverified', user.verified ? 'Verified' : 'Unverified')}
                     </Badge>
                  </div>
-                <div className="flex justify-center my-4">
-                    <Avatar className="h-28 w-28 border-4 border-card shadow-md">
+                <div className="flex justify-center -mt-8">
+                    <Avatar className="h-28 w-28 border-4 border-background shadow-md">
                         <AvatarImage src={user.avatarUrl} data-ai-hint="portrait photo" />
                         <AvatarFallback>{user.avatarFallback}</AvatarFallback>
                     </Avatar>
@@ -135,31 +119,30 @@ export function MemberCardBack() {
     )
 }
 
-export function MemberCard({ user: initialUser }: { user: any }) {
+export function MemberCard({ user }: { user: any }) {
     const { t } = useI18n();
     const frontCardRef = useRef<HTMLDivElement>(null);
 
-    const user: UserForCard = {
-        id: `U-${initialUser.id.slice(0, 4).toUpperCase()}`,
-        name: initialUser.name.charAt(0).toUpperCase() + initialUser.name.slice(1).replace(/-/g, ' '),
-        email: initialUser.email,
-        role: initialUser.role,
-        role_label: roleLabels[initialUser.role as keyof typeof roleLabels] || initialUser.role,
-        role_label_id: t(`role_${initialUser.role}`),
+    const userForCard: UserForCard = {
+        id: `U-${user.id.slice(0, 4).toUpperCase()}`,
+        name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' '),
+        role: user.role,
+        role_label: roleLabels[user.role as keyof typeof roleLabels] || user.role,
+        role_label_id: t(`role_${user.role}`),
         role_desc: "Penjual", // Can be enhanced later
-        verified: initialUser.verified,
+        verified: user.verified,
         expires: "30/04/2025",
-        slug: initialUser.name,
-        code: `${initialUser.role.charAt(0).toUpperCase()}${initialUser.id.slice(0, 3)}`,
-        avatarUrl: `https://placehold.co/150x150.png?text=${initialUser.name.charAt(0).toUpperCase()}`,
-        avatarFallback: initialUser.name.charAt(0).toUpperCase(),
+        slug: user.name,
+        code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
+        avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
+        avatarFallback: user.name.charAt(0).toUpperCase(),
         qrCodeData: {
-          userId: `U-${initialUser.id.slice(0, 4).toUpperCase()}`,
-          name: (initialUser.name.charAt(0).toUpperCase() + initialUser.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
+          userId: `U-${user.id.slice(0, 4).toUpperCase()}`,
+          name: (user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
           validUntil: "30/04/2025",
-          code: `${initialUser.role.charAt(0).toUpperCase()}${initialUser.id.slice(0, 3)}`,
-          slug: initialUser.name,
-          role: initialUser.role
+          code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
+          slug: user.name,
+          role: user.role
         }
     };
 
@@ -171,7 +154,7 @@ export function MemberCard({ user: initialUser }: { user: any }) {
                 scale: 2 // Increase resolution
             }).then((canvas) => {
                 const link = document.createElement('a');
-                link.download = `agribid-member-card-${user.slug}.png`;
+                link.download = `agribid-member-card-${userForCard.slug}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
@@ -182,11 +165,11 @@ export function MemberCard({ user: initialUser }: { user: any }) {
         <div className="flex flex-col items-center">
              <div className="grid md:grid-cols-2 gap-8 justify-items-center">
                 <div ref={frontCardRef}>
-                    <MemberCardFront user={user} />
+                    <MemberCardFront user={userForCard} />
                 </div>
                 <MemberCardBack />
             </div>
-            {user.verified && (
+            {userForCard.verified && (
                 <Button onClick={handleDownload} className="mt-6">
                     <Download className="mr-2 h-4 w-4" />
                     {t('download_card', 'Download Card')}

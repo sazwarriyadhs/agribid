@@ -1,6 +1,6 @@
 
 'use client'
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import {
   Card,
@@ -25,9 +25,21 @@ import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
 import { MemberCardFront, MemberCardBack } from '@/components/member-card';
-import { Download } from 'lucide-react';
+import { Download, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { roleLabels } from '@/lib/roles';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
+import { Input } from '@/components/ui/input';
+import Image from 'next/image';
 
 // TODO: Connect to the database and fetch the user's products.
 const userProducts: any[] = [];
@@ -39,6 +51,11 @@ export default function ProfilePage() {
     const { toast } = useToast();
     const frontCardRef = useRef<HTMLDivElement>(null);
     const backCardRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [avatarUrl, setAvatarUrl] = useState(`https://placehold.co/150x150.png?text=${user?.name.charAt(0).toUpperCase()}`);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+
 
     if (!user) {
         // In a real app, you might redirect to login or show a public version.
@@ -50,7 +67,10 @@ export default function ProfilePage() {
     if (user.id !== params.code) {
         return notFound();
     }
-    
+
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
     const userProfile = {
         id: `U-${user.id.slice(0, 4).toUpperCase()}`,
         name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' '),
@@ -60,21 +80,20 @@ export default function ProfilePage() {
         role_label_id: t(`role_${user.role}`),
         role_desc: "Penjual", // This can be enhanced later
         verified: user.verified,
-        expires: "30/04/2025",
+        expires: expiryDate.toLocaleDateString('id-ID', { day:'2-digit', month: '2-digit', year: 'numeric' }),
         slug: user.name,
         code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
-        avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
+        avatarUrl: avatarUrl,
         avatarFallback: user.name.charAt(0).toUpperCase(),
         qrCodeData: {
           userId: `U-${user.id.slice(0, 4).toUpperCase()}`,
           name: (user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
-          validUntil: "30/04/2025",
+          validUntil: expiryDate.toLocaleDateString('id-ID', { day:'2-digit', month: '2-digit', year: 'numeric' }),
           code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
           slug: user.name,
           role: user.role
         }
     };
-    
     
     const handleDownload = (cardRef: React.RefObject<HTMLDivElement>, side: 'front' | 'back') => {
         if (cardRef.current) {
@@ -91,6 +110,28 @@ export default function ProfilePage() {
         }
     };
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const result = reader.result as string;
+                setImagePreview(result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleProfileUpdate = () => {
+        if (imagePreview) {
+            setAvatarUrl(imagePreview);
+        }
+        toast({
+            title: "Profil Diperbarui",
+            description: "Foto profil Anda telah berhasil diperbarui.",
+        });
+        setImagePreview(null);
+    }
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -126,7 +167,50 @@ export default function ProfilePage() {
                 </div>
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
-                <Button className="w-full">{t('edit_profile')}</Button>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button className="w-full">{t('edit_profile')}</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>{t('edit_profile')}</DialogTitle>
+                            <DialogDescription>Perbarui foto profil Anda.</DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                           <div className="grid gap-2">
+                                <p className="text-sm font-medium">Foto Profil</p>
+                                <Card className="border-2 border-dashed">
+                                    <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+                                        {imagePreview ? (
+                                            <div className="relative w-full max-w-sm aspect-square rounded-md overflow-hidden">
+                                                <Image src={imagePreview} alt="Pratinjau Foto Profil" layout="fill" objectFit="cover" />
+                                            </div>
+                                        ) : (
+                                            <div className="relative w-full max-w-sm aspect-square rounded-md overflow-hidden bg-secondary flex items-center justify-center">
+                                                <Avatar className="h-32 w-32 text-4xl">
+                                                    <AvatarImage src={userProfile.avatarUrl} />
+                                                    <AvatarFallback>{userProfile.avatarFallback}</AvatarFallback>
+                                                </Avatar>
+                                            </div>
+                                        )}
+                                        <Button type="button" variant="outline" className="mt-4" onClick={() => fileInputRef.current?.click()}>
+                                            {imagePreview ? t('change_photo', 'Ganti Foto') : "Unggah Foto Baru"}
+                                        </Button>
+                                        <Input ref={fileInputRef} id="file-upload" type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary">{t('cancel')}</Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                                <Button type="button" onClick={handleProfileUpdate}>Simpan Perubahan</Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
                  <Button asChild variant="outline" className="w-full">
                     <Link href={`/dashboard/${user.role}`}>{t('dashboard')}</Link>
                  </Button>
