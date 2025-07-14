@@ -1,4 +1,3 @@
-
 'use client';
 import Image from 'next/image';
 
@@ -8,6 +7,7 @@ import QRCode from 'qrcode.react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { ShieldCheck, ShieldAlert } from 'lucide-react';
+import { allowedRoles, type Role } from '@/lib/roles';
 
 interface UserForCard {
     id: string;
@@ -31,6 +31,16 @@ const regulations = [
 export function MemberCard({ user }: MemberCardProps) {
     const { t, language } = useI18n();
     
+    const isValidRole = allowedRoles.includes(user.role as Role);
+
+    if (!isValidRole) {
+        return (
+            <div className="p-4 text-red-500 font-medium bg-red-50 border border-red-200 rounded-md">
+            ⚠️ Peran <strong>{user.role}</strong> tidak valid. Kartu tidak bisa ditampilkan.
+            </div>
+        );
+    }
+
     const cardInfo = {
         name: user.name.toUpperCase().replace(/-/g, ' '),
         role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
