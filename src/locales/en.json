@@ -453,5 +453,8 @@
   "Peternakan": "Livestock",
   "Perikanan": "Fishery",
   "Perkebunan": "Plantation",
-  "Hasil Hutan": "Forestry"
+  "Hasil Hutan": "Forestry",
+  "previous_page": "Previous",
+  "next_page": "Next",
+  "page_info": "Page {{currentPage}} of {{totalPages}}"
 }

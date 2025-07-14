@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown } from 'lucide-react';
+import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
 import { FeaturedCommodities } from '@/components/featured-commodities';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
@@ -128,14 +128,17 @@ const categories = [
     { key: "Hasil Hutan", label: "Hasil Hutan" }
 ];
 
+const ITEMS_PER_PAGE = 6;
+
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
   // const allActiveAuctions = productDatabase.getProductsByStatus('Active'); // Replaced with placeholder
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const featuredAuctions = useMemo(() => {
+  const filteredAuctions = useMemo(() => {
     // TODO: Implement search and filter logic with database query.
     return allActiveAuctions.filter(item => {
       const nameMatches = language === 'id'
@@ -148,6 +151,11 @@ export default function Home() {
     });
   }, [allActiveAuctions, searchTerm, selectedCategory, language]);
 
+  const totalPages = Math.ceil(filteredAuctions.length / ITEMS_PER_PAGE);
+  const paginatedAuctions = filteredAuctions.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const getHighestBidder = (bidders: {name: string, bid: number, avatar: string}[]) => {
     if (!bidders || bidders.length === 0) return null;
@@ -186,9 +194,15 @@ export default function Home() {
                     placeholder={t('find_products_desc')}
                     className="md:col-span-2 text-base"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1); // Reset to first page on search
+                    }}
                 />
-                <Select onValueChange={setSelectedCategory} value={selectedCategory}>
+                <Select onValueChange={(value) => {
+                    setSelectedCategory(value);
+                    setCurrentPage(1); // Reset to first page on category change
+                }} value={selectedCategory}>
                     <SelectTrigger>
                         <SelectValue placeholder={t('select_category_placeholder')} />
                     </SelectTrigger>
@@ -203,7 +217,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredAuctions.map((item) => {
+                {paginatedAuctions.map((item) => {
                     const highestBidder = getHighestBidder(item.bidders || []);
                     return (
                         <Card key={item.id} className="overflow-hidden flex flex-col">
@@ -251,10 +265,32 @@ export default function Home() {
                     );
                 })}
             </div>
-             {featuredAuctions.length === 0 && (
+             {filteredAuctions.length === 0 && (
                 <div className="text-center py-16 text-muted-foreground">
                     <p className="text-lg font-medium">{t('no_auctions_found', 'No auctions found.')}</p>
                     <p>{t('try_different_search', 'Try adjusting your search or category filters.')}</p>
+                </div>
+            )}
+
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-12">
+                    <Button 
+                        variant="outline" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                    >
+                        <ArrowLeft className="mr-2 h-4 w-4" /> {t('previous_page', 'Previous')}
+                    </Button>
+                    <span className="text-sm font-medium">
+                        {t('page_info', 'Page {{currentPage}} of {{totalPages}}', {currentPage, totalPages})}
+                    </span>
+                    <Button 
+                        variant="outline" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                    >
+                        {t('next_page', 'Next')} <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
             )}
         </div>

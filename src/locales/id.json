@@ -453,5 +453,8 @@
   "Peternakan": "Peternakan",
   "Perikanan": "Perikanan",
   "Perkebunan": "Perkebunan",
-  "Hasil Hutan": "Hasil Hutan"
+  "Hasil Hutan": "Hasil Hutan",
+  "previous_page": "Sebelumnya",
+  "next_page": "Berikutnya",
+  "page_info": "Halaman {{currentPage}} dari {{totalPages}}"
 }
