@@ -71,8 +71,12 @@ export default function ProfilePage() {
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
+    const userIdSuffix = user.id.replace('usr_', '');
+    const membershipId = `U-USR-${userIdSuffix.slice(0, 4).toUpperCase()}`;
+    const userCode = `${user.role.charAt(0).toUpperCase()}${userIdSuffix.slice(0, 3).toUpperCase()}`;
+
     const userProfile = {
-        id: `U-${user.id.slice(0, 4).toUpperCase()}`,
+        id: membershipId,
         name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' '),
         email: user.email,
         role: user.role,
@@ -82,14 +86,14 @@ export default function ProfilePage() {
         verified: user.verified,
         expires: expiryDate.toLocaleDateString('id-ID', { day:'2-digit', month: '2-digit', year: 'numeric' }),
         slug: user.name,
-        code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
+        code: userCode,
         avatarUrl: avatarUrl,
         avatarFallback: user.name.charAt(0).toUpperCase(),
         qrCodeData: {
-          userId: `U-${user.id.slice(0, 4).toUpperCase()}`,
+          userId: membershipId,
           name: (user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
           validUntil: expiryDate.toLocaleDateString('id-ID', { day:'2-digit', month: '2-digit', year: 'numeric' }),
-          code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
+          code: userCode,
           slug: user.name,
           role: user.role
         }
