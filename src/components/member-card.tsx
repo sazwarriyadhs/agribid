@@ -6,12 +6,15 @@ import { AgriBidLogo } from './icons';
 import { useI18n } from '@/context/i18n';
 import QRCode from 'qrcode.react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Badge } from './ui/badge';
+import { ShieldCheck, ShieldAlert } from 'lucide-react';
 
 interface UserForCard {
     id: string;
     name: string;
     role: string;
     email: string;
+    verified?: boolean;
 }
 
 interface MemberCardProps {
@@ -38,7 +41,8 @@ export function MemberCard({ user }: MemberCardProps) {
         role_slug: user.role,
         expires: "30/04/2025",
         avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
-        avatarFallback: user.name.charAt(0).toUpperCase()
+        avatarFallback: user.name.charAt(0).toUpperCase(),
+        verified: user.verified ?? false,
     };
     
      const qrCodeData = JSON.stringify({
@@ -67,9 +71,17 @@ export function MemberCard({ user }: MemberCardProps) {
                   </p>
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
-                    <div className="text-center my-4">
-                        <AgriBidLogo className="h-16 w-auto mx-auto" />
-                    </div>
+                     <div className="flex justify-between items-start">
+                        <AgriBidLogo className="h-12" />
+                         <Badge variant={cardInfo.verified ? "default" : "destructive"}>
+                            {cardInfo.verified ? (
+                                <ShieldCheck className="mr-2 h-4 w-4" />
+                            ) : (
+                                <ShieldAlert className="mr-2 h-4 w-4" />
+                            )}
+                            {t(cardInfo.verified ? 'status_verified' : 'status_unverified', cardInfo.verified ? 'Verified' : 'Unverified')}
+                        </Badge>
+                     </div>
                     <div className="flex justify-center my-4">
                         <Avatar className="h-28 w-28 border-4 border-card shadow-md">
                             <AvatarImage src={cardInfo.avatarUrl} data-ai-hint="portrait photo" />

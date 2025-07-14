@@ -225,6 +225,7 @@
   "status_won": "Won",
   "status_outbid": "Outbid",
   "status_verified": "Verified",
+  "status_unverified": "Unverified",
   "status_in_transit": "In Transit",
   "status_delivered": "Delivered",
   "status_suspended": "Suspended",
@@ -456,5 +457,6 @@
   "Hasil Hutan": "Forestry",
   "previous_page": "Previous",
   "next_page": "Next",
-  "page_info": "Page {{currentPage}} of {{totalPages}}"
+  "page_info": "Page {{currentPage}} of {{totalPages}}",
+  "must_be_verified_to_download": "Your account must be verified to download the card."
 }

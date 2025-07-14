@@ -54,7 +54,8 @@ export default function ProfilePage() {
         role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
         role_id: t(`role_${user.role}`),
         avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
-        avatarFallback: user.name.charAt(0).toUpperCase()
+        avatarFallback: user.name.charAt(0).toUpperCase(),
+        verified: user.verified,
     };
 
     const handleDownloadCard = () => {
@@ -92,7 +93,12 @@ export default function ProfilePage() {
                 </Avatar>
                 <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>
                 <CardDescription>{userProfile.email}</CardDescription>
-                <Badge variant="outline" className="mt-2">{language === 'id' ? userProfile.role_id : userProfile.role}</Badge>
+                <div className="flex gap-2 mt-2">
+                    <Badge variant="outline">{language === 'id' ? userProfile.role_id : userProfile.role}</Badge>
+                    <Badge variant={userProfile.verified ? 'default' : 'destructive'}>
+                        {t(userProfile.verified ? 'status_verified' : 'status_unverified', userProfile.verified ? 'Verified' : 'Unverified')}
+                    </Badge>
+                </div>
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 <Button className="w-full">{t('edit_profile')}</Button>
@@ -112,10 +118,11 @@ export default function ProfilePage() {
                    <div className="w-full max-w-[350px]">
                      <MemberCard user={user} />
                    </div>
-                   <Button onClick={handleDownloadCard}>
+                   <Button onClick={handleDownloadCard} disabled={!user.verified}>
                        <Download className="mr-2 h-4 w-4" />
                        {t('download_as_pdf', 'Download as PDF')}
                    </Button>
+                   {!user.verified && <p className="text-xs text-muted-foreground">{t('must_be_verified_to_download', 'Your account must be verified to download the card.')}</p>}
                 </CardContent>
             </Card>
             {user.role === 'seller' && (

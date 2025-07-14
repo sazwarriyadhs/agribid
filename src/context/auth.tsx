@@ -9,6 +9,7 @@ interface User {
   name: string; // Will store the specific role, e.g., 'petani', 'buyer'
   email: string;
   role: Role; // Will store the abstract role, e.g., 'seller', 'buyer'
+  verified: boolean;
 }
 
 interface AuthContextType {
@@ -27,20 +28,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const emailPrefix = email.split('@')[0].toLowerCase();
     
     const sellerRoles = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah hasil hutan', 'producer', 'seller'];
+    const adminRoles = ['admin'];
+    const vendorRoles = ['mitra', 'partner', 'vendor'];
+    const exporterRoles = ['eksportir', 'exporter'];
+    const buyerRoles = ['buyer', 'bidder'];
+    
+    let isVerified = false;
+
     if (sellerRoles.includes(emailPrefix)) {
         role = 'seller';
-    } else if (emailPrefix === 'admin') {
+        isVerified = false;
+    } else if (adminRoles.includes(emailPrefix)) {
         role = 'admin';
-    } else if (['mitra', 'partner', 'vendor'].includes(emailPrefix)) {
+        isVerified = true;
+    } else if (vendorRoles.includes(emailPrefix)) {
         role = 'vendor';
-    } else if (['eksportir', 'exporter'].includes(emailPrefix)) {
+        isVerified = true;
+    } else if (exporterRoles.includes(emailPrefix)) {
         role = 'exporter';
-    } else if (['buyer', 'bidder'].includes(emailPrefix)) {
+        isVerified = true;
+    } else if (buyerRoles.includes(emailPrefix)) {
         role = 'buyer';
+        isVerified = false;
     } else {
-        // If no specific role matches, we can't create a user.
-        // Or default to 'buyer'. Let's default.
         role = 'buyer';
+        isVerified = false;
     }
 
     const mockUser: User = {
@@ -48,6 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       name: emailPrefix, // Use email prefix as the specific role name and slug
       email: email,
       role: role,
+      verified: isVerified,
     };
     setUser(mockUser);
     return mockUser;
