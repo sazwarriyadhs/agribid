@@ -75,8 +75,16 @@ export function MembershipBenefits() {
                             <div className="grid md:grid-cols-2 gap-8 justify-items-center">
                                 {/* Front Card */}
                                 <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden">
-                                    <div className="bg-primary/20 text-primary-foreground p-3 text-center">
-                                         <p className="font-bold text-lg tracking-wider text-primary">{t('membership_card')}</p>
+                                    <div className="bg-primary/20 text-primary-foreground text-center relative h-36 w-full">
+                                      <Image
+                                        src="/images/kartu.png"
+                                        alt="Member Card"
+                                        fill
+                                        className="object-cover"
+                                      />
+                                      <p className="absolute inset-0 flex items-center justify-center font-bold text-lg tracking-wider text-primary z-10">
+                                        {t('membership_card')}
+                                      </p>
                                     </div>
                                     <div className="p-6 flex flex-col flex-grow">
                                         <div className="text-center my-4">
