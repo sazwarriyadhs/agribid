@@ -1,5 +1,7 @@
 
 'use client'
+import { useRef } from 'react';
+import html2canvas from 'html2canvas';
 import {
   Card,
   CardContent,
@@ -34,6 +36,7 @@ export default function ProfilePage() {
     const { user } = useAuth();
     const params = useParams();
     const { toast } = useToast();
+    const cardRef = useRef<HTMLDivElement>(null);
 
     if (!user) {
         // In a real app, you might redirect to login or show a public version.
@@ -59,12 +62,18 @@ export default function ProfilePage() {
     };
 
     const handleDownloadCard = () => {
-        // TODO: Implement actual PDF generation and download logic (e.g., using jsPDF)
-        toast({
-            title: "Download Feature",
-            description: "PDF download functionality is not yet implemented."
-        })
-    }
+        if (cardRef.current) {
+            html2canvas(cardRef.current, {
+                useCORS: true,
+                backgroundColor: null, // Make background transparent
+            }).then((canvas) => {
+                const link = document.createElement('a');
+                link.download = `agribid-member-card-${user.name}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    };
     
 
     const getStatusVariant = (status: string) => {
@@ -115,12 +124,12 @@ export default function ProfilePage() {
                     <CardDescription>{t('membership_card_subtitle')}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center gap-6">
-                   <div className="w-full max-w-[350px]">
+                   <div ref={cardRef} className="w-full max-w-[350px]">
                      <MemberCard user={user} />
                    </div>
                    <Button onClick={handleDownloadCard} disabled={!user.verified}>
                        <Download className="mr-2 h-4 w-4" />
-                       {t('download_as_pdf', 'Download as PDF')}
+                       {t('download_as_pdf', 'Download as PNG')}
                    </Button>
                    {!user.verified && <p className="text-xs text-muted-foreground">{t('must_be_verified_to_download', 'Your account must be verified to download the card.')}</p>}
                 </CardContent>
