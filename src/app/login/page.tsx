@@ -3,11 +3,14 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useI18n } from '@/context/i18n';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { QrCode } from 'lucide-react';
 import { useState } from 'react';
@@ -15,6 +18,17 @@ import { QrScannerDialog } from '@/components/qr-scanner-dialog';
 import { useAuth } from '@/context/auth';
 import { roleToDashboardMap } from '@/config/sidebar';
 import type { Role } from '@/lib/roles';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: z.string().min(1, {
+    message: "Password is required.",
+  }),
+})
 
 export default function LoginPage() {
   const { toast } = useToast();
@@ -22,30 +36,36 @@ export default function LoginPage() {
   const { t } = useI18n();
   const { login } = useAuth();
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
     // Simple check for demo purposes
-    if (password !== 'password') {
+    if (values.password !== 'password') {
         toast({
             variant: 'destructive',
-            title: 'Login Failed',
-            description: 'Invalid credentials. Please try again.',
+            title: t('login_failed_title', 'Login Failed'),
+            description: t('login_failed_desc', 'Invalid credentials. Please try again.'),
         });
+        form.setError("password", { type: "manual", message: t('login_failed_desc', 'Invalid credentials. Please try again.') });
         return;
     }
 
-    const loggedInUser = login(email);
+    const loggedInUser = login(values.email);
     
     if (!loggedInUser) {
          toast({
             variant: 'destructive',
-            title: 'Login Failed',
-            description: 'Invalid user role specified in email.',
+            title: t('login_failed_title', 'Login Failed'),
+            description: t('login_role_invalid_desc', 'Invalid user role specified in email.'),
         });
+        form.setError("email", { type: "manual", message: t('login_role_invalid_desc', 'Invalid user role specified in email.') });
         return;
     }
     
@@ -95,35 +115,48 @@ export default function LoginPage() {
             <CardDescription>
               {t('login_page_desc', 'Enter your email below to login to your account.')}
               <br />
-              <span className="text-xs">Use role@agribid.com and "password" for demo.</span>
+              <span className="text-xs">{t('demo_login_instructions', 'For demo, use any role (e.g., admin, petani, buyer) as the email prefix and "password" as the password.')}</span>
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">{t('email_address')}</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="role@agribid.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('email_address')}</FormLabel>
+                      <FormControl>
+                        <Input placeholder="role@agribid.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div className="grid gap-2">
-                 <div className="flex items-center">
-                  <Label htmlFor="password">{t('password', 'Password')}</Label>
-                  <Link href="#" className="ml-auto inline-block text-sm underline">
-                    {t('forgot_password', 'Forgot your password?')}
-                  </Link>
-                </div>
-                <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-              </div>
-              <Button type="submit" className="w-full">
-                {t('log_in')}
-              </Button>
-            </form>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                        <div className="flex items-center">
+                            <FormLabel>{t('password', 'Password')}</FormLabel>
+                            <Link href="#" className="ml-auto inline-block text-sm underline">
+                                {t('forgot_password', 'Forgot your password?')}
+                            </Link>
+                        </div>
+                      <FormControl>
+                        <Input type="password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  {t('log_in')}
+                </Button>
+              </form>
+            </Form>
              <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />

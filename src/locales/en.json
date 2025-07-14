@@ -476,5 +476,9 @@
   "verify_and_activate": "Verify & Activate",
   "user_verified_title": "User Verified",
   "user_verified_desc": "Membership for {{userName}} has been activated.",
-  "user_suspended_desc": "Membership for {{userName}} has been suspended."
+  "user_suspended_desc": "Membership for {{userName}} has been suspended.",
+  "login_failed_title": "Login Failed",
+  "login_failed_desc": "Invalid credentials. Please try again.",
+  "login_role_invalid_desc": "Invalid user role specified in email.",
+  "demo_login_instructions": "For demo, use any role (e.g., admin, petani, buyer) as the email prefix and \"password\" as the password."
 }
