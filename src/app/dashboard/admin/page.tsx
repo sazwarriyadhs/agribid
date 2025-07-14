@@ -33,7 +33,7 @@ const financialStats = [
 
 // TODO: Connect to the database and fetch real data from the 'users' table.
 const initialAllUsers: any[] = [
-    { id: 'usr_1', name: 'Petani Jaya', email: 'petani@agribid.com', role: 'seller', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01' },
+    { id: 'usr_1', name: 'petani', email: 'petani@agribid.com', role: 'seller', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01' },
     { id: 'usr_2', name: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15' },
     { id: 'usr_3', name: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20' },
     { id: 'usr_4', name: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10' },
