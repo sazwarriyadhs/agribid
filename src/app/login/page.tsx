@@ -13,24 +13,8 @@ import { QrCode } from 'lucide-react';
 import { useState } from 'react';
 import { QrScannerDialog } from '@/components/qr-scanner-dialog';
 import { useAuth } from '@/context/auth';
-
-const dashboardRedirect: Record<string, string> = {
-  admin: "/dashboard/admin",
-  petani: "/dashboard/seller",
-  nelayan: "/dashboard/seller",
-  peternak: "/dashboard/seller",
-  peladang: "/dashboard/seller",
-  "pengolah hasil hutan": "/dashboard/seller",
-  eksportir: "/dashboard/exporter",
-  mitra: "/dashboard/vendor",
-  partner: "/dashboard/vendor",
-  vendor: "/dashboard/vendor",
-  buyer: "/dashboard/buyer",
-  bidder: "/dashboard/buyer",
-  producer: "/dashboard/seller",
-  exporter: "/dashboard/exporter",
-};
-
+import { roleToDashboardMap } from '@/config/sidebar';
+import type { Role } from '@/lib/roles';
 
 export default function LoginPage() {
   const { toast } = useToast();
@@ -65,8 +49,7 @@ export default function LoginPage() {
         return;
     }
     
-    const emailPrefix = email.split('@')[0].toLowerCase();
-    const path = dashboardRedirect[emailPrefix] || '/dashboard/buyer';
+    const path = roleToDashboardMap[loggedInUser.role as Role] || '/dashboard/buyer';
 
     toast({
       title: t('login_success_title'),

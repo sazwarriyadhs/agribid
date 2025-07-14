@@ -1,8 +1,9 @@
 
 import type { LucideIcon } from 'lucide-react';
 import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck, ShoppingCart } from 'lucide-react';
+import type { Role } from '@/lib/roles';
 
-export type Role = "seller" | "buyer" | "admin" | "vendor" | "exporter" | "producer";
+export type GeneralRole = 'seller' | 'buyer' | 'admin' | 'vendor' | 'exporter';
 
 export interface NavItem {
   name: string;
@@ -11,12 +12,8 @@ export interface NavItem {
   labelKey?: string;
 }
 
-export const sidebarByRole: Record<Role, NavItem[]> = {
+export const sidebarByRole: Record<GeneralRole, NavItem[]> = {
   seller: [ 
-    { name: "Dashboard", path: "/dashboard/seller", icon: LayoutDashboard, labelKey: 'dashboard' },
-    { name: "Create New Auction", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
-  ],
-  producer: [ // producer is an alias for seller
     { name: "Dashboard", path: "/dashboard/seller", icon: LayoutDashboard, labelKey: 'dashboard' },
     { name: "Create New Auction", path: "/sell", icon: FilePlus, labelKey: 'create_new_auction' },
   ],
@@ -49,6 +46,7 @@ export const dashboardLabel: { [key: string]: string } = {
   nelayan: "Dashboard Nelayan",
   peternak: "Dashboard Peternak",
   peladang: "Dashboard Peladang",
+  pengolah: "Dashboard Pengolah",
   "pengolah hasil hutan": "Dashboard Kehutanan",
   eksportir: "Dashboard Ekspor",
   mitra: "Dashboard Vendor",
@@ -56,5 +54,47 @@ export const dashboardLabel: { [key: string]: string } = {
   producer: "Dashboard Produsen",
   seller: "Dashboard Penjual",
   buyer: "Dashboard Pembeli",
+  pelaku_usaha: "Dashboard Pelaku Usaha",
+  klien: "Dashboard Klien",
   default: "Dashboard"
+};
+
+export const roleToDashboardMap: Record<Role, string> = {
+    admin: '/dashboard/admin',
+    petani: '/dashboard/seller',
+    nelayan: '/dashboard/seller',
+    peternak: '/dashboard/seller',
+    peladang: '/dashboard/seller',
+    pengolah: '/dashboard/seller',
+    seller: '/dashboard/seller',
+    producer: '/dashboard/seller',
+    buyer: '/dashboard/buyer',
+    pelaku_usaha: '/dashboard/buyer',
+    bidder: '/dashboard/buyer', // legacy
+    eksportir: '/dashboard/exporter',
+    exporter: '/dashboard/exporter',
+    mitra: '/dashboard/vendor',
+    vendor: '/dashboard/vendor',
+    partner: '/dashboard/vendor', // legacy
+    klien: '/dashboard/buyer', // default for now
+};
+
+export const roleToGeneralRoleMap: Record<Role, GeneralRole> = {
+  admin: 'admin',
+  petani: 'seller',
+  nelayan: 'seller',
+  peternak: 'seller',
+  peladang: 'seller',
+  pengolah: 'seller',
+  producer: 'seller',
+  seller: 'seller',
+  buyer: 'buyer',
+  pelaku_usaha: 'buyer',
+  bidder: 'buyer', // legacy
+  klien: 'buyer',
+  eksportir: 'exporter',
+  exporter: 'exporter',
+  mitra: 'vendor',
+  vendor: 'vendor',
+  partner: 'vendor', // legacy
 };

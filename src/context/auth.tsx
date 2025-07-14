@@ -2,7 +2,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { Role } from '@/config/sidebar';
+import type { Role } from '@/lib/roles';
 
 interface User {
   id: string;
@@ -27,27 +27,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     let role: Role = 'buyer'; // Default role
     const emailPrefix = email.split('@')[0].toLowerCase();
     
-    const sellerRoles = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah hasil hutan', 'producer', 'seller'];
-    const adminRoles = ['admin'];
-    const vendorRoles = ['mitra', 'partner', 'vendor'];
-    const exporterRoles = ['eksportir', 'exporter'];
-    const buyerRoles = ['buyer', 'bidder'];
+    const sellerRoles: Role[] = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah', 'producer', 'seller'];
+    const adminRoles: Role[] = ['admin'];
+    const vendorRoles: Role[] = ['mitra', 'partner', 'vendor'];
+    const exporterRoles: Role[] = ['eksportir', 'exporter'];
+    const buyerRoles: Role[] = ['buyer', 'bidder', 'pelaku_usaha'];
     
     let isVerified = false;
 
-    if (sellerRoles.includes(emailPrefix)) {
-        role = 'seller';
-        isVerified = true; // For simulation, seller is verified
-    } else if (adminRoles.includes(emailPrefix)) {
+    if (sellerRoles.includes(emailPrefix as Role)) {
+        role = emailPrefix as Role;
+        isVerified = true;
+    } else if (adminRoles.includes(emailPrefix as Role)) {
         role = 'admin';
         isVerified = true;
-    } else if (vendorRoles.includes(emailPrefix)) {
+    } else if (vendorRoles.includes(emailPrefix as Role)) {
         role = 'vendor';
         isVerified = true;
-    } else if (exporterRoles.includes(emailPrefix)) {
+    } else if (exporterRoles.includes(emailPrefix as Role)) {
         role = 'exporter';
         isVerified = true;
-    } else if (buyerRoles.includes(emailPrefix)) {
+    } else if (buyerRoles.includes(emailPrefix as Role)) {
         role = 'buyer';
         isVerified = false;
     } else {

@@ -11,14 +11,25 @@ import { Badge } from './ui/badge';
 import { ShieldCheck, ShieldAlert, Download } from 'lucide-react';
 import { allowedRoles, type Role } from '@/lib/roles';
 import { Button } from './ui/button';
+import { roleLabels } from '@/lib/roles';
+
 
 interface UserForCard {
     id: string;
     name: string;
     role: string;
-    email: string;
+    role_label: string;
+    role_label_id: string;
+    role_desc: string;
     verified?: boolean;
+    expires: string;
+    slug: string;
+    code: string;
+    avatarUrl: string;
+    avatarFallback: string;
+    qrCodeData: any;
 }
+
 
 interface MemberCardProps {
     user: UserForCard;
@@ -33,41 +44,25 @@ const regulations = [
 
 export function MemberCardFront({ user }: MemberCardProps) {
     const { t, language } = useI18n();
-    const isValidRole = allowedRoles.includes(user.role as Role);
 
-    if (!isValidRole) {
-        return (
-            <div className="p-4 text-red-500 font-medium bg-red-50 border border-red-200 rounded-md w-[350px]">
-            ⚠️ Peran <strong>{user.role}</strong> tidak valid. Kartu tidak bisa ditampilkan.
-            </div>
-        );
-    }
-
-    const cardInfo = {
-        name: user.name.toUpperCase().replace(/-/g, ' '),
-        role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
-        role_id: t(`role_${user.role}`),
-        id: `U-${user.id.slice(0, 4).toUpperCase()}${Date.now().toString().slice(-4)}`,
-        code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
-        slug: user.name,
-        role_slug: user.role,
-        expires: "30/04/2025",
-        avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
-        avatarFallback: user.name.charAt(0).toUpperCase(),
-        verified: user.verified ?? false,
+    const cardRef = useRef<HTMLDivElement>(null);
+    const handleDownload = () => {
+        if (cardRef.current) {
+            html2canvas(cardRef.current, {
+                useCORS: true,
+                backgroundColor: null,
+                scale: 2 // Increase resolution
+            }).then((canvas) => {
+                const link = document.createElement('a');
+                link.download = `agribid-member-card-${user.slug}-front.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
     };
-    
-     const qrCodeData = JSON.stringify({
-        userId: cardInfo.id,
-        name: cardInfo.name,
-        validUntil: cardInfo.expires,
-        code: cardInfo.code,
-        slug: cardInfo.slug,
-        role: cardInfo.role_slug
-    });
 
     return (
-        <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
+        <div ref={cardRef} className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
             <div className="bg-primary/20 text-primary-foreground text-center relative h-36 w-full">
               <Image
                 src="/images/kartu.png"
@@ -82,38 +77,38 @@ export function MemberCardFront({ user }: MemberCardProps) {
             <div className="p-6 flex flex-col flex-grow">
                  <div className="flex justify-between items-start">
                     <AgriBidLogo className="h-12" />
-                     <Badge variant={cardInfo.verified ? "default" : "destructive"}>
-                        {cardInfo.verified ? (
+                     <Badge variant={user.verified ? "default" : "destructive"}>
+                        {user.verified ? (
                             <ShieldCheck className="mr-2 h-4 w-4" />
                         ) : (
                             <ShieldAlert className="mr-2 h-4 w-4" />
                         )}
-                        {t(cardInfo.verified ? 'status_verified' : 'status_unverified', cardInfo.verified ? 'Verified' : 'Unverified')}
+                        {t(user.verified ? 'status_verified' : 'status_unverified', user.verified ? 'Verified' : 'Unverified')}
                     </Badge>
                  </div>
                 <div className="flex justify-center my-4">
                     <Avatar className="h-28 w-28 border-4 border-card shadow-md">
-                        <AvatarImage src={cardInfo.avatarUrl} data-ai-hint="portrait photo" />
-                        <AvatarFallback>{cardInfo.avatarFallback}</AvatarFallback>
+                        <AvatarImage src={user.avatarUrl} data-ai-hint="portrait photo" />
+                        <AvatarFallback>{user.avatarFallback}</AvatarFallback>
                     </Avatar>
                 </div>
                 <div className="text-center space-y-1 my-4">
-                    <p className="font-bold text-xl tracking-wide uppercase">{cardInfo.name}</p>
-                    <p className="text-primary font-medium">{language === 'id' ? cardInfo.role_id : cardInfo.role}</p>
+                    <p className="font-bold text-xl tracking-wide uppercase">{user.name}</p>
+                    <p className="text-primary font-medium">{language === 'id' ? user.role_label_id : user.role_label}</p>
                 </div>
                  <div className="text-center my-4">
                     <p className="text-sm text-muted-foreground">{t('membership_id')}</p>
-                    <p className="font-mono font-bold text-lg">{cardInfo.id}</p>
+                    <p className="font-mono font-bold text-lg">{user.id}</p>
                 </div>
                 <div className="flex items-end justify-between mt-auto flex-grow">
                     <div className="text-center">
                         <div className="bg-white p-1.5 rounded-md inline-block">
-                            <QRCode value={qrCodeData} size={70} />
+                            <QRCode value={JSON.stringify(user.qrCodeData)} size={70} />
                         </div>
                     </div>
                     <div className="text-right">
                         <p className="text-sm text-muted-foreground">{t('valid_until')}</p>
-                        <p className="font-semibold text-lg">{cardInfo.expires}</p>
+                        <p className="font-semibold text-lg">{user.expires}</p>
                     </div>
                 </div>
             </div>
@@ -140,13 +135,63 @@ export function MemberCardBack() {
     )
 }
 
-export function MemberCard({ user }: MemberCardProps) {
+export function MemberCard({ user: initialUser }: { user: any }) {
+    const { t } = useI18n();
+    const frontCardRef = useRef<HTMLDivElement>(null);
+
+    const user: UserForCard = {
+        id: `U-${initialUser.id.slice(0, 4).toUpperCase()}`,
+        name: initialUser.name.charAt(0).toUpperCase() + initialUser.name.slice(1).replace(/-/g, ' '),
+        email: initialUser.email,
+        role: initialUser.role,
+        role_label: roleLabels[initialUser.role as keyof typeof roleLabels] || initialUser.role,
+        role_label_id: t(`role_${initialUser.role}`),
+        role_desc: "Penjual", // Can be enhanced later
+        verified: initialUser.verified,
+        expires: "30/04/2025",
+        slug: initialUser.name,
+        code: `${initialUser.role.charAt(0).toUpperCase()}${initialUser.id.slice(0, 3)}`,
+        avatarUrl: `https://placehold.co/150x150.png?text=${initialUser.name.charAt(0).toUpperCase()}`,
+        avatarFallback: initialUser.name.charAt(0).toUpperCase(),
+        qrCodeData: {
+          userId: `U-${initialUser.id.slice(0, 4).toUpperCase()}`,
+          name: (initialUser.name.charAt(0).toUpperCase() + initialUser.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
+          validUntil: "30/04/2025",
+          code: `${initialUser.role.charAt(0).toUpperCase()}${initialUser.id.slice(0, 3)}`,
+          slug: initialUser.name,
+          role: initialUser.role
+        }
+    };
+
+    const handleDownload = () => {
+        if (frontCardRef.current) {
+            html2canvas(frontCardRef.current, {
+                useCORS: true,
+                backgroundColor: null,
+                scale: 2 // Increase resolution
+            }).then((canvas) => {
+                const link = document.createElement('a');
+                link.download = `agribid-member-card-${user.slug}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    };
+    
     return (
         <div className="flex flex-col items-center">
              <div className="grid md:grid-cols-2 gap-8 justify-items-center">
-                <MemberCardFront user={user} />
+                <div ref={frontCardRef}>
+                    <MemberCardFront user={user} />
+                </div>
                 <MemberCardBack />
             </div>
+            {user.verified && (
+                <Button onClick={handleDownload} className="mt-6">
+                    <Download className="mr-2 h-4 w-4" />
+                    {t('download_card', 'Download Card')}
+                </Button>
+            )}
         </div>
     );
 }

@@ -27,6 +27,7 @@ import { useAuth } from '@/context/auth';
 import { MemberCardFront, MemberCardBack } from '@/components/member-card';
 import { Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { roleLabels } from '@/lib/roles';
 
 // TODO: Connect to the database and fetch the user's products.
 const userProducts: any[] = [];
@@ -51,16 +52,29 @@ export default function ProfilePage() {
     }
     
     const userProfile = {
-        code: `U-${user.id.slice(0, 4).toUpperCase()}`,
-        slug: user.name,
+        id: `U-${user.id.slice(0, 4).toUpperCase()}`,
         name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' '),
         email: user.email,
-        role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
-        role_id: t(`role_${user.role}`),
+        role: user.role,
+        role_label: roleLabels[user.role as keyof typeof roleLabels] || user.role,
+        role_label_id: t(`role_${user.role}`),
+        role_desc: "Penjual", // This can be enhanced later
+        verified: user.verified,
+        expires: "30/04/2025",
+        slug: user.name,
+        code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
         avatarUrl: `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}`,
         avatarFallback: user.name.charAt(0).toUpperCase(),
-        verified: user.verified,
+        qrCodeData: {
+          userId: `U-${user.id.slice(0, 4).toUpperCase()}`,
+          name: (user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
+          validUntil: "30/04/2025",
+          code: `${user.role.charAt(0).toUpperCase()}${user.id.slice(0, 3)}`,
+          slug: user.name,
+          role: user.role
+        }
     };
+    
     
     const handleDownload = (cardRef: React.RefObject<HTMLDivElement>, side: 'front' | 'back') => {
         if (cardRef.current) {
@@ -105,7 +119,7 @@ export default function ProfilePage() {
                 <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>
                 <CardDescription>{userProfile.email}</CardDescription>
                 <div className="flex gap-2 mt-2">
-                    <Badge variant="outline">{language === 'id' ? userProfile.role_id : userProfile.role}</Badge>
+                    <Badge variant="outline">{language === 'id' ? userProfile.role_label_id : userProfile.role_label}</Badge>
                     <Badge variant={userProfile.verified ? 'default' : 'destructive'}>
                         {t(userProfile.verified ? 'status_verified' : 'status_unverified', userProfile.verified ? 'Verified' : 'Unverified')}
                     </Badge>
@@ -127,7 +141,7 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center gap-6">
                    <div className="grid md:grid-cols-2 gap-8 justify-items-center">
-                      <div ref={frontCardRef}><MemberCardFront user={user} /></div>
+                      <div ref={frontCardRef}><MemberCardFront user={userProfile} /></div>
                       <div ref={backCardRef}><MemberCardBack /></div>
                    </div>
                    {user.verified ? (

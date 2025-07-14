@@ -17,8 +17,8 @@ import { AgriBidLogo } from '@/components/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth';
-import { sidebarByRole, NavItem } from '@/config/sidebar';
-import type { Role } from '@/config/sidebar';
+import { sidebarByRole, NavItem, roleToGeneralRoleMap, GeneralRole } from '@/config/sidebar';
+import type { Role } from '@/lib/roles';
 import { DashboardHeader } from '@/components/dashboard-header';
 
 function Sidebar() {
@@ -27,8 +27,8 @@ function Sidebar() {
     const { user } = useAuth();
     
     // Default to 'buyer' if no user is logged in, or if the role is not in the config.
-    const role: Role = (user?.role && user.role in sidebarByRole) ? user.role : 'buyer';
-    const menuItems = sidebarByRole[role] || [];
+    const generalRole: GeneralRole = user ? roleToGeneralRoleMap[user.role as Role] || 'buyer' : 'buyer';
+    const menuItems = sidebarByRole[generalRole] || [];
 
     const getRoleTitle = (role: Role) => {
         const key = `role_${role}`;
@@ -44,12 +44,15 @@ function Sidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarMenu>
-                    <SidebarGroupLabel>{getRoleTitle(role)} {t('navigation')}</SidebarGroupLabel>
+                    <SidebarGroupLabel>{getRoleTitle(user?.role || 'buyer')} {t('navigation')}</SidebarGroupLabel>
                     {menuItems.map((item: NavItem) => {
                         const label = t(item.labelKey || item.name.toLowerCase().replace(/ /g, '_'), item.name);
                         
                         let isActive = false;
-                        if (item.path === `/dashboard/${role}`) {
+                        if (item.path.includes('#')) {
+                            isActive = pathname + window.location.hash === item.path;
+                        }
+                        else if (item.path === `/dashboard/${generalRole}`) {
                             isActive = pathname === item.path;
                         } else if (item.path === '/') {
                              // The root path '/' is a special case for the buyer's "Active Auctions" link.
