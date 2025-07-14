@@ -179,6 +179,13 @@
   "role_seller": "Penjual",
   "role_buyer": "Pembeli",
   "role_vendor": "Vendor",
+  "role_petani": "Petani",
+  "role_nelayan": "Nelayan",
+  "role_peternak": "Peternak",
+  "role_peladang": "Peladang",
+  "role_pengolah": "Pengolah",
+  "role_pelaku_usaha": "Pelaku Usaha",
+  "role_klien": "Klien",
   "producer_dashboard_title": "Dasbor Produsen",
   "producer_dashboard_desc": "Kelola produk dan lelang Anda.",
   "seller_dashboard_title": "Dasbor Penjual",
@@ -479,6 +486,7 @@
   "user_suspended_desc": "Keanggotaan untuk {{userName}} telah ditangguhkan.",
   "login_failed_title": "Gagal Masuk",
   "login_failed_desc": "Kredensial tidak valid. Silakan coba lagi.",
+  "login_failed_qr_desc": "Kode QR tidak valid atau kedaluwarsa.",
   "login_role_invalid_desc": "Peran pengguna yang ditentukan dalam email tidak valid.",
   "demo_login_instructions": "Untuk demo, gunakan peran apa pun (mis., admin, petani, pembeli) sebagai awalan email dan \"password\" sebagai kata sandi."
 }

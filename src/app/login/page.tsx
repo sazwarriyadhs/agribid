@@ -46,26 +46,15 @@ export default function LoginPage() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Simple check for demo purposes
-    if (values.password !== 'password') {
-        toast({
-            variant: 'destructive',
-            title: t('login_failed_title', 'Login Failed'),
-            description: t('login_failed_desc', 'Invalid credentials. Please try again.'),
-        });
-        form.setError("password", { type: "manual", message: t('login_failed_desc', 'Invalid credentials. Please try again.') });
-        return;
-    }
-
-    const loggedInUser = login(values.email);
+    const loggedInUser = login(values.email, values.password);
     
     if (!loggedInUser) {
          toast({
             variant: 'destructive',
             title: t('login_failed_title', 'Login Failed'),
-            description: t('login_role_invalid_desc', 'Invalid user role specified in email.'),
+            description: t('login_failed_desc', 'Invalid credentials. Please try again.'),
         });
-        form.setError("email", { type: "manual", message: t('login_role_invalid_desc', 'Invalid user role specified in email.') });
+        form.setError("password", { type: "manual", message: t('login_failed_desc', 'Invalid credentials. Please try again.') });
         return;
     }
     
@@ -85,8 +74,10 @@ export default function LoginPage() {
         const qrData = JSON.parse(data);
         if (qrData.userId && qrData.name && qrData.code && qrData.slug && qrData.role) {
              const userEmail = `${qrData.role.toLowerCase()}@agribid.com`;
-             const loggedInUser = login(userEmail);
-             if (!loggedInUser) return;
+             const loggedInUser = login(userEmail, 'password'); // Bypass password for QR login
+             if (!loggedInUser) {
+                throw new Error('Invalid role in QR code data');
+             };
              
              toast({
                 title: t('login_success_title'),
@@ -100,8 +91,8 @@ export default function LoginPage() {
     } catch (error) {
         toast({
             variant: 'destructive',
-            title: 'Login Gagal',
-            description: 'Kode QR tidak valid atau kedaluwarsa.',
+            title: t('login_failed_title'),
+            description: t('login_failed_qr_desc', 'Invalid or expired QR code.'),
         });
     }
   };
@@ -115,7 +106,7 @@ export default function LoginPage() {
             <CardDescription>
               {t('login_page_desc', 'Enter your email below to login to your account.')}
               <br />
-              <span className="text-xs">{t('demo_login_instructions', 'For demo, use any role (e.g., admin, petani, buyer) as the email prefix and "password" as the password.')}</span>
+              <span className="text-xs">{t('demo_login_instructions')}</span>
             </CardDescription>
           </CardHeader>
           <CardContent>

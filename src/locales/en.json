@@ -179,6 +179,13 @@
   "role_seller": "Seller",
   "role_buyer": "Buyer",
   "role_vendor": "Vendor",
+  "role_petani": "Petani",
+  "role_nelayan": "Nelayan",
+  "role_peternak": "Peternak",
+  "role_peladang": "Peladang",
+  "role_pengolah": "Pengolah",
+  "role_pelaku_usaha": "Pelaku Usaha",
+  "role_klien": "Klien",
   "producer_dashboard_title": "Producer Dashboard",
   "producer_dashboard_desc": "Manage your products and auctions.",
   "seller_dashboard_title": "Seller Dashboard",
@@ -479,6 +486,7 @@
   "user_suspended_desc": "Membership for {{userName}} has been suspended.",
   "login_failed_title": "Login Failed",
   "login_failed_desc": "Invalid credentials. Please try again.",
+  "login_failed_qr_desc": "Invalid or expired QR code.",
   "login_role_invalid_desc": "Invalid user role specified in email.",
   "demo_login_instructions": "For demo, use any role (e.g., admin, petani, buyer) as the email prefix and \"password\" as the password."
 }
