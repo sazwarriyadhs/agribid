@@ -24,7 +24,7 @@ import Link from 'next/link';
 import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
-import { MemberCard } from '@/components/member-card';
+import { MemberCardFront, MemberCardBack } from '@/components/member-card';
 import { Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -36,6 +36,8 @@ export default function ProfilePage() {
     const { user } = useAuth();
     const params = useParams();
     const { toast } = useToast();
+    const frontCardRef = useRef<HTMLDivElement>(null);
+    const backCardRef = useRef<HTMLDivElement>(null);
 
     if (!user) {
         // In a real app, you might redirect to login or show a public version.
@@ -60,6 +62,21 @@ export default function ProfilePage() {
         verified: user.verified,
     };
     
+    const handleDownload = (cardRef: React.RefObject<HTMLDivElement>, side: 'front' | 'back') => {
+        if (cardRef.current) {
+            html2canvas(cardRef.current, {
+                useCORS: true,
+                backgroundColor: null,
+                scale: 2 // Increase resolution
+            }).then((canvas) => {
+                const link = document.createElement('a');
+                link.download = `agribid-member-card-${user.name}-${side}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    };
+
 
     const getStatusVariant = (status: string) => {
         const s = status.toLowerCase();
@@ -109,7 +126,24 @@ export default function ProfilePage() {
                     <CardDescription>{t('membership_card_subtitle')}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center gap-6">
-                   <MemberCard user={user} />
+                   <div className="grid md:grid-cols-2 gap-8 justify-items-center">
+                      <div ref={frontCardRef}><MemberCardFront user={user} /></div>
+                      <div ref={backCardRef}><MemberCardBack /></div>
+                   </div>
+                   {user.verified ? (
+                     <div className="flex gap-4 mt-4">
+                        <Button onClick={() => handleDownload(frontCardRef, 'front')}>
+                            <Download className="mr-2 h-4 w-4" />
+                            {t('download_front_card', 'Download Front')}
+                        </Button>
+                         <Button onClick={() => handleDownload(backCardRef, 'back')} variant="secondary">
+                            <Download className="mr-2 h-4 w-4" />
+                            {t('download_back_card', 'Download Back')}
+                        </Button>
+                     </div>
+                   ) : (
+                    <p className="text-xs text-muted-foreground mt-6">{t('must_be_verified_to_download', 'Your account must be verified to download the card.')}</p>
+                   )}
                 </CardContent>
             </Card>
             {user.role === 'seller' && (
@@ -159,4 +193,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

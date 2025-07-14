@@ -31,15 +31,13 @@ const regulations = [
     "regulation_4",
 ];
 
-export function MemberCard({ user }: MemberCardProps) {
+export function MemberCardFront({ user }: MemberCardProps) {
     const { t, language } = useI18n();
-    const cardRef = useRef<HTMLDivElement>(null);
-    
     const isValidRole = allowedRoles.includes(user.role as Role);
 
     if (!isValidRole) {
         return (
-            <div className="p-4 text-red-500 font-medium bg-red-50 border border-red-200 rounded-md">
+            <div className="p-4 text-red-500 font-medium bg-red-50 border border-red-200 rounded-md w-[350px]">
             ⚠️ Peran <strong>{user.role}</strong> tidak valid. Kartu tidak bisa ditampilkan.
             </div>
         );
@@ -68,102 +66,87 @@ export function MemberCard({ user }: MemberCardProps) {
         role: cardInfo.role_slug
     });
 
-    const handleDownload = () => {
-        if (cardRef.current) {
-            html2canvas(cardRef.current, {
-                useCORS: true,
-                backgroundColor: null, 
-            }).then((canvas) => {
-                const link = document.createElement('a');
-                link.download = `agribid-member-card-${user.name}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
-    };
+    return (
+        <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
+            <div className="bg-primary/20 text-primary-foreground text-center relative h-36 w-full">
+              <Image
+                src="/images/kartu.png"
+                alt="Member Card"
+                fill
+                className="object-cover"
+              />
+              <p className="absolute inset-0 flex items-center justify-center font-bold text-lg tracking-wider text-primary z-10">
+                {t('membership_card')}
+              </p>
+            </div>
+            <div className="p-6 flex flex-col flex-grow">
+                 <div className="flex justify-between items-start">
+                    <AgriBidLogo className="h-12" />
+                     <Badge variant={cardInfo.verified ? "default" : "destructive"}>
+                        {cardInfo.verified ? (
+                            <ShieldCheck className="mr-2 h-4 w-4" />
+                        ) : (
+                            <ShieldAlert className="mr-2 h-4 w-4" />
+                        )}
+                        {t(cardInfo.verified ? 'status_verified' : 'status_unverified', cardInfo.verified ? 'Verified' : 'Unverified')}
+                    </Badge>
+                 </div>
+                <div className="flex justify-center my-4">
+                    <Avatar className="h-28 w-28 border-4 border-card shadow-md">
+                        <AvatarImage src={cardInfo.avatarUrl} data-ai-hint="portrait photo" />
+                        <AvatarFallback>{cardInfo.avatarFallback}</AvatarFallback>
+                    </Avatar>
+                </div>
+                <div className="text-center space-y-1 my-4">
+                    <p className="font-bold text-xl tracking-wide uppercase">{cardInfo.name}</p>
+                    <p className="text-primary font-medium">{language === 'id' ? cardInfo.role_id : cardInfo.role}</p>
+                </div>
+                 <div className="text-center my-4">
+                    <p className="text-sm text-muted-foreground">{t('membership_id')}</p>
+                    <p className="font-mono font-bold text-lg">{cardInfo.id}</p>
+                </div>
+                <div className="flex items-end justify-between mt-auto flex-grow">
+                    <div className="text-center">
+                        <div className="bg-white p-1.5 rounded-md inline-block">
+                            <QRCode value={qrCodeData} size={70} />
+                        </div>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-sm text-muted-foreground">{t('valid_until')}</p>
+                        <p className="font-semibold text-lg">{cardInfo.expires}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
+export function MemberCardBack() {
+    const { t } = useI18n();
+    return (
+        <div className="w-[350px] bg-card p-6 rounded-2xl shadow-xl flex flex-col font-sans border h-full">
+            <div className="border-b-2 border-primary/20 pb-2 mb-4">
+                 <p className="text-primary font-bold text-lg tracking-wider">{t('regulations_title')}</p>
+            </div>
+            <ul className="space-y-4 text-muted-foreground mt-4 text-base">
+                {regulations.map(reg => (
+                    <li key={reg} className="flex gap-3">
+                        <span className="mt-1.5">&#x2022;</span>
+                        <span>{t(reg as any)}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )
+}
 
+export function MemberCard({ user }: MemberCardProps) {
     return (
         <div className="flex flex-col items-center">
              <div className="grid md:grid-cols-2 gap-8 justify-items-center">
-                {/* Front Card */}
-                <div ref={cardRef} className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
-                    <div className="bg-primary/20 text-primary-foreground text-center relative h-36 w-full">
-                      <Image
-                        src="/images/kartu.png"
-                        alt="Member Card"
-                        fill
-                        className="object-cover"
-                      />
-                      <p className="absolute inset-0 flex items-center justify-center font-bold text-lg tracking-wider text-primary z-10">
-                        {t('membership_card')}
-                      </p>
-                    </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                         <div className="flex justify-between items-start">
-                            <AgriBidLogo className="h-12" />
-                             <Badge variant={cardInfo.verified ? "default" : "destructive"}>
-                                {cardInfo.verified ? (
-                                    <ShieldCheck className="mr-2 h-4 w-4" />
-                                ) : (
-                                    <ShieldAlert className="mr-2 h-4 w-4" />
-                                )}
-                                {t(cardInfo.verified ? 'status_verified' : 'status_unverified', cardInfo.verified ? 'Verified' : 'Unverified')}
-                            </Badge>
-                         </div>
-                        <div className="flex justify-center my-4">
-                            <Avatar className="h-28 w-28 border-4 border-card shadow-md">
-                                <AvatarImage src={cardInfo.avatarUrl} data-ai-hint="portrait photo" />
-                                <AvatarFallback>{cardInfo.avatarFallback}</AvatarFallback>
-                            </Avatar>
-                        </div>
-                        <div className="text-center space-y-1 my-4">
-                            <p className="font-bold text-xl tracking-wide uppercase">{cardInfo.name}</p>
-                            <p className="text-primary font-medium">{language === 'id' ? cardInfo.role_id : cardInfo.role}</p>
-                        </div>
-                         <div className="text-center my-4">
-                            <p className="text-sm text-muted-foreground">{t('membership_id')}</p>
-                            <p className="font-mono font-bold text-lg">{cardInfo.id}</p>
-                        </div>
-                        <div className="flex items-end justify-between mt-auto flex-grow">
-                            <div className="text-center">
-                                <div className="bg-white p-1.5 rounded-md inline-block">
-                                    <QRCode value={qrCodeData} size={70} />
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm text-muted-foreground">{t('valid_until')}</p>
-                                <p className="font-semibold text-lg">{cardInfo.expires}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Back Card */}
-                <div className="w-[350px] bg-card p-6 rounded-2xl shadow-xl flex flex-col font-sans border">
-                    <div className="border-b-2 border-primary/20 pb-2 mb-4">
-                         <p className="text-primary font-bold text-lg tracking-wider">{t('regulations_title')}</p>
-                    </div>
-                    <ul className="space-y-4 text-muted-foreground mt-4 text-base">
-                        {regulations.map(reg => (
-                            <li key={reg} className="flex gap-3">
-                                <span className="mt-1.5">&#x2022;</span>
-                                <span>{t(reg as any)}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <MemberCardFront user={user} />
+                <MemberCardBack />
             </div>
-            {cardInfo.verified && (
-                <Button onClick={handleDownload} className="mt-6">
-                    <Download className="mr-2 h-4 w-4" />
-                    {t('download_as_pdf', 'Download Card')}
-                </Button>
-            )}
-             {!cardInfo.verified && (
-                <p className="text-xs text-muted-foreground mt-6">{t('must_be_verified_to_download', 'Your account must be verified to download the card.')}</p>
-            )}
         </div>
     );
 }
-
