@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (sellerRoles.includes(emailPrefix)) {
         role = 'seller';
-        isVerified = false;
+        isVerified = true; // For simulation, seller is verified
     } else if (adminRoles.includes(emailPrefix)) {
         role = 'admin';
         isVerified = true;

@@ -12,9 +12,11 @@ export const allowedRoles = [
   'buyer',
   'mitra',
   'vendor',
+  'seller',
+  'producer'
 ] as const;
 
-export type Role = typeof allowedRoles[number];
+export type Role = (typeof allowedRoles)[number];
 
 export const roleLabels: Record<Role, string> = {
   admin: 'Admin',
@@ -29,4 +31,6 @@ export const roleLabels: Record<Role, string> = {
   buyer: 'Buyer',
   mitra: 'Mitra',
   vendor: 'Vendor',
+  seller: 'Seller',
+  producer: 'Producer'
 };
