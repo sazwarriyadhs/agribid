@@ -155,7 +155,7 @@ export default function SignupPage() {
             {selectedRole === 'international_buyer' && (
                 <div className="grid gap-2">
                     <Label htmlFor="country">{t('country', 'Country')}</Label>
-                     <Select onValueChange={setCountry} value={country}>
+                     <Select onValueChange={setCountry} value={country} required>
                         <SelectTrigger id="country">
                             <SelectValue placeholder={t('select_your_country', 'Select your country')} />
                         </SelectTrigger>
