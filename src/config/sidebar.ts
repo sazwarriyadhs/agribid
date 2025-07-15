@@ -1,9 +1,9 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck, ShoppingCart, Globe } from 'lucide-react';
 import type { Role } from '@/lib/roles';
 
-export type GeneralRole = 'seller' | 'buyer' | 'admin' | 'vendor' | 'exporter';
+export type GeneralRole = 'seller' | 'buyer' | 'admin' | 'vendor' | 'exporter' | 'international_buyer';
 
 export interface NavItem {
   name: string;
@@ -21,6 +21,11 @@ export const sidebarByRole: Record<GeneralRole, NavItem[]> = {
     { name: "Dashboard", path: "/dashboard/buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
     { name: "Active Auctions", path: "/", icon: Search, labelKey: 'auctions' },
     { name: "My Orders", path: "/dashboard/buyer", icon: ShoppingCart, labelKey: 'my_orders_title' },
+  ],
+  international_buyer: [
+    { name: "Dashboard", path: "/dashboard/international-buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
+    { name: "Browse Commodities", path: "/", icon: Search, labelKey: 'browse_export_commodities' },
+    { name: "My Imports", path: "/dashboard/international-buyer", icon: Plane, labelKey: 'manage_imports_title' },
   ],
   admin: [
     { name: "Overview", path: "/dashboard/admin", icon: LayoutDashboard, labelKey: 'admin_dashboard_title' },
@@ -54,6 +59,7 @@ export const dashboardLabel: { [key: string]: string } = {
   producer: "Dashboard Produsen",
   seller: "Dashboard Penjual",
   buyer: "Dashboard Pembeli",
+  international_buyer: "International Buyer Dashboard",
   pelaku_usaha: "Dashboard Pelaku Usaha",
   klien: "Dashboard Klien",
   default: "Dashboard"
@@ -69,6 +75,7 @@ export const roleToDashboardMap: Record<Role, string> = {
     seller: '/dashboard/seller',
     producer: '/dashboard/seller',
     buyer: '/dashboard/buyer',
+    international_buyer: '/dashboard/international-buyer',
     pelaku_usaha: '/dashboard/buyer',
     bidder: '/dashboard/buyer', // legacy
     eksportir: '/dashboard/exporter',
@@ -89,6 +96,7 @@ export const roleToGeneralRoleMap: Record<Role, GeneralRole> = {
   producer: 'seller',
   seller: 'seller',
   buyer: 'buyer',
+  international_buyer: 'international_buyer',
   pelaku_usaha: 'buyer',
   bidder: 'buyer', // legacy
   klien: 'buyer',

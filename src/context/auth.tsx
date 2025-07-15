@@ -14,6 +14,7 @@ interface User {
   role: Role; 
   verified: boolean;
   type: 'individual' | 'company';
+  country?: string;
   firstName?: string;
   lastName?: string;
   companyName?: string;
@@ -47,21 +48,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!generalRole) return null;
 
     // Simulate verification status based on role
-    const sellerRoles: Role[] = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah', 'producer', 'seller'];
-    const adminRoles: Role[] = ['admin'];
-    const vendorRoles: Role[] = ['mitra', 'partner', 'vendor'];
-    const exporterRoles: Role[] = ['eksportir', 'exporter'];
+    const alwaysVerifiedRoles: Role[] = ['petani', 'nelayan', 'peternak', 'peladang', 'pengolah', 'producer', 'seller', 'admin', 'mitra', 'partner', 'vendor', 'eksportir', 'exporter', 'international_buyer'];
     
-    const isVerified = 
-        sellerRoles.includes(emailPrefix as Role) ||
-        adminRoles.includes(emailPrefix as Role) ||
-        vendorRoles.includes(emailPrefix as Role) ||
-        exporterRoles.includes(emailPrefix as Role);
+    const isVerified = alwaysVerifiedRoles.includes(emailPrefix as Role);
     
-    const isCompany = ['pelaku_usaha', 'buyer', 'klien', 'mitra', 'vendor', 'partner', 'eksportir', 'exporter', 'admin'].includes(emailPrefix);
+    const isCompany = ['pelaku_usaha', 'buyer', 'klien', 'mitra', 'vendor', 'partner', 'eksportir', 'exporter', 'admin', 'international_buyer'].includes(emailPrefix);
     const userType = isCompany ? 'company' : 'individual';
 
-    const name = emailPrefix.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const name = emailPrefix.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     
     const mockUser: User = {
       id: `usr_${Math.random().toString(36).substring(2, 9)}`,
@@ -71,6 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       role: emailPrefix as Role,
       verified: isVerified,
       type: userType,
+      country: emailPrefix === 'international_buyer' ? 'USA' : undefined, // Mock country for demo
       ...(userType === 'individual' ? { firstName: name.split(' ')[0], lastName: name.split(' ')[1] || '' } : { companyName: name }),
     };
     setUser(mockUser);

@@ -18,13 +18,19 @@ import { useI18n } from '@/context/i18n';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Banknote, Building, User } from 'lucide-react';
+import { Banknote, Building, User, Globe } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const roles = [
   { key: 'role_producer', value: 'producer', fee: 25000 },
   { key: 'role_bidder', value: 'bidder', fee: 25000 },
   { key: 'role_partner', value: 'partner', fee: 50000 },
-  { key: 'role_exporter', value: 'exporter', fee: 50000 },
+  { key: 'role_international_buyer', value: 'international_buyer', fee: 50000 },
+];
+
+// In a real app, this would come from a database or a more robust source
+const countries = [
+  "USA", "China", "India", "Netherlands", "Germany", "Japan", "Vietnam", "Malaysia", "Singapore", "Australia", "Canada", "United Kingdom"
 ];
 
 export default function SignupPage() {
@@ -33,9 +39,19 @@ export default function SignupPage() {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState('bidder');
   const [userType, setUserType] = useState<'individual' | 'company'>('individual');
+  const [country, setCountry] = useState('');
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedRole === 'international_buyer' && !country) {
+        toast({
+            variant: 'destructive',
+            title: t('error'),
+            description: t('country_selection_required', 'Please select your country to register as an International Buyer.'),
+        });
+        return;
+    }
+
     toast({
       title: t('registration_submitted_title', "Registration Submitted"),
       description: t('registration_submitted_desc', "Your account is pending admin approval. You will be notified upon activation."),
@@ -135,6 +151,22 @@ export default function SignupPage() {
                     ))}
                 </RadioGroup>
             </div>
+
+            {selectedRole === 'international_buyer' && (
+                <div className="grid gap-2">
+                    <Label htmlFor="country">{t('country', 'Country')}</Label>
+                     <Select onValueChange={setCountry} value={country}>
+                        <SelectTrigger id="country">
+                            <SelectValue placeholder={t('select_your_country', 'Select your country')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {countries.map((c) => (
+                                <SelectItem key={c} value={c}>{c}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+            )}
             
              <Alert>
                 <Banknote className="h-4 w-4"/>
