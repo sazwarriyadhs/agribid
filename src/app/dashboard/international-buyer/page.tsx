@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useI18n } from "@/context/i18n";
 import { useAuth } from "@/context/auth";
-import { Globe, Package, Plane, FileText, Trophy, Truck } from "lucide-react";
+import { Globe, Package, Plane, FileText, Trophy, Truck, FilePlus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -115,15 +115,15 @@ export default function InternationalBuyerDashboardPage() {
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card>
+                 <Card>
                     <CardHeader>
-                        <Globe className="h-8 w-8 text-primary mb-2"/>
-                        <CardTitle>{t('browse_export_commodities')}</CardTitle>
+                        <FilePlus className="h-8 w-8 text-primary mb-2"/>
+                        <CardTitle>{t('post_request_title', 'Post a Request')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-muted-foreground mb-4">{t('browse_export_commodities_desc')}</p>
+                        <p className="text-muted-foreground mb-4">{t('post_request_desc', 'Let producers know what you need.')}</p>
                         <Button asChild>
-                            <Link href="/">{t('start_browsing')}</Link>
+                            <Link href="/dashboard/international-buyer/post-request">{t('create_new_request', 'Create Request')}</Link>
                         </Button>
                     </CardContent>
                 </Card>
@@ -155,5 +155,3 @@ export default function InternationalBuyerDashboardPage() {
         </>
     )
 }
-
-    

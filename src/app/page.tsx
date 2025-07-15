@@ -17,6 +17,7 @@ import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 import HeroSlider from '@/components/hero-slider';
 import { DirectFromProducer } from '@/components/direct-from-producer';
+import { InternationalDemand } from '@/components/international-demand';
 
 // TODO: Connect to the database and fetch real data.
 // This is placeholder data based on user's database query.
@@ -295,6 +296,8 @@ export default function Home() {
             )}
         </div>
       </section>
+
+      <InternationalDemand />
 
       <section className="py-16 md:py-24 bg-secondary/50">
         <div className="container px-4 md:px-6">
