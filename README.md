@@ -1,4 +1,4 @@
-slider
+
 # AgriBid - The Digital Marketplace for Agriculture
 
 ![AgriBid Hero](https://placehold.co/1200x600.png)
@@ -19,14 +19,14 @@ AgriBid is built around a role-based system to cater to the specific needs of ea
 - **Secure Authentication:** Secure login system, including an innovative QR code login via a digital membership card.
 - **Global Market Insights:** View real-time data on global demand for Indonesian commodities.
 
-### 🧑‍🌾 Producer Dashboard
+### 🧑‍🌾 Producer/Seller Dashboard
 - **CRUD for Products:** Full control to Create, Read, Update, and Delete auction listings.
 - **AI-Powered Price Suggestions:** Get intelligent starting price recommendations for new products based on description, category, and images.
-- **Auction Management:** Monitor the status of active, pending, and completed auctions.
+- **Auction & Sales Management:** Monitor the status of active, pending, and completed auctions, and track revenue.
 
-###  bidders 👨‍⚖️ Bidder Dashboard
+### 👨‍⚖️ Buyer/Bidder Dashboard
 - **Seamless Bidding:** Place bids easily on the auction detail page.
-- **Bid History:** Track all active bids, auctions won, and auctions lost.
+- **Bid & Order Management:** Track all active bids, auctions won, and view order history with shipment status.
 - **Secure Payments:** All transactions are processed through a centralized, secure joint account managed by the admin.
 
 ### ✈️ Exporter Features
@@ -35,10 +35,16 @@ AgriBid is built around a role-based system to cater to the specific needs of ea
 - **Producer Mentorship:** Exporters can manage and educate up to 10 producers, helping them meet quality standards for the global market.
 - **Shipment Tracking:** A dedicated dashboard to manage and track export shipments.
 
+### 🚚 Vendor/Partner Dashboard
+- **Shipping Order Management:** View and accept shipping jobs for completed auctions.
+- **Delivery Status Updates:** Update the status of shipments from "Pending" to "In Transit" and "Delivered."
+- **Printable Delivery Orders:** Generate and view official delivery order documents.
+
 ### 🛡️ Admin Dashboard
 - **Platform Oversight:** A comprehensive overview of all platform activity, including total users, active auctions, and revenue.
-- **User Management:** View, manage, suspend, or delete users.
+- **User & Membership Management:** View, manage, suspend, or delete users, and verify membership payments.
 - **Product Verification:** Approve or reject new product listings submitted by producers to maintain quality standards.
+- **Payment & Payout Management:** Oversee the central joint account and approve payouts to sellers.
 
 ---
 
@@ -48,6 +54,7 @@ AgriBid leverages Google's Genkit to provide intelligent features that enhance t
 
 1.  **Suggest Price Flow (`suggest-price-flow.ts`):** Analyzes product details and images to recommend a competitive starting auction price, helping producers maximize their returns.
 2.  **Exporter Eligibility Check Flow (`check-exporter-eligibility-flow.ts`):** An AI consultant that assesses a user's transaction history and uploaded documents to determine if they meet the criteria to become an exporter, providing clear feedback and next steps.
+3.  **Calculate Shipping Cost Flow (`calculate-shipping-cost-flow.ts`):** An AI logistics expert that estimates shipping costs between two points based on product details, helping buyers budget for their purchases.
 
 ---
 
@@ -94,7 +101,7 @@ To run the AgriBid application locally, follow these steps:
       This starts the Genkit development server, allowing the frontend to communicate with the AI flows.
 
 4.  **Explore the App:**
-    Open your browser to `http://localhost:9002` to start using AgriBid. You can explore different user roles by navigating to the respective dashboards from the `/dashboard` page.
+    Open your browser to `http://localhost:9002` to start using AgriBid. You can explore different user roles by logging in with an email corresponding to a specific role (e.g., `petani@agribid.com`, `buyer@agribid.com`, `admin@agribid.com`). The password for all demo accounts is `password`.
 
 ---
 

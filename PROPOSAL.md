@@ -40,13 +40,17 @@ AgriBid addresses these challenges by offering a centralized, technology-driven 
 
 ### **Role-Based Functionality**
 
-#### **🧑‍🌾 Producer (Penjual)**
+#### **🧑‍🌾 Producer/Seller (Penjual)**
+- **Role Examples:** Petani (Farmer), Nelayan (Fisherman), Peternak (Rancher), etc.
 - **Product Management (CRUD):** Full capability to create, view, update, and delete product listings for auction.
 - **AI-Powered Price Suggestion:** An intelligent tool suggests an optimal starting bid price based on product data and images.
+- **Sales & Revenue Tracking:** A dedicated dashboard to monitor active auctions, products sold, and gross revenue.
 
-#### **👨‍⚖️ Bidder (Penawar)**
+#### **👨‍⚖️ Buyer/Bidder (Pembeli)**
+- **Role Examples:** Pelaku Usaha (Business Actor), Klien (Client), etc.
 - **Live Bidding:** Ability to place bids on any active auction.
 - **Bid Management:** A dedicated dashboard to track active bids, won auctions, and total spending.
+- **Order & Shipment Tracking:** Manage won auctions and track their shipment status.
 - **Pathway to Exporter:** Can become an exporter after meeting transaction and verification requirements.
 
 #### **✈️ Exporter (Eksportir)**
@@ -55,17 +59,25 @@ AgriBid addresses these challenges by offering a centralized, technology-driven 
 - **Producer Mentorship:** Authority to manage and educate up to 10 registered producers to help them meet export standards.
 - **Shipment Management:** A dashboard to manage and track ongoing export shipments.
 
+#### **🚚 Vendor/Partner (Mitra)**
+- **Shipping Order Management:** A dashboard to view and accept shipping jobs from completed auctions.
+- **Status Updates:** Ability to update the shipment status from "Pending" to "In Transit" and "Delivered".
+- **Delivery Order Generation:** Access printable delivery order documents for each shipment.
+
 #### **🛡️ Admin (Administrator)**
 - **Full Oversight:** A central dashboard to monitor platform metrics like user count, revenue, and active auctions.
-- **User Management:** Ability to manage, verify, suspend, or delete user accounts.
+- **User Management & Verification:** Ability to manage, verify, suspend, or delete user accounts, including membership payment status.
 - **Product Verification:** Power to approve or reject new products submitted by Producers, ensuring quality control.
-- **Transaction Mediation:** Manages the central joint account for all financial transactions.
+- **Transaction Mediation:** Manages the central joint account and approves payouts to sellers.
 
 ---
 
 ## **5. Monetization Strategy**
 
-AgriBid will implement a simple and transparent revenue model:
+AgriBid will implement a clear revenue model based on membership and transaction fees:
+- **Membership Fee:** A tiered annual membership fee is required for registration, varying by role:
+    - **Producer/Bidder:** IDR 25,000 / year
+    - **Partner/Exporter:** IDR 50,000 / year
 - **Transaction Fee:** A **10% administration fee** will be applied to the final winning bid amount of every successful transaction. This fee covers platform maintenance, support, and admin verification services.
 
 ---
