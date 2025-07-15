@@ -504,7 +504,7 @@
   "login_failed_desc": "Kredensial tidak valid. Silakan coba lagi.",
   "login_failed_qr_desc": "Kode QR tidak valid atau kedaluwarsa.",
   "login_role_invalid_desc": "Peran pengguna yang ditentukan dalam email tidak valid.",
-  "demo_login_instructions": "Untuk demo, gunakan peran apa pun (mis., admin, petani, pembeli) sebagai awalan email dan \"password\" sebagai kata sandi.",
+  "demo_login_instructions": "Untuk demo, gunakan peran apa pun (mis., admin, petani, buyer, international_buyer) sebagai awalan email dan \"password\" sebagai kata sandi.",
   "user_type": "Tipe Pengguna",
   "individual": "Perorangan",
   "sop_foreign_buyer_title": "SOP untuk Pembeli Asing",
