@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useI18n } from "@/context/i18n";
 import { useAuth } from "@/context/auth";
-import { Globe, Package, Plane } from "lucide-react";
+import { Globe, Package, Plane, FileText } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -41,13 +41,13 @@ export default function InternationalBuyerDashboardPage() {
                 </Card>
                 <Card>
                     <CardHeader>
-                        <Plane className="h-8 w-8 text-primary mb-2"/>
-                        <CardTitle>{t('manage_imports_title')}</CardTitle>
+                        <FileText className="h-8 w-8 text-primary mb-2"/>
+                        <CardTitle>{t('sop_foreign_buyer_title')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-muted-foreground mb-4">{t('manage_imports_desc')}</p>
+                        <p className="text-muted-foreground mb-4">{t('sop_foreign_buyer_desc')}</p>
                          <Button asChild variant="secondary">
-                            <Link href="#">{t('view_my_orders')}</Link>
+                            <Link href="/sop-foreign-buyer">{t('view_sop')}</Link>
                         </Button>
                     </CardContent>
                 </Card>
