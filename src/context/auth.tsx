@@ -4,13 +4,19 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { allowedRoles, type Role } from '@/lib/roles';
 import { roleToGeneralRoleMap } from '@/config/sidebar';
+import slugify from 'slugify';
 
 interface User {
   id: string;
-  name: string; // Will store the specific role, e.g., 'petani', 'buyer'
+  name: string; // The display name (full name or company name)
+  slug: string; // a slugified version of the name
   email: string;
-  role: Role; // Will store the abstract role, e.g., 'seller', 'buyer'
+  role: Role; 
   verified: boolean;
+  type: 'individual' | 'company';
+  firstName?: string;
+  lastName?: string;
+  companyName?: string;
 }
 
 interface AuthContextType {
@@ -51,14 +57,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         adminRoles.includes(emailPrefix as Role) ||
         vendorRoles.includes(emailPrefix as Role) ||
         exporterRoles.includes(emailPrefix as Role);
+    
+    const isCompany = ['pelaku_usaha', 'buyer', 'klien', 'mitra', 'vendor', 'partner', 'eksportir', 'exporter', 'admin'].includes(emailPrefix);
+    const userType = isCompany ? 'company' : 'individual';
 
-
+    const name = emailPrefix.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    
     const mockUser: User = {
       id: `usr_${Math.random().toString(36).substring(2, 9)}`,
-      name: emailPrefix, // Use email prefix as the specific role name and slug
+      name: name, 
+      slug: slugify(name, { lower: true, strict: true }),
       email: email,
-      role: emailPrefix as Role, // The specific role
+      role: emailPrefix as Role,
       verified: isVerified,
+      type: userType,
+      ...(userType === 'individual' ? { firstName: name.split(' ')[0], lastName: name.split(' ')[1] || '' } : { companyName: name }),
     };
     setUser(mockUser);
     return mockUser;

@@ -489,5 +489,7 @@
   "login_failed_desc": "Invalid credentials. Please try again.",
   "login_failed_qr_desc": "Invalid or expired QR code.",
   "login_role_invalid_desc": "Invalid user role specified in email.",
-  "demo_login_instructions": "For demo, use any role (e.g., admin, petani, buyer) as the email prefix and \"password\" as the password."
+  "demo_login_instructions": "For demo, use any role (e.g., admin, petani, buyer) as the email prefix and \"password\" as the password.",
+  "user_type": "User Type",
+  "individual": "Individual"
 }

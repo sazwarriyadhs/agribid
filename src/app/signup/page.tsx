@@ -18,7 +18,7 @@ import { useI18n } from '@/context/i18n';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Banknote } from 'lucide-react';
+import { Banknote, Building, User } from 'lucide-react';
 
 const roles = [
   { key: 'role_producer', value: 'producer', fee: 25000 },
@@ -32,6 +32,7 @@ export default function SignupPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState('bidder');
+  const [userType, setUserType] = useState<'individual' | 'company'>('individual');
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,16 +59,45 @@ export default function SignupPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignup} className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="first-name">{t('first_name', 'First name')}</Label>
-                <Input id="first-name" placeholder="Max" required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="last-name">{t('last_name', 'Last name')}</Label>
-                <Input id="last-name" placeholder="Robinson" required />
-              </div>
+            
+            <div className="grid gap-2">
+              <Label>{t('user_type', 'User Type')}</Label>
+              <RadioGroup defaultValue="individual" onValueChange={(value) => setUserType(value as 'individual' | 'company')} className="grid grid-cols-2 gap-4">
+                  <div>
+                    <RadioGroupItem value="individual" id="individual" className="peer sr-only" />
+                    <Label htmlFor="individual" className="flex items-center justify-center gap-2 rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                      <User className="h-5 w-5"/>
+                      {t('individual', 'Individual')}
+                    </Label>
+                  </div>
+                   <div>
+                    <RadioGroupItem value="company" id="company" className="peer sr-only" />
+                    <Label htmlFor="company" className="flex items-center justify-center gap-2 rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                      <Building className="h-5 w-5" />
+                      {t('company', 'Company')}
+                    </Label>
+                  </div>
+              </RadioGroup>
             </div>
+            
+            {userType === 'individual' ? (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="first-name">{t('first_name', 'First name')}</Label>
+                  <Input id="first-name" placeholder="Max" required />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="last-name">{t('last_name', 'Last name')}</Label>
+                  <Input id="last-name" placeholder="Robinson" required />
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-2">
+                <Label htmlFor="company-name">{t('company_name', 'Company Name')}</Label>
+                <Input id="company-name" placeholder={t('company_name_placeholder', 'e.g. PT Agri Jaya')} required />
+              </div>
+            )}
+
             <div className="grid gap-2">
               <Label htmlFor="email">{t('email_address')}</Label>
               <Input

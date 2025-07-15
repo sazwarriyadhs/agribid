@@ -64,7 +64,7 @@ export default function ProfilePage() {
     }
     
     // Simple check to ensure the user is viewing their own profile based on the URL
-    if (user.id !== params.code) {
+    if (user.slug !== params.slug) {
         return notFound();
     }
 
@@ -77,24 +77,23 @@ export default function ProfilePage() {
 
     const userProfile = {
         id: membershipId,
-        name: user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' '),
+        name: user.name,
         email: user.email,
         role: user.role,
         role_label: roleLabels[user.role as keyof typeof roleLabels] || user.role,
         role_label_id: t(`role_${user.role}`),
-        role_desc: "Penjual", // This can be enhanced later
         verified: user.verified,
         expires: expiryDate.toLocaleDateString('id-ID', { day:'2-digit', month: '2-digit', year: 'numeric' }),
-        slug: user.name,
+        slug: user.slug,
         code: userCode,
         avatarUrl: avatarUrl,
         avatarFallback: user.name.charAt(0).toUpperCase(),
         qrCodeData: {
           userId: membershipId,
-          name: (user.name.charAt(0).toUpperCase() + user.name.slice(1).replace(/-/g, ' ')).toUpperCase(),
+          name: user.name.toUpperCase(),
           validUntil: expiryDate.toLocaleDateString('id-ID', { day:'2-digit', month: '2-digit', year: 'numeric' }),
           code: userCode,
-          slug: user.name,
+          slug: user.slug,
           role: user.role
         }
     };
@@ -107,7 +106,7 @@ export default function ProfilePage() {
                 scale: 2 // Increase resolution
             }).then((canvas) => {
                 const link = document.createElement('a');
-                link.download = `agribid-member-card-${user.name}-${side}.png`;
+                link.download = `agribid-member-card-${user.slug}-${side}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
