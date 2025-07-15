@@ -56,8 +56,8 @@ export function MemberCardFront({ user }: MemberCardProps) {
 
     return (
         <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
-             <div className="bg-primary/10 text-primary-foreground text-center relative h-28 w-full p-4 flex items-center justify-center">
-                <AgriBidLogo className="h-16" />
+             <div className="bg-primary/10 text-primary-foreground text-center relative w-full p-4 flex items-center justify-center">
+                <AgriBidLogo className="h-20" />
             </div>
             <div className="p-6 flex flex-col flex-grow">
                  <div className="flex justify-end items-start -mt-12">
@@ -70,8 +70,8 @@ export function MemberCardFront({ user }: MemberCardProps) {
                         {t(user.verified ? 'status_verified' : 'status_unverified', user.verified ? 'Verified' : 'Unverified')}
                     </Badge>
                  </div>
-                <div className="flex justify-center -mt-8">
-                    <Avatar className="h-28 w-28 border-4 border-background shadow-md">
+                <div className="flex justify-center -mt-10">
+                    <Avatar className="h-32 w-32 border-4 border-background shadow-md">
                         <AvatarImage src={user.avatarUrl} data-ai-hint="portrait photo" />
                         <AvatarFallback>{user.avatarFallback}</AvatarFallback>
                     </Avatar>
@@ -84,10 +84,10 @@ export function MemberCardFront({ user }: MemberCardProps) {
                     <p className="text-sm text-muted-foreground">{t('membership_id')}</p>
                     <p className="font-mono font-bold text-lg">{user.id}</p>
                 </div>
-                <div className="flex items-end justify-between mt-auto flex-grow">
+                <div className="flex items-end justify-between mt-auto pt-4 flex-grow">
                     <div className="text-center">
-                        <div className="bg-white p-1.5 rounded-md inline-block">
-                            <QRCode value={JSON.stringify(user.qrCodeData)} size={70} />
+                        <div className="bg-white p-2 rounded-md inline-block shadow-inner">
+                            <QRCode value={JSON.stringify(user.qrCodeData)} size={80} />
                         </div>
                     </div>
                     <div className="text-right">
