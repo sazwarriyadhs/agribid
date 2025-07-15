@@ -1,3 +1,4 @@
+
 /**
  * DEPRECATED: This file is being replaced by a direct database connection.
  * The logic below is preserved for reference but is no longer in use.
@@ -163,5 +164,205 @@ export const productDatabase = new ProductDatabase();
 */
 
 // TODO: Connect to the database and fetch real data.
-// This file is now deprecated and will be removed once the database connection is implemented.
-export {};
+// This file now only exports mock data for demonstration purposes.
+export const allActiveAuctions = [
+    {
+      id: '1',
+      name: 'Lelang Cabai Organik',
+      name_id: 'Lelang Cabai Organik',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'organic chili',
+      seller: 'Petani Jaya',
+      seller_id: 'Petani Jaya',
+      currentBid: 30000,
+      bidders: [],
+      category: 'Fruits & Vegetables',
+      quantity: '1 Ton',
+      shelfLife: '7 hari',
+      packaging: 'Kantung jaring 5kg',
+      description: 'Cabai organik dari petani lokal dengan kualitas terbaik. Dipanen saat matang sempurna untuk rasa pedas yang maksimal.'
+    },
+    {
+      id: '2',
+      name: 'Lelang Jagung Manis',
+      name_id: 'Lelang Jagung Manis',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'sweet corn',
+      seller: 'Petani Jaya',
+      seller_id: 'Petani Jaya',
+      currentBid: 15000,
+      bidders: [],
+      category: 'Grains',
+      quantity: '5 Ton',
+      shelfLife: '5 hari',
+      packaging: 'Karung goni',
+      description: 'Jagung manis hasil panen segar, cocok untuk dibakar atau direbus. Biji besar dan rasa manis alami.'
+    },
+    {
+      id: '5',
+      name: 'Lelang Telur Ayam Kampung',
+      name_id: 'Lelang Telur Ayam Kampung',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'free range eggs',
+      seller: 'Peternak Sentosa',
+      seller_id: 'Peternak Sentosa',
+      currentBid: 20000,
+      bidders: [],
+      category: 'Livestock',
+      quantity: '500 butir',
+      shelfLife: '30 hari',
+      packaging: 'Tray karton',
+      description: 'Telur ayam kampung asli, bebas dari bahan kimia dan pakan pabrikan.'
+    },
+    {
+      id: '6',
+      name: 'Lelang Sayur Bayam Organik',
+      name_id: 'Lelang Sayur Bayam Organik',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'organic spinach',
+      seller: 'Petani Jaya',
+      seller_id: 'Petani Jaya',
+      currentBid: 10000,
+      bidders: [],
+      category: 'Fruits & Vegetables',
+      quantity: '100 ikat',
+      shelfLife: '3 hari',
+      packaging: 'Ikat segar',
+      description: 'Bayam organik segar langsung dari kebun, tanpa pestisida.'
+    },
+    {
+      id: '8',
+      name: 'Lelang Padi IR64',
+      name_id: 'Lelang Padi IR64',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'rice paddy',
+      seller: 'Petani Jaya',
+      seller_id: 'Petani Jaya',
+      currentBid: 40000,
+      bidders: [],
+      category: 'Grains',
+      quantity: '10 Ton',
+      shelfLife: '12 bulan',
+      packaging: 'Karung 50kg',
+      description: 'Padi varietas IR64, hasil panen baru dengan kualitas gabah kering giling.'
+    },
+    {
+      id: '10',
+      name: 'Lelang Tomat Merah Segar',
+      name_id: 'Lelang Tomat Merah Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fresh tomatoes',
+      seller: 'Petani Jaya',
+      seller_id: 'Petani Jaya',
+      currentBid: 12000,
+      bidders: [],
+      category: 'Fruits & Vegetables',
+      quantity: '200 kg',
+      shelfLife: '10 hari',
+      packaging: 'Krat plastik',
+      description: 'Tomat merah segar, ukuran seragam, cocok untuk konsumsi langsung atau diolah.'
+    },
+    {
+      id: '3',
+      name: 'Lelang Daging Sapi Segar',
+      name_id: 'Lelang Daging Sapi Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fresh beef',
+      seller: 'Peternak Sentosa',
+      seller_id: 'Peternak Sentosa',
+      currentBid: 85000,
+      bidders: [],
+      category: 'Livestock',
+      quantity: '500 Kg',
+      shelfLife: '3 hari (pendingin)',
+      packaging: 'Dikemas vakum per 1kg',
+      description: 'Daging sapi segar dari peternakan lokal, pemotongan higienis dan sesuai standar. Bagian paha depan.'
+    },
+    {
+      id: '11',
+      name: 'Lelang Ayam Broiler Hidup',
+      name_id: 'Lelang Ayam Broiler Hidup',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'live broiler chicken',
+      seller: 'Peternak Sentosa',
+      seller_id: 'Peternak Sentosa',
+      currentBid: 60000,
+      bidders: [],
+      category: 'Livestock',
+      quantity: '100 ekor',
+      shelfLife: 'N/A',
+      packaging: 'Keranjang ayam',
+      description: 'Ayam broiler hidup sehat, bobot rata-rata 1.8kg per ekor.'
+    }
+];
+
+export const initialSellerProducts = [
+    { 
+        id: '1', 
+        name: 'Lelang Cabai Organik', 
+        name_id: 'Lelang Cabai Organik', 
+        status: 'Active', 
+        status_id: 'Aktif', 
+        quantity: '1 Ton', 
+        category: 'Fruits & Vegetables',
+        currentBid: 30000,
+        image: 'https://placehold.co/600x400.png',
+        aiHint: 'organic chili',
+        seller: 'Petani Jaya',
+        seller_id: 'Petani Jaya',
+        description: 'Cabai organik dari petani lokal dengan kualitas terbaik. Dipanen saat matang sempurna untuk rasa pedas yang maksimal.',
+        shelfLife: '7 hari',
+        packaging: 'Kantung jaring 5kg'
+    },
+    { 
+        id: '2', 
+        name: 'Lelang Jagung Manis', 
+        name_id: 'Lelang Jagung Manis', 
+        status: 'Active', 
+        status_id: 'Aktif', 
+        quantity: '5 Ton', 
+        category: 'Grains',
+        currentBid: 15000,
+        image: 'https://placehold.co/600x400.png',
+        aiHint: 'sweet corn',
+        seller: 'Petani Jaya',
+        seller_id: 'Petani Jaya',
+        description: 'Jagung manis hasil panen segar, cocok untuk dibakar atau direbus. Biji besar dan rasa manis alami.',
+        shelfLife: '5 hari',
+        packaging: 'Karung goni'
+    },
+    { 
+        id: '99',
+        name: 'Panen Gandum Berkualitas',
+        name_id: 'Panen Gandum Berkualitas',
+        status: 'Ended',
+        status_id: 'Selesai',
+        quantity: '10 Ton',
+        category: 'Grains',
+        currentBid: 4500, // This is the final price
+        image: 'https://placehold.co/600x400.png',
+        aiHint: 'quality wheat',
+        seller: 'Petani Jaya',
+        seller_id: 'Petani Jaya',
+        description: 'Gandum berkualitas tinggi untuk industri roti dan kue.',
+        shelfLife: '12 bulan',
+        packaging: 'Karung 50kg'
+    },
+    { 
+        id: '98',
+        name: 'Bawang Merah Super',
+        name_id: 'Bawang Merah Super',
+        status: 'Pending',
+        status_id: 'Menunggu',
+        quantity: '2 Ton',
+        category: 'Fruits & Vegetables',
+        currentBid: 1800,
+        image: 'https://placehold.co/600x400.png',
+        aiHint: 'shallots',
+        seller: 'Petani Jaya',
+        seller_id: 'Petani Jaya',
+        description: 'Bawang merah kualitas super, ukuran besar dan kering.',
+        shelfLife: '3 bulan',
+        packaging: 'Karung jaring'
+    }
+];

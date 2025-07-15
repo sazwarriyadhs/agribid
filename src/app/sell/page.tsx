@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast"
 import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useAuth } from '@/context/auth';
+import { initialSellerProducts } from '@/lib/mock-data';
 
 const categories = [
     { key: "grains", label: "Grains" },
@@ -53,10 +54,21 @@ function SellPageContents() {
     useEffect(() => {
         const editId = searchParams.get('edit');
         if (editId) {
-            // TODO: Fetch product data from the database using the editId
-            // For now, it won't populate the form in edit mode as mock data is removed.
-            setIsEditMode(true);
-            setProductId(editId);
+            // Fetch product data from mock data for simulation
+            const productToEdit = initialSellerProducts.find(p => p.id === editId);
+            if (productToEdit) {
+                setIsEditMode(true);
+                setProductId(editId);
+                setProductName(language === 'id' ? productToEdit.name_id : productToEdit.name);
+                setDescription(productToEdit.description || ''); // Assuming description exists
+                setCategory(productToEdit.category);
+                setQuantity(productToEdit.quantity);
+                setShelfLife(productToEdit.shelfLife || '');
+                setPackaging(productToEdit.packaging || '');
+                setPrice(productToEdit.currentBid);
+                setImagePreview(productToEdit.image);
+                setImageDataUri(productToEdit.image); // Use existing image URI for AI
+            }
         }
     }, [searchParams, language]);
 
@@ -136,7 +148,7 @@ function SellPageContents() {
         if (isEditMode) {
             toast({
                 title: t('product_updated_title', 'Product Updated'),
-                description: t('product_updated_desc', `"${productName}" has been successfully updated.`),
+                description: t('product_updated_desc', { productName }),
             });
         } else {
             toast({

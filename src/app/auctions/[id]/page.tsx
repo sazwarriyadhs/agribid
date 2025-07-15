@@ -13,56 +13,7 @@ import { useI18n } from '@/context/i18n'
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useParams, notFound } from 'next/navigation'
-
-// Mock data for a single product to display. In a real app, you would fetch this from a database.
-const mockAuctionData: { [key: string]: any } = {
-  '1': {
-    id: '1',
-    name: 'Lelang Cabai Organik',
-    name_id: 'Lelang Cabai Organik',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'organic chili',
-    seller: 'Petani Lokal',
-    seller_id: 'Petani Lokal',
-    currentBid: 30000,
-    description: 'Cabai organik dari petani lokal dengan kualitas terbaik. Dipanen saat matang sempurna untuk rasa pedas yang maksimal.',
-    category: 'Pertanian',
-    quantity: '1 Ton',
-    shelfLife: '7 hari',
-    packaging: 'Kantung jaring 5kg'
-  },
-  '2': {
-    id: '2',
-    name: 'Lelang Jagung Manis',
-    name_id: 'Lelang Jagung Manis',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'sweet corn',
-    seller: 'Petani Lokal',
-    seller_id: 'Petani Lokal',
-    currentBid: 15000,
-    description: 'Jagung manis hasil panen segar, cocok untuk dibakar atau direbus. Biji besar dan rasa manis alami.',
-    category: 'Pertanian',
-    quantity: '5 Ton',
-    shelfLife: '5 hari',
-    packaging: 'Karung goni'
-  },
-  '3': {
-    id: '3',
-    name: 'Lelang Daging Sapi Segar',
-    name_id: 'Lelang Daging Sapi Segar',
-    image: 'https://placehold.co/600x400.png',
-    aiHint: 'fresh beef',
-    seller: 'Peternak Lokal',
-    seller_id: 'Peternak Lokal',
-    currentBid: 85000,
-    description: 'Daging sapi segar dari peternakan lokal, pemotongan higienis dan sesuai standar. Bagian paha depan.',
-    category: 'Peternakan',
-    quantity: '500 Kg',
-    shelfLife: '3 hari (pendingin)',
-    packaging: 'Dikemas vakum per 1kg'
-  }
-  // Add other products from the main page here if you want them to be accessible
-};
+import { allActiveAuctions } from '@/lib/mock-data'
 
 
 const initialBidHistory = [
@@ -77,8 +28,8 @@ export default function AuctionPage() {
   const { toast } = useToast();
   const { t, formatCurrency, language } = useI18n();
   
-  // In a real app, you would fetch this data from your database using the params.id
-  const auctionItem = mockAuctionData[params.id as string];
+  // Fetch the specific auction item from the shared mock data source.
+  const auctionItem = allActiveAuctions.find(item => item.id === params.id);
 
   const [timeLeft, setTimeLeft] = useState('');
   const [currentBid, setCurrentBid] = useState(auctionItem?.currentBid || 0);
@@ -91,6 +42,10 @@ export default function AuctionPage() {
   useEffect(() => {
     if (auctionItem) {
         setCurrentBid(auctionItem.currentBid);
+        // Add current bid to bid history if it's not there
+        if (auctionItem.currentBid > 0 && !initialBidHistory.some(b => b.bid === auctionItem.currentBid)) {
+            setBidHistory([{ user: 'Initial Bid', avatar: 'I', bid: auctionItem.currentBid, time: '1 day ago', time_id: '1 hari yang lalu' }, ...initialBidHistory]);
+        }
     }
   }, [auctionItem]);
 
@@ -108,7 +63,7 @@ export default function AuctionPage() {
       }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
       
@@ -128,7 +83,7 @@ export default function AuctionPage() {
             <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4"/>
                 <AlertTitle>Auction Not Found</AlertTitle>
-                <AlertDescription>The auction you are looking for does not exist or has been removed. This could be because the database is not yet connected.</AlertDescription>
+                <AlertDescription>The auction you are looking for does not exist or has been removed.</AlertDescription>
             </Alert>
         </div>
     )

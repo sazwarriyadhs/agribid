@@ -17,6 +17,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Line, XAxis, YAxis, CartesianGrid, LineChart as RechartsLineChart } from "recharts"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { MemberCard } from '@/components/member-card';
+import { allActiveAuctions, initialSellerProducts } from '@/lib/mock-data';
 
 
 const stats = [
@@ -33,11 +34,11 @@ const financialStats = [
 
 // TODO: Connect to the database and fetch real data from the 'users' table.
 const initialAllUsers: any[] = [
-    { id: 'usr_1', name: 'petani', email: 'petani@agribid.com', role: 'seller', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01' },
-    { id: 'usr_2', name: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15' },
-    { id: 'usr_3', name: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20' },
-    { id: 'usr_4', name: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10' },
-    { id: 'usr_5', name: 'Nelayan Makmur', email: 'nelayan@agribid.com', role: 'seller', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null },
+    { id: 'usr_petani', name: 'Petani Jaya', email: 'petani@agribid.com', role: 'petani', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01' },
+    { id: 'usr_buyer', name: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15' },
+    { id: 'usr_vendor', name: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20' },
+    { id: 'usr_exporter', name: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10' },
+    { id: 'usr_nelayan', name: 'Nelayan Makmur', email: 'nelayan@agribid.com', role: 'nelayan', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null },
 ];
 
 // TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
@@ -71,20 +72,13 @@ export default function AdminDashboardPage() {
     const { user } = useAuth();
     
     // TODO: Connect to the database and fetch real data from the 'products' table where status is 'Pending'.
-    const [pendingProducts, setPendingProducts] = useState<any[]>([]);
+    const [pendingProducts, setPendingProducts] = useState<any[]>(initialSellerProducts.filter(p => p.status === 'Pending'));
     
     const [allUsers, setAllUsers] = useState(initialAllUsers);
     const [transactions, setTransactions] = useState(initialTransactions);
     const [shippingReports, setShippingReports] = useState(initialShippingReports);
     
     const pageTitle = user?.name ? dashboardLabel[user.name as keyof typeof dashboardLabel] || t('admin_dashboard_title') : t('admin_dashboard_title');
-    
-    // useEffect(() => {
-    //     const unsubscribe = productDatabase.subscribe(() => {
-    //         setPendingProducts(productDatabase.getProductsByStatus('Pending'));
-    //     });
-    //     return () => unsubscribe();
-    // }, []);
 
     const handleProductVerification = (productId: string, action: 'approve' | 'reject') => {
         // TODO: Implement a server action to update the product status in the database.
@@ -92,14 +86,12 @@ export default function AdminDashboardPage() {
         if (!product) return;
 
         if (action === 'approve') {
-            // productDatabase.updateProductStatus(productId, 'Active');
             setPendingProducts(prev => prev.filter(p => p.id !== productId));
             toast({
                 title: t('product_approved'),
                 description: `${language === 'id' ? product.name_id : product.name} has been approved and is now live.`,
             });
         } else {
-            // productDatabase.updateProductStatus(productId, 'Rejected');
             setPendingProducts(prev => prev.filter(p => p.id !== productId));
             toast({
                 title: t('product_rejected'),
