@@ -61,7 +61,17 @@ export default function SignupPage() {
   
   const usdEquivalentFee = (feeInIdr: number) => {
     // This is an approximation. In a real app, you'd use a proper exchange rate service.
-    return feeInIdr / 15000;
+    const rate = 15000;
+    return feeInIdr / rate;
+  }
+
+  const formatUsd = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(value);
   }
 
   return (
@@ -145,7 +155,12 @@ export default function SignupPage() {
                             >
                                {t(role.key as any)}
                                <span className="text-xs text-muted-foreground mt-2">{t('registration_fee', 'Registration Fee')}</span>
-                               <span className="font-bold text-primary">{formatCurrency(usdEquivalentFee(role.fee))}</span>
+                               <span className="font-bold text-primary">
+                                {role.value === 'international_buyer' 
+                                    ? formatUsd(usdEquivalentFee(role.fee))
+                                    : formatCurrency(role.fee)
+                                }
+                               </span>
                             </Label>
                         </div>
                     ))}

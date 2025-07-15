@@ -95,7 +95,8 @@ export default function ProfilePage() {
           code: userCode,
           slug: user.slug,
           role: user.role
-        }
+        },
+        country: user.country
     };
     
     const handleDownload = (cardRef: React.RefObject<HTMLDivElement>, side: 'front' | 'back') => {
