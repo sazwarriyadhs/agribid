@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -52,17 +51,9 @@ export default function HeroSlider() {
       >
         <CarouselContent className="h-full">
           {heroSlides.map((slide, index) => (
-            <CarouselItem key={index} className="relative w-full h-full">
-              <div className="relative w-full h-full">
-                <Image
-                  src={slide.src}
-                  alt={t(slide.titleKey) || 'Slide image'}
-                  data-ai-hint={slide.aiHint}
-                  fill
-                  sizes="100vw"
-                  className="object-cover"
-                  priority={index === 0}
-                />
+            <CarouselItem key={index}>
+              <div className="bg-red-500 w-full h-full flex items-center justify-center text-white text-3xl">
+                Slide {index + 1}
               </div>
             </CarouselItem>
           ))}
