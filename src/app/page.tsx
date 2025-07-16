@@ -11,13 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
-import { FeaturedCommodities } from '@/components/featured-commodities';
-import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
 import HeroSlider from '@/components/hero-slider';
 import { DirectFromProducer } from '@/components/direct-from-producer';
 import { InternationalDemand } from '@/components/international-demand';
+import CategoryGrid from '@/components/category-grid';
+import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
+
 
 // TODO: Connect to the database and fetch real data.
 // This is placeholder data based on user's database query.
@@ -128,6 +129,14 @@ const categories = [
     { key: "Perkebunan", label: "Perkebunan" },
     { key: "Hasil Hutan", label: "Hasil Hutan" }
 ];
+
+const productCategories = [
+    { category: "Pertanian", image_url: "https://placehold.co/400x300.png" },
+    { category: "Peternakan", image_url: "https://placehold.co/400x300.png" },
+    { category: "Perikanan", image_url: "https://placehold.co/400x300.png" },
+    { category: "Perkebunan", image_url: "https://placehold.co/400x300.png" },
+];
+
 
 const ITEMS_PER_PAGE = 6;
 
@@ -317,7 +326,13 @@ export default function Home() {
         </div>
       </section>
 
-      <FeaturedCommodities onCategorySelect={setSelectedCategory} />
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold text-center font-headline">{t('browse_by_category')}</h2>
+            <p className="text-center text-muted-foreground mt-2 mb-12">{t('browse_by_category_subtitle')}</p>
+            <CategoryGrid categories={productCategories} onCategorySelect={setSelectedCategory} />
+        </div>
+      </section>
       
       <DirectFromProducer />
 
