@@ -325,6 +325,38 @@ export const allActiveAuctions = [
       shelfLife: '6 bulan (beku)',
       packaging: 'Kemasan plastik vakum 1kg',
       description: 'Udang windu segar yang dibekukan dengan cepat untuk menjaga kualitas. Ukuran 20-30 ekor per kg.'
+    },
+    {
+      id: '14',
+      name: 'Lelang Kopi Arabika Gayo',
+      name_id: 'Lelang Kopi Arabika Gayo',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'arabica coffee beans',
+      seller: 'Petani Kopi',
+      seller_id: 'Petani Kopi',
+      currentBid: 65000,
+      bidders: [],
+      category: 'Perkebunan',
+      quantity: '1 Ton',
+      shelfLife: '24 bulan',
+      packaging: 'Karung goni 60kg',
+      description: 'Biji kopi Arabika Gayo grade 1, diproses secara full-washed.'
+    },
+    {
+      id: '15',
+      name: 'Lelang Kakao Kering Fermentasi',
+      name_id: 'Lelang Kakao Kering Fermentasi',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fermented dried cocoa beans',
+      seller: 'Petani Kakao',
+      seller_id: 'Petani Kakao',
+      currentBid: 72000,
+      bidders: [],
+      category: 'Perkebunan',
+      quantity: '2 Ton',
+      shelfLife: '18 bulan',
+      packaging: 'Karung goni 50kg',
+      description: 'Biji kakao kering yang telah difermentasi dengan baik, siap untuk diolah menjadi cokelat berkualitas.'
     }
 ];
 

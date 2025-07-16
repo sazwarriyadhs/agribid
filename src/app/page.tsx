@@ -96,14 +96,26 @@ const allActiveAuctions = [
       category: 'Pertanian'
     },
     {
-      id: '13',
-      name: 'Lelang Udang Windu',
-      name_id: 'Lelang Udang Windu',
+      id: '12',
+      name: 'Lelang Ikan Nila Segar',
+      name_id: 'Lelang Ikan Nila Segar',
       image: 'https://placehold.co/600x400.png',
-      aiHint: 'tiger prawn',
-      seller: 'Tambak Jaya',
-      seller_id: 'Tambak Jaya',
-      currentBid: 75000,
+      aiHint: 'fresh tilapia fish',
+      seller: 'Nelayan Lokal',
+      seller_id: 'Nelayan Lokal',
+      currentBid: 25000,
+      bidders: [],
+      category: 'Perikanan'
+    },
+    {
+      id: '13',
+      name: 'Lelang Udang Windu Beku',
+      name_id: 'Lelang Udang Windu Beku',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'frozen tiger prawn',
+      seller: 'Nelayan Lokal',
+      seller_id: 'Nelayan Lokal',
+      currentBid: 78000,
       bidders: [],
       category: 'Perikanan'
     },
@@ -144,28 +156,28 @@ const allActiveAuctions = [
       category: 'Peternakan'
     },
     {
-      id: '12',
-      name: 'Lelang Ikan Nila Segar',
-      name_id: 'Lelang Ikan Nila Segar',
+      id: '14',
+      name: 'Lelang Kopi Arabika Gayo',
+      name_id: 'Lelang Kopi Arabika Gayo',
       image: 'https://placehold.co/600x400.png',
-      aiHint: 'fresh tilapia fish',
-      seller: 'Nelayan Lokal',
-      seller_id: 'Nelayan Lokal',
-      currentBid: 25000,
+      aiHint: 'arabica coffee beans',
+      seller: 'Petani Kopi',
+      seller_id: 'Petani Kopi',
+      currentBid: 65000,
       bidders: [],
-      category: 'Perikanan'
+      category: 'Perkebunan'
     },
     {
-      id: '13',
-      name: 'Lelang Udang Windu Beku',
-      name_id: 'Lelang Udang Windu Beku',
+      id: '15',
+      name: 'Lelang Kakao Kering Fermentasi',
+      name_id: 'Lelang Kakao Kering Fermentasi',
       image: 'https://placehold.co/600x400.png',
-      aiHint: 'frozen tiger prawn',
-      seller: 'Nelayan Lokal',
-      seller_id: 'Nelayan Lokal',
-      currentBid: 78000,
+      aiHint: 'fermented dried cocoa beans',
+      seller: 'Petani Kakao',
+      seller_id: 'Petani Kakao',
+      currentBid: 72000,
       bidders: [],
-      category: 'Perikanan'
+      category: 'Perkebunan'
     }
 ];
 
