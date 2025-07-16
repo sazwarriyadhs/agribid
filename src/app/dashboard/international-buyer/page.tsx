@@ -1,10 +1,9 @@
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useI18n } from "@/context/i18n";
 import { useAuth } from "@/context/auth";
-import { Globe, Package, Plane, FileText, Trophy, Truck, FilePlus } from "lucide-react";
+import { Globe, Package, Plane, FileText, Trophy, Truck, FilePlus, Search } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -75,7 +74,7 @@ export default function InternationalBuyerDashboardPage() {
                 </Card>
             </div>
             
-            <Card className="mb-8">
+            <Card id="my-imports" className="mb-8">
                 <CardHeader>
                     <CardTitle>{t('my_imports_title', 'My Imports')}</CardTitle>
                     <CardDescription>{t('manage_imports_desc')}</CardDescription>
@@ -117,6 +116,18 @@ export default function InternationalBuyerDashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                  <Card>
                     <CardHeader>
+                        <Search className="h-8 w-8 text-primary mb-2"/>
+                        <CardTitle>{t('browse_export_commodities', 'Browse Commodities')}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground mb-4">{t('browse_export_commodities_desc', 'Find export-ready products from verified Indonesian producers.')}</p>
+                        <Button asChild>
+                            <Link href="/">{t('start_browsing', 'Start Browsing')}</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
                         <FilePlus className="h-8 w-8 text-primary mb-2"/>
                         <CardTitle>{t('post_request_title', 'Post a Request')}</CardTitle>
                     </CardHeader>
@@ -127,7 +138,7 @@ export default function InternationalBuyerDashboardPage() {
                         </Button>
                     </CardContent>
                 </Card>
-                <Card>
+                 <Card>
                     <CardHeader>
                         <FileText className="h-8 w-8 text-primary mb-2"/>
                         <CardTitle>{t('sop_foreign_buyer_title')}</CardTitle>
@@ -136,18 +147,6 @@ export default function InternationalBuyerDashboardPage() {
                         <p className="text-muted-foreground mb-4">{t('sop_foreign_buyer_desc')}</p>
                          <Button asChild variant="secondary">
                             <Link href="/sop-foreign-buyer">{t('view_sop')}</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-                 <Card>
-                    <CardHeader>
-                        <Package className="h-8 w-8 text-primary mb-2"/>
-                        <CardTitle>{t('verified_producers_title')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground mb-4">{t('verified_producers_desc')}</p>
-                         <Button asChild variant="secondary">
-                            <Link href="/#">{t('find_producers')}</Link>
                         </Button>
                     </CardContent>
                 </Card>
