@@ -554,6 +554,7 @@
   "requested_by": "Requested by",
   "volume_required": "Volume",
   "contact_buyer": "Contact Buyer",
+  "fulfill_request": "Fulfill Request",
   "must_be_producer_to_sell": "You must be logged in as a producer role (Farmer, Fisherman, etc.) to list products.",
   "access_denied": "Access Denied"
 }

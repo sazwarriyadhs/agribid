@@ -19,6 +19,7 @@ import { InternationalDemand } from '@/components/international-demand';
 import CategoryGrid from '@/components/category-grid';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
 import { allActiveAuctions } from '@/lib/mock-data';
+import { useAuth } from '@/context/auth';
 
 
 const categories = [
@@ -46,13 +47,21 @@ const ITEMS_PER_PAGE = 9;
 
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredAuctions = useMemo(() => {
-    return allActiveAuctions.filter(item => {
+    let auctions = allActiveAuctions;
+
+    // If the user is an international buyer, only show products from exporters.
+    if (user?.role === 'international_buyer') {
+      auctions = allActiveAuctions.filter(item => item.sellerRole === 'exporter');
+    }
+
+    return auctions.filter(item => {
       const nameMatches = language === 'id'
         ? item.name_id.toLowerCase().includes(searchTerm.toLowerCase())
         : item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -61,7 +70,7 @@ export default function Home() {
 
       return nameMatches && categoryMatches;
     });
-  }, [allActiveAuctions, searchTerm, selectedCategory, language]);
+  }, [allActiveAuctions, searchTerm, selectedCategory, language, user]);
 
   const totalPages = Math.ceil(filteredAuctions.length / ITEMS_PER_PAGE);
   const paginatedAuctions = filteredAuctions.slice(
@@ -146,7 +155,7 @@ export default function Home() {
                             <CardHeader>
                                 <CardTitle className="font-headline text-xl h-14">{language === 'id' ? item.name_id : item.name}</CardTitle>
                                 <div className="flex justify-between items-center text-sm text-muted-foreground">
-                                    <span>{t('sold_by')}: <span className="font-medium text-primary">{language === 'id' ? item.seller_id : item.seller}</span></span>
+                                    <span>{t(item.sellerRole === 'exporter' ? 'exporter' : 'sold_by')}: <span className="font-medium text-primary">{language === 'id' ? item.seller_id : item.seller}</span></span>
                                 </div>
                             </CardHeader>
                             <CardContent className="flex-grow">

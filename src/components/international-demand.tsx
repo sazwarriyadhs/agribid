@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Handshake, MapPin, Package, Scale, User, MessagesSquare } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
+import { useAuth } from '@/context/auth';
 
 const buyerRequests = [
     {
@@ -56,6 +57,7 @@ const buyerRequests = [
 
 export function InternationalDemand() {
   const { t, language } = useI18n();
+  const { user } = useAuth();
 
   return (
     <section className="py-16 md:py-24 bg-secondary/50">
@@ -93,8 +95,8 @@ export function InternationalDemand() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button className="w-full">
-                        <MessagesSquare className="mr-2 h-4 w-4" /> {t('contact_buyer', 'Contact Buyer')}
+                    <Button className="w-full" disabled={user?.role !== 'exporter'}>
+                        <MessagesSquare className="mr-2 h-4 w-4" /> {t('fulfill_request', 'Fulfill Request')}
                     </Button>
                 </CardFooter>
             </Card>

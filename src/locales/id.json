@@ -539,6 +539,7 @@
   "requested_by": "Diminta oleh",
   "volume_required": "Volume",
   "contact_buyer": "Hubungi Pembeli",
+  "fulfill_request": "Penuhi Permintaan",
   "must_be_producer_to_sell": "Anda harus masuk sebagai peran produsen (Petani, Nelayan, dll.) untuk mendaftarkan produk.",
   "access_denied": "Akses Ditolak"
 }
