@@ -19,12 +19,12 @@ export const sidebarByRole: Record<GeneralRole, NavItem[]> = {
   ],
   buyer: [
     { name: "Dashboard", path: "/dashboard/buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
-    { name: "Active Auctions", path: "/", icon: Search, labelKey: 'auctions' },
+    { name: "Active Auctions", path: "/dashboard/auctions", icon: Search, labelKey: 'auctions' },
     { name: "My Orders", path: "/dashboard/buyer", icon: ShoppingCart, labelKey: 'my_orders_title' },
   ],
   international_buyer: [
     { name: "Dashboard", path: "/dashboard/international-buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
-    { name: "Browse Commodities", path: "/", icon: Search, labelKey: 'browse_export_commodities' },
+    { name: "Browse Commodities", path: "/dashboard/auctions", icon: Search, labelKey: 'browse_export_commodities' },
     { name: "Post a Request", path: "/dashboard/international-buyer/post-request", icon: FilePlus, labelKey: 'post_request_title' },
     { name: "My Imports", path: "/dashboard/international-buyer#my-imports", icon: Plane, labelKey: 'my_imports_title' },
   ],
