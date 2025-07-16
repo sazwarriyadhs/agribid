@@ -231,15 +231,17 @@ export default function BuyerDashboardPage() {
                                         {shippingCost[order.id] ? (
                                             <span className="font-mono">{formatCurrency(shippingCost[order.id].cost)}</span>
                                         ) : (
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => handleCalculateShipping(order.id, order.origin!, order.item)}
-                                                disabled={isCalculating === order.id}
-                                            >
-                                                {isCalculating === order.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Sparkles className="mr-2 h-4 w-4" />}
-                                                {t('calculate_with_ai', 'Calculate with AI')}
-                                            </Button>
+                                            order.origin && (
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => handleCalculateShipping(order.id, order.origin!, order.item)}
+                                                    disabled={isCalculating === order.id}
+                                                >
+                                                    {isCalculating === order.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Sparkles className="mr-2 h-4 w-4" />}
+                                                    {t('calculate_with_ai', 'Calculate with AI')}
+                                                </Button>
+                                            )
                                         )}
                                     </TableCell>
                                     <TableCell className="text-right">
@@ -260,4 +262,5 @@ export default function BuyerDashboardPage() {
         </>
     )
 }
+
 
