@@ -13,22 +13,23 @@ import {
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { useI18n } from '@/context/i18n';
+import { useEffect } from 'react';
 
 const heroSlides = [
   {
-    src: '/images/hero1.png',
+    src: 'https://placehold.co/1920x1080.png',
     aiHint: 'farmer field sunrise',
     titleKey: 'hero_title',
     subtitleKey: 'hero_subtitle',
   },
   {
-    src: '/images/hero2.png',
+    src: 'https://placehold.co/1920x1080.png',
     aiHint: 'agricultural trade market',
     titleKey: 'hero_title_2',
     subtitleKey: 'hero_subtitle_2',
   },
   {
-    src: '/images/hero3.png',
+    src: 'https://placehold.co/1920x1080.png',
     aiHint: 'fresh produce export logistics',
     titleKey: 'hero_title_3',
     subtitleKey: 'hero_subtitle_3',
@@ -37,6 +38,10 @@ const heroSlides = [
 
 export default function HeroSlider() {
   const { t } = useI18n();
+
+  useEffect(() => {
+    console.log("HeroSlider mounted");
+  }, []);
 
   return (
     <section className="relative w-full h-[90vh] lg:h-screen text-white overflow-hidden">
@@ -48,16 +53,19 @@ export default function HeroSlider() {
         <CarouselContent className="h-full">
           {heroSlides.map((slide, index) => (
             <CarouselItem key={index} className="relative w-full h-full">
-              <Image
-                src={slide.src}
-                alt={t(slide.titleKey)}
-                data-ai-hint={slide.aiHint}
-                fill
-                sizes="100vw"
-                className="object-cover w-full h-full brightness-50"
-                priority={index === 0}
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 px-4">
+              <div className="relative w-full h-full">
+                <Image
+                  src={slide.src}
+                  alt={t(slide.titleKey) || 'Slide image'}
+                  data-ai-hint={slide.aiHint}
+                  fill
+                  sizes="100vw"
+                  className="object-cover w-full h-full"
+                  priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
                 <div className="max-w-3xl">
                   <h1 className="text-3xl md:text-5xl font-headline font-bold tracking-tight">
                     {t(slide.titleKey)}
