@@ -84,7 +84,8 @@ export default function LoginPage() {
                 description: `Welcome back, ${qrData.name}!`,
             });
             
-            router.push(`/u/${loggedInUser.id}/${loggedInUser.name}`);
+            const membershipId = qrData.userId;
+            router.push(`/u/${membershipId}/${qrData.slug}`);
         } else {
             throw new Error('Invalid QR code data');
         }

@@ -90,23 +90,23 @@ export default function ProfilePage() {
     const [avatarUrl, setAvatarUrl] = useState(user ? `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}` : 'https://placehold.co/150x150.png');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-
     if (!user) {
         // In a real app, you might redirect to login or show a public version.
         // For now, we'll just show a loading state or a "not found" message.
         return notFound();
     }
     
+    const userIdSuffix = user.id.replace('usr_', '');
+    const membershipId = `U-USR-${userIdSuffix.slice(0, 4).toUpperCase()}`;
+
     // Simple check to ensure the user is viewing their own profile based on the URL
-    if (user.slug !== params.slug) {
+    if (user.slug !== params.slug || membershipId !== params.id) {
         return notFound();
     }
 
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-    const userIdSuffix = user.id.replace('usr_', '');
-    const membershipId = `U-USR-${userIdSuffix.slice(0, 4).toUpperCase()}`;
     const userCode = `${user.role.charAt(0).toUpperCase()}${userIdSuffix.slice(0, 3).toUpperCase()}`;
 
     const userProfile = {

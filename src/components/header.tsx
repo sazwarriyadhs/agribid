@@ -39,7 +39,8 @@ export function AppHeader() {
     })
   };
   
-  const profileUrl = user ? `/u/${user.id}/${user.name}` : '/login';
+  const membershipId = user ? `U-USR-${user.id.replace('usr_', '').slice(0, 4).toUpperCase()}` : '';
+  const profileUrl = user ? `/u/${membershipId}/${user.slug}` : '/login';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

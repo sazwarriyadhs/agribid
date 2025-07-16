@@ -33,7 +33,8 @@ export function DashboardHeader() {
     })
   };
 
-  const profileUrl = user ? `/u/${user.slug}/${user.slug}` : '/login';
+  const membershipId = user ? `U-USR-${user.id.replace('usr_', '').slice(0, 4).toUpperCase()}` : '';
+  const profileUrl = user ? `/u/${membershipId}/${user.slug}` : '/login';
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
