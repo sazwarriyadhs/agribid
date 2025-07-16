@@ -357,6 +357,38 @@ export const allActiveAuctions = [
       shelfLife: '18 bulan',
       packaging: 'Karung goni 50kg',
       description: 'Biji kakao kering yang telah difermentasi dengan baik, siap untuk diolah menjadi cokelat berkualitas.'
+    },
+    {
+      id: '16',
+      name: 'Lelang Madu Hutan Asli',
+      name_id: 'Lelang Madu Hutan Asli',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'wild forest honey',
+      seller: 'Petani Hutan',
+      seller_id: 'Petani Hutan',
+      currentBid: 95000,
+      bidders: [],
+      category: 'Hasil Hutan',
+      quantity: '100 Liter',
+      shelfLife: '24 bulan',
+      packaging: 'Botol kaca 1 Liter',
+      description: 'Madu hutan asli yang dipanen secara lestari dari hutan pedalaman.'
+    },
+    {
+      id: '17',
+      name: 'Lelang Getah Damar',
+      name_id: 'Lelang Getah Damar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'resin damar tree',
+      seller: 'Pengumpul Hutan',
+      seller_id: 'Pengumpul Hutan',
+      currentBid: 42000,
+      bidders: [],
+      category: 'Hasil Hutan',
+      quantity: '500 Kg',
+      shelfLife: 'N/A',
+      packaging: 'Karung goni',
+      description: 'Getah damar kualitas super, kering dan bersih, siap untuk industri.'
     }
 ];
 

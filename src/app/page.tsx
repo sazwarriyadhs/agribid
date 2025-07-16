@@ -178,6 +178,30 @@ const allActiveAuctions = [
       currentBid: 72000,
       bidders: [],
       category: 'Perkebunan'
+    },
+    {
+      id: '16',
+      name: 'Lelang Madu Hutan Asli',
+      name_id: 'Lelang Madu Hutan Asli',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'wild forest honey',
+      seller: 'Petani Hutan',
+      seller_id: 'Petani Hutan',
+      currentBid: 95000,
+      bidders: [],
+      category: 'Hasil Hutan'
+    },
+    {
+      id: '17',
+      name: 'Lelang Getah Damar',
+      name_id: 'Lelang Getah Damar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'resin damar tree',
+      seller: 'Pengumpul Hutan',
+      seller_id: 'Pengumpul Hutan',
+      currentBid: 42000,
+      bidders: [],
+      category: 'Hasil Hutan'
     }
 ];
 
