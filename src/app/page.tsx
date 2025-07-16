@@ -131,14 +131,14 @@ const categories = [
 ];
 
 const productCategories = [
-    { category: "Pertanian", image_url: "https://placehold.co/400x300.png", aiHint: "rice field" },
-    { category: "Peternakan", image_url: "https://placehold.co/400x300.png", aiHint: "livestock farm" },
-    { category: "Perikanan", image_url: "https://placehold.co/400x300.png", aiHint: "fishing boat" },
-    { category: "Perkebunan", image_url: "https://placehold.co/400x300.png", aiHint: "tea plantation" },
+    { category: "Beras", image_url: "https://placehold.co/400x300.png", aiHint: "rice field" },
     { category: "Sayuran", image_url: "https://placehold.co/400x300.png", aiHint: "fresh vegetables" },
     { category: "Buah", image_url: "https://placehold.co/400x300.png", aiHint: "tropical fruits" },
+    { category: "Ikan", image_url: "https://placehold.co/400x300.png", aiHint: "fresh fish" },
+    { category: "Daging", image_url: "https://placehold.co/400x300.png", aiHint: "raw meat" },
+    { category: "Kopi", image_url: "https://placehold.co/400x300.png", aiHint: "coffee beans" },
     { category: "Rempah", image_url: "https://placehold.co/400x300.png", aiHint: "spices market" },
-    { category: "Kopi", image_url: "https://placehold.co/400x300.png", aiHint: "coffee beans" }
+    { category: "Kelapa Sawit", image_url: "https://placehold.co/400x300.png", aiHint: "palm oil" }
 ];
 
 
