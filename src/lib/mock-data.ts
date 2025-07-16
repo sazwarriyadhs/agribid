@@ -293,6 +293,38 @@ export const allActiveAuctions = [
       shelfLife: 'N/A',
       packaging: 'Keranjang ayam',
       description: 'Ayam broiler hidup sehat, bobot rata-rata 1.8kg per ekor.'
+    },
+    {
+      id: '12',
+      name: 'Lelang Ikan Nila Segar',
+      name_id: 'Lelang Ikan Nila Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fresh tilapia fish',
+      seller: 'Nelayan Lokal',
+      seller_id: 'Nelayan Lokal',
+      currentBid: 25000,
+      bidders: [],
+      category: 'Perikanan',
+      quantity: '300 Kg',
+      shelfLife: '2 hari (pendingin)',
+      packaging: 'Boks styrofoam dengan es',
+      description: 'Ikan nila segar hasil budidaya air tawar, ukuran konsumsi.'
+    },
+    {
+      id: '13',
+      name: 'Lelang Udang Windu Beku',
+      name_id: 'Lelang Udang Windu Beku',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'frozen tiger prawn',
+      seller: 'Nelayan Lokal',
+      seller_id: 'Nelayan Lokal',
+      currentBid: 78000,
+      bidders: [],
+      category: 'Perikanan',
+      quantity: '150 Kg',
+      shelfLife: '6 bulan (beku)',
+      packaging: 'Kemasan plastik vakum 1kg',
+      description: 'Udang windu segar yang dibekukan dengan cepat untuk menjaga kualitas. Ukuran 20-30 ekor per kg.'
     }
 ];
 

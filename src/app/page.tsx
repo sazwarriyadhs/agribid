@@ -142,6 +142,30 @@ const allActiveAuctions = [
       currentBid: 60000,
       bidders: [],
       category: 'Peternakan'
+    },
+    {
+      id: '12',
+      name: 'Lelang Ikan Nila Segar',
+      name_id: 'Lelang Ikan Nila Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fresh tilapia fish',
+      seller: 'Nelayan Lokal',
+      seller_id: 'Nelayan Lokal',
+      currentBid: 25000,
+      bidders: [],
+      category: 'Perikanan'
+    },
+    {
+      id: '13',
+      name: 'Lelang Udang Windu Beku',
+      name_id: 'Lelang Udang Windu Beku',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'frozen tiger prawn',
+      seller: 'Nelayan Lokal',
+      seller_id: 'Nelayan Lokal',
+      currentBid: 78000,
+      bidders: [],
+      category: 'Perikanan'
     }
 ];
 
