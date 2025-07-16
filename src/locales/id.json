@@ -319,7 +319,8 @@
   "bid_placed_title": "Tawaran Berhasil Diajukan",
   "bid_placed_desc": "Tawaran Anda sebesar {{amount}} telah dicatat.",
   "payment_info_title": "Informasi Pembayaran",
-  "payment_info_desc": "Semua transaksi pembayaran melalui rekening bersama: BCA 5735434656 a.n Azwar Riyadh Subarkah (admin). Biaya administrasi sebesar 10% akan dikenakan pada jumlah transaksi akhir.",
+  "payment_info_desc_local": "Semua transaksi diproses melalui rekening bersama. Biaya administrasi 10% akan dikenakan pada jumlah transaksi akhir untuk perdagangan lokal.",
+  "payment_info_desc_international": "Semua transaksi diproses melalui rekening bersama. Biaya administrasi 15% akan dikenakan pada jumlah transaksi akhir untuk perdagangan ekspor internasional.",
   "ready_to_become_exporter_title": "Siap Menjadi Eksportir?",
   "upload_documents_and_check_eligibility": "Unggah dokumen legal Anda dan gunakan asisten AI kami untuk memeriksa kelayakan Anda.",
   "upload_legal_documents_title": "Unggah Dokumen Legal (hanya PDF)",
@@ -541,5 +542,12 @@
   "contact_buyer": "Hubungi Pembeli",
   "fulfill_request": "Penuhi Permintaan",
   "must_be_producer_to_sell": "Anda harus masuk sebagai peran produsen (Petani, Nelayan, dll.) untuk mendaftarkan produk.",
-  "access_denied": "Akses Ditolak"
+  "access_denied": "Akses Ditolak",
+  "products_sold": "Produk Terjual",
+  "gross_revenue": "Pendapatan Kotor",
+  "commission_info_title": "Informasi Komisi",
+  "commission_info_desc": "Komisi platform dipotong dari harga jual akhir setiap item yang terjual.",
+  "total_commission": "Total Komisi",
+  "net_revenue": "Pendapatan Bersih",
+  "no_sales_data": "Belum ada data penjualan."
 }

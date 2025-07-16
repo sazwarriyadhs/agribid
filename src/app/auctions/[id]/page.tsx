@@ -132,6 +132,10 @@ export default function AuctionPage() {
     });
   }
 
+  const paymentInfoDescription = auctionItem.sellerRole === 'exporter' 
+    ? t('payment_info_desc_international') 
+    : t('payment_info_desc_local');
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:py-12">
       <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
@@ -250,7 +254,7 @@ export default function AuctionPage() {
                                     <Banknote className="h-4 w-4"/>
                                     <AlertTitle className="font-semibold">{t('payment_info_title')}</AlertTitle>
                                     <AlertDescription>
-                                        {t('payment_info_desc')}
+                                        {paymentInfoDescription}
                                     </AlertDescription>
                                 </Alert>
                             </div>

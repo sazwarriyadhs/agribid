@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { useI18n } from "@/context/i18n";
 import Link from "next/link";
-import { MoreHorizontal, PlusCircle, DollarSign, Package, CheckCircle, PieChart } from "lucide-react";
+import { MoreHorizontal, PlusCircle, DollarSign, Package, CheckCircle, PieChart, Info } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +16,8 @@ import { useAuth } from "@/context/auth";
 import { dashboardLabel } from "@/config/sidebar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Pie, Cell, PieChart as RechartsPieChart } from "recharts"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 
 const chartConfig = {
   sales: {
@@ -118,12 +120,18 @@ export default function SellerDashboardPage() {
         return t(statusKey, language === 'id' ? product.status_id : product.status);
     }
     
-    const stats = useMemo(() => {
+    const { grossRevenue, totalCommission, netRevenue, ...stats } = useMemo(() => {
         const activeAuctions = sellerProducts.filter(p => p.status === 'Active').length;
         const productsSold = sellerProducts.filter(p => p.status === 'Ended');
         const grossRevenue = productsSold.reduce((acc, p) => acc + p.currentBid, 0);
-        return { activeAuctions, productsSold: productsSold.length, grossRevenue };
-    }, [sellerProducts]);
+
+        // Assuming user role is available from useAuth()
+        const commissionRate = user?.role === 'exporter' ? 0.15 : 0.10;
+        const totalCommission = grossRevenue * commissionRate;
+        const netRevenue = grossRevenue - totalCommission;
+
+        return { activeAuctions, productsSold: productsSold.length, grossRevenue, totalCommission, netRevenue };
+    }, [sellerProducts, user?.role]);
 
     const salesByCategory = useMemo(() => {
         const soldProducts = sellerProducts.filter(p => p.status === 'Ended');
@@ -178,9 +186,24 @@ export default function SellerDashboardPage() {
                        <CardTitle className="text-sm font-medium">{t('gross_revenue', 'Gross Revenue')}</CardTitle>
                        <DollarSign className="h-4 w-4 text-muted-foreground" />
                    </CardHeader>
-                   <CardContent><div className="text-2xl font-bold">{formatCurrency(stats.grossRevenue)}</div></CardContent>
+                   <CardContent><div className="text-2xl font-bold">{formatCurrency(grossRevenue)}</div></CardContent>
                 </Card>
             </div>
+             <Alert className="mb-8">
+                <Info className="h-4 w-4" />
+                <AlertTitle className="font-semibold">{t('commission_info_title', 'Commission Information')}</AlertTitle>
+                <AlertDescription>
+                    <p>{t('commission_info_desc', 'A platform commission is deducted from the final sale price of each sold item.')}</p>
+                    <div className="flex justify-between items-center mt-2 text-sm">
+                        <span>{t('total_commission', 'Total Commission')}:</span>
+                        <span className="font-semibold">{formatCurrency(totalCommission)}</span>
+                    </div>
+                     <div className="flex justify-between items-center mt-1 text-sm font-bold">
+                        <span>{t('net_revenue', 'Net Revenue')}:</span>
+                        <span>{formatCurrency(netRevenue)}</span>
+                    </div>
+                </AlertDescription>
+            </Alert>
             
             <div className="grid lg:grid-cols-5 gap-8">
                 <Card className="lg:col-span-3">
