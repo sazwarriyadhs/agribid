@@ -67,7 +67,11 @@ export function MembershipBenefits() {
                     <Dialog>
                         <DialogTrigger asChild>
                              <div className="cursor-pointer">
-                                <Image src="/images/kartu.png" alt={t('membership_benefits_title')} layout="fill" className="object-contain" />
+                                <Image 
+                                    src="/images/kartu.png" 
+                                    alt={t('membership_benefits_title')} 
+                                    fill 
+                                    className="object-contain" />
                             </div>
                         </DialogTrigger>
                         <DialogContent className="max-w-4xl bg-transparent border-none shadow-none p-0">
