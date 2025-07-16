@@ -49,17 +49,14 @@ export default function HeroSlider() {
         plugins={[plugin.current]}
         className="relative w-full h-full"
       >
-        <CarouselContent className="flex h-full transition-transform duration-700 ease-in-out">
+        <CarouselContent className="h-full">
           {heroSlides.map((slide, index) => (
-            <CarouselItem
-              key={index}
-              className="flex-1 relative h-full shrink-0 grow-0 basis-full transition-opacity duration-700 ease-in-out"
-            >
+            <CarouselItem key={index} className="relative h-full">
               <Image
                 src={slide.src}
                 alt={t(slide.titleKey) || 'Hero image'}
                 fill
-                className="object-cover transition-opacity duration-700 ease-in-out"
+                className="object-cover"
                 priority={index === 0}
               />
               <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center px-4">
