@@ -53,7 +53,7 @@ export default function ProfilePage() {
     const backCardRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [avatarUrl, setAvatarUrl] = useState(`https://placehold.co/150x150.png?text=${user?.name.charAt(0).toUpperCase()}`);
+    const [avatarUrl, setAvatarUrl] = useState(user ? `https://placehold.co/150x150.png?text=${user.name.charAt(0).toUpperCase()}` : 'https://placehold.co/150x150.png');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
 

@@ -1,10 +1,21 @@
+
 'use client';
-import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import idTranslations from '@/locales/id.json';
 import enTranslations from '@/locales/en.json';
+import arTranslations from '@/locales/ar.json';
+import zhTranslations from '@/locales/zh.json';
+import esTranslations from '@/locales/es.json';
+import ptTranslations from '@/locales/pt.json';
+import frTranslations from '@/locales/fr.json';
+import jaTranslations from '@/locales/ja.json';
 
-type Language = 'id' | 'en';
-type Currency = 'idr' | 'usd';
+import type { User } from './auth';
+import { useAuth } from './auth';
+
+
+export type Language = 'id' | 'en' | 'ar' | 'zh' | 'es' | 'pt' | 'fr' | 'ja';
+export type Currency = 'idr' | 'usd' | 'eur' | 'jpy' | 'cny' | 'brl';
 type Translations = typeof idTranslations;
 
 interface I18nContextType {
@@ -13,12 +24,18 @@ interface I18nContextType {
   currency: Currency;
   setCurrency: (currency: Currency) => void;
   t: (key: keyof Translations | string, fallback?: string | { [key: string]: string | number }) => string;
-  formatCurrency: (value: number) => string;
+  formatCurrency: (value: number, options?: { in?: Currency }) => string;
 }
 
 const translations: Record<Language, Translations> = {
   id: idTranslations,
   en: enTranslations,
+  ar: arTranslations,
+  zh: zhTranslations,
+  es: esTranslations,
+  pt: ptTranslations,
+  fr: frTranslations,
+  ja: jaTranslations,
 };
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -26,6 +43,13 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<Language>('id');
   const [currency, setCurrency] = useState<Currency>('idr');
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    if (user?.currency) {
+      setCurrency(user.currency);
+    }
+  }, [user]);
 
   const t = useCallback((key: keyof Translations | string, options?: string | { [key: string]: string | number }) => {
     let translation = translations[language][key as keyof Translations] || translations['en'][key as keyof Translations] || key;
@@ -41,21 +65,43 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
     return translation;
   }, [language]);
 
-  const formatCurrency = useCallback((value: number) => {
-    const options: Intl.NumberFormatOptions = {
+  const formatCurrency = useCallback((value: number, options?: { in?: Currency }) => {
+    const displayCurrency = options?.in || currency;
+
+    const formatOptions: Intl.NumberFormatOptions = {
         style: 'currency',
-        currency: currency.toUpperCase(),
+        currency: displayCurrency.toUpperCase(),
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
     };
-
-    if (currency === 'idr') {
-        // Convert dollar-based value to a reasonable IDR equivalent for display
-        value = value * 15000;
+    
+    // We assume the base value is always in USD for calculation purposes.
+    // So if the passed value is 100, it means $100.
+    let convertedValue = value;
+    switch (displayCurrency) {
+        case 'idr':
+            convertedValue = value * 15000;
+            break;
+        case 'jpy':
+            convertedValue = value * 155;
+            break;
+        case 'eur':
+            convertedValue = value * 0.92;
+            break;
+        case 'cny':
+            convertedValue = value * 7.2;
+            break;
+        case 'brl':
+            convertedValue = value * 5.1;
+            break;
+        // USD is the base, no conversion needed
+        case 'usd':
+        default:
+             break;
     }
 
     const locale = language === 'id' ? 'id-ID' : 'en-US';
-    return new Intl.NumberFormat(locale, options).format(value);
+    return new Intl.NumberFormat(locale, formatOptions).format(convertedValue);
   }, [currency, language]);
 
   return (

@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from "@/hooks/use-toast"
-import { useI18n } from '@/context/i18n';
+import { useI18n, type Language, type Currency } from '@/context/i18n';
 import { useAuth } from '@/context/auth';
 
 const notifications = [
@@ -66,15 +66,25 @@ export function AppHeader() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>{t('change_language')}</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={language} onValueChange={(value) => setLanguage(value as 'id' | 'en')}>
+                <DropdownMenuRadioGroup value={language} onValueChange={(value) => setLanguage(value as Language)}>
                     <DropdownMenuRadioItem value="id">Bahasa Indonesia (ID)</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="en">English (EN)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="ar">العربية (AR)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="zh">中文 (ZH)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="es">Español (ES)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="pt">Português (PT)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="fr">Français (FR)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="ja">日本語 (JA)</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>{t('change_currency')}</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={currency} onValueChange={(value) => setCurrency(value as 'usd' | 'idr')}>
+                <DropdownMenuRadioGroup value={currency} onValueChange={(value) => setCurrency(value as Currency)}>
                     <DropdownMenuRadioItem value="idr">Rupiah (IDR)</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="usd">US Dollar (USD)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="eur">Euro (EUR)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="jpy">Japanese Yen (JPY)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="cny">Chinese Yuan (CNY)</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="brl">Brazilian Real (BRL)</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>

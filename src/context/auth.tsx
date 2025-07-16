@@ -5,8 +5,10 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { allowedRoles, type Role } from '@/lib/roles';
 import { roleToGeneralRoleMap } from '@/config/sidebar';
 import slugify from 'slugify';
+import type { Currency } from './i18n';
 
-interface User {
+
+export interface User {
   id: string;
   name: string; // The display name (full name or company name)
   slug: string; // a slugified version of the name
@@ -15,6 +17,7 @@ interface User {
   verified: boolean;
   type: 'individual' | 'company';
   country?: string;
+  currency?: Currency;
   firstName?: string;
   lastName?: string;
   companyName?: string;
@@ -22,7 +25,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password?: string) => User | null;
+  login: (email: string, password?: string, details?: Partial<User>) => User | null;
   logout: () => void;
 }
 
@@ -31,7 +34,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (email: string, password?: string): User | null => {
+  const login = (email: string, password?: string, details?: Partial<User>): User | null => {
     // For demo purposes, we allow QR login to bypass password check
     if (password && password !== 'password') {
         return null;
@@ -53,10 +56,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const isVerified = alwaysVerifiedRoles.includes(emailPrefix as Role);
     
     const isCompany = ['pelaku_usaha', 'buyer', 'klien', 'mitra', 'vendor', 'partner', 'eksportir', 'exporter', 'admin', 'international_buyer'].includes(emailPrefix);
-    const userType = isCompany ? 'company' : 'individual';
+    const userType = details?.type || (isCompany ? 'company' : 'individual');
 
-    const name = emailPrefix.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    
+    let name = details?.name || emailPrefix.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
     const mockUser: User = {
       id: `usr_${Math.random().toString(36).substring(2, 9)}`,
       name: name, 
@@ -65,7 +68,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       role: emailPrefix as Role,
       verified: isVerified,
       type: userType,
-      country: emailPrefix === 'international_buyer' ? 'USA' : undefined, // Mock country for demo
+      country: details?.country,
+      currency: details?.currency,
       ...(userType === 'individual' ? { firstName: name.split(' ')[0], lastName: name.split(' ')[1] || '' } : { companyName: name }),
     };
     setUser(mockUser);

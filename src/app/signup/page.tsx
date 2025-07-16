@@ -14,36 +14,53 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useI18n } from '@/context/i18n';
+import { useI18n, type Currency } from '@/context/i18n';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Banknote, Building, User, Globe } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useAuth } from '@/context/auth';
+
 
 const roles = [
-  { key: 'role_producer', value: 'producer', fee: 25000 },
-  { key: 'role_bidder', value: 'bidder', fee: 25000 },
-  { key: 'role_partner', value: 'partner', fee: 50000 },
-  { key: 'role_international_buyer', value: 'international_buyer', fee: 50000 },
+  { key: 'role_producer', value: 'producer', fee: 25000, currency: 'idr' as Currency, basePriceUSD: 1.7 },
+  { key: 'role_bidder', value: 'bidder', fee: 25000, currency: 'idr' as Currency, basePriceUSD: 1.7 },
+  { key: 'role_partner', value: 'partner', fee: 50000, currency: 'idr' as Currency, basePriceUSD: 3.4 },
+  { key: 'role_international_buyer', value: 'international_buyer', fee: 50, currency: 'usd' as Currency, basePriceUSD: 50 },
 ];
 
-// In a real app, this would come from a database or a more robust source
-const countries = [
-  "USA", "China", "India", "Netherlands", "Germany", "Japan", "Vietnam", "Malaysia", "Singapore", "Australia", "Canada", "United Kingdom"
+const countries: { name: string; currency: Currency }[] = [
+    { name: "USA", currency: 'usd' },
+    { name: "China", currency: 'cny' },
+    { name: "India", currency: 'usd' },
+    { name: "Netherlands", currency: 'eur' },
+    { name: "Germany", currency: 'eur' },
+    { name: "France", currency: 'eur' },
+    { name: "Japan", currency: 'jpy' },
+    { name: "Vietnam", currency: 'usd' },
+    { name: "Malaysia", currency: 'usd' },
+    { name: "Singapore", currency: 'usd' },
+    { name: "Australia", currency: 'usd' },
+    { name: "Canada", currency: 'usd' },
+    { name: "United Kingdom", currency: 'eur' },
+    { name: "Brazil", currency: 'brl' },
+    { name: "Spain", currency: 'eur' },
+    { name: "Portugal", currency: 'eur' },
 ];
 
 export default function SignupPage() {
-  const { t, formatCurrency } = useI18n();
+  const { t, formatCurrency, setCurrency: setGlobalCurrency } = useI18n();
   const { toast } = useToast();
   const router = useRouter();
+  const { login } = useAuth();
   const [selectedRole, setSelectedRole] = useState('bidder');
   const [userType, setUserType] = useState<'individual' | 'company'>('individual');
-  const [country, setCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState<{name: string, currency: Currency} | null>(null);
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedRole === 'international_buyer' && !country) {
+    if (selectedRole === 'international_buyer' && !selectedCountry) {
         toast({
             variant: 'destructive',
             title: t('error'),
@@ -51,6 +68,13 @@ export default function SignupPage() {
         });
         return;
     }
+    
+    // Simulate login to set user context for redirection
+    const email = `${selectedRole}@agribid.com`;
+    login(email, 'password', { 
+        country: selectedCountry?.name, 
+        currency: selectedCountry?.currency 
+    });
 
     toast({
       title: t('registration_submitted_title', "Registration Submitted"),
@@ -58,20 +82,31 @@ export default function SignupPage() {
     });
     router.push('/login');
   };
-  
-  const usdEquivalentFee = (feeInIdr: number) => {
-    // This is an approximation. In a real app, you'd use a proper exchange rate service.
-    const rate = 15000;
-    return feeInIdr / rate;
+
+  const handleCountryChange = (countryName: string) => {
+    const country = countries.find(c => c.name === countryName);
+    if (country) {
+        setSelectedCountry(country);
+        setGlobalCurrency(country.currency);
+    }
   }
 
-  const formatUsd = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(value);
+  const handleRoleChange = (roleValue: string) => {
+      setSelectedRole(roleValue);
+      if (roleValue !== 'international_buyer') {
+          setSelectedCountry(null);
+          setGlobalCurrency('idr');
+      }
+  }
+  
+  const getDisplayFee = (role: typeof roles[0]) => {
+      if (role.value === 'international_buyer' && selectedCountry) {
+          return formatCurrency(role.basePriceUSD, { in: selectedCountry.currency });
+      }
+      if (role.value === 'international_buyer') {
+          return formatCurrency(role.basePriceUSD, { in: 'usd' });
+      }
+      return formatCurrency(role.basePriceUSD);
   }
 
   return (
@@ -143,7 +178,7 @@ export default function SignupPage() {
                 <RadioGroup 
                     defaultValue="bidder" 
                     className="grid grid-cols-2 gap-4"
-                    onValueChange={setSelectedRole}
+                    onValueChange={handleRoleChange}
                     value={selectedRole}
                 >
                     {roles.map(role => (
@@ -156,10 +191,7 @@ export default function SignupPage() {
                                {t(role.key as any)}
                                <span className="text-xs text-muted-foreground mt-2">{t('registration_fee', 'Registration Fee')}</span>
                                <span className="font-bold text-primary">
-                                {role.value === 'international_buyer' 
-                                    ? formatUsd(usdEquivalentFee(role.fee))
-                                    : formatCurrency(role.fee)
-                                }
+                                 {getDisplayFee(role)}
                                </span>
                             </Label>
                         </div>
@@ -170,13 +202,13 @@ export default function SignupPage() {
             {selectedRole === 'international_buyer' && (
                 <div className="grid gap-2">
                     <Label htmlFor="country">{t('country', 'Country')}</Label>
-                     <Select onValueChange={setCountry} value={country} required>
+                     <Select onValueChange={handleCountryChange} value={selectedCountry?.name} required>
                         <SelectTrigger id="country">
                             <SelectValue placeholder={t('select_your_country', 'Select your country')} />
                         </SelectTrigger>
                         <SelectContent>
                             {countries.map((c) => (
-                                <SelectItem key={c} value={c}>{c}</SelectItem>
+                                <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
