@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -6,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 export interface ProductCategory {
   category: string;
   image_url: string;
+  aiHint?: string;
 }
 
 interface CategoryGridProps {
@@ -27,6 +29,7 @@ export default function CategoryGrid({ categories, onCategorySelect }: CategoryG
               src={cat.image_url}
               alt={cat.category}
               fill
+              data-ai-hint={cat.aiHint}
               className="object-cover"
             />
             <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white text-center text-sm py-1">
