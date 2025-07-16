@@ -67,6 +67,7 @@ export default function HeroSlider() {
                 fill
                 className="object-cover transition-opacity duration-700 ease-in-out"
                 priority={index === 0}
+                sizes="(max-width: 768px) 100vw, 100vw"
               />
               <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center px-4">
                 <div className="max-w-3xl text-white">
