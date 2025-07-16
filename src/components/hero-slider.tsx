@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -47,14 +48,36 @@ export default function HeroSlider() {
       <Carousel
         opts={{ loop: true }}
         plugins={[Autoplay({ delay: 5000, stopOnInteraction: false })]}
-        className="absolute inset-0 w-full h-full"
+        className="w-full h-full"
       >
         <CarouselContent className="h-full">
           {heroSlides.map((slide, index) => (
-            <CarouselItem key={index}>
-              <div className="bg-red-500 w-full h-full flex items-center justify-center text-white text-3xl">
-                Slide {index + 1}
-              </div>
+            <CarouselItem key={index} className="relative w-full h-full">
+                <Image
+                    src={slide.src}
+                    alt={t(slide.titleKey)}
+                    data-ai-hint={slide.aiHint}
+                    fill
+                    className="object-cover"
+                    priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                    <h1 className="text-4xl md:text-6xl font-bold font-headline drop-shadow-lg">
+                    {t(slide.titleKey)}
+                    </h1>
+                    <p className="mt-4 max-w-2xl text-lg md:text-xl drop-shadow-md">
+                    {t(slide.subtitleKey)}
+                    </p>
+                    <div className="mt-8 flex gap-4">
+                    <Button asChild size="lg">
+                        <Link href="#featured-auctions">{t('browse_auctions')}</Link>
+                    </Button>
+                    <Button asChild size="lg" variant="secondary">
+                        <Link href="/signup">{t('become_a_producer')}</Link>
+                    </Button>
+                    </div>
+                </div>
             </CarouselItem>
           ))}
         </CarouselContent>
