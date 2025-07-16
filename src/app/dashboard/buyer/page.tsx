@@ -203,7 +203,7 @@ export default function BuyerDashboardPage() {
                 </Card>
             </div>
 
-            <Card>
+            <Card id="my-orders">
                 <CardHeader>
                     <CardTitle className="font-headline text-2xl">{t('my_orders_title', 'My Orders')}</CardTitle>
                     <CardDescription>{t('my_orders_desc', 'Track your won auctions and manage shipments.')}</CardDescription>
@@ -260,3 +260,4 @@ export default function BuyerDashboardPage() {
         </>
     )
 }
+

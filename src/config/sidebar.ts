@@ -20,7 +20,7 @@ export const sidebarByRole: Record<GeneralRole, NavItem[]> = {
   buyer: [
     { name: "Dashboard", path: "/dashboard/buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
     { name: "Active Auctions", path: "/dashboard/auctions", icon: Search, labelKey: 'auctions' },
-    { name: "My Orders", path: "/dashboard/buyer", icon: ShoppingCart, labelKey: 'my_orders_title' },
+    { name: "My Orders", path: "/dashboard/buyer#my-orders", icon: ShoppingCart, labelKey: 'my_orders_title' },
   ],
   international_buyer: [
     { name: "Dashboard", path: "/dashboard/international-buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
