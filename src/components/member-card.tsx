@@ -156,7 +156,7 @@ export function MemberCard({ user }: { user: any }) {
 
     const handleDownload = () => {
         if (frontCardRef.current) {
-            html2canvas(frontCardRef.current, {
+            html2canvas(frontCardRef.current!, {
                 useCORS: true,
                 backgroundColor: null,
                 scale: 2 // Increase resolution
