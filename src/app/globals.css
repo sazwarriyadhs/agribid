@@ -86,6 +86,29 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .swiper-button-next, .swiper-button-prev {
+    color: hsl(var(--primary-foreground)) !important;
+    background-color: hsla(var(--primary), 0.5);
+    border-radius: 9999px;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    transition: background-color 0.2s;
+  }
+  .swiper-button-next:hover, .swiper-button-prev:hover {
+     background-color: hsla(var(--primary), 0.8);
+  }
+  .swiper-button-next:after, .swiper-button-prev:after {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+  }
+  .swiper-pagination-bullet {
+    background-color: hsl(var(--primary-foreground)) !important;
+    opacity: 0.7;
+  }
+  .swiper-pagination-bullet-active {
+    background-color: hsl(var(--accent)) !important;
+    opacity: 1;
+  }
 }
 
 .map-tooltip {
