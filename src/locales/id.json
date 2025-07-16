@@ -469,6 +469,8 @@
   "login_failed_qr_desc": "Kode QR tidak valid atau kedaluwarsa.",
   "login_role_invalid_desc": "Peran pengguna yang ditentukan dalam email tidak valid.",
   "demo_login_instructions": "Untuk demo, gunakan peran apa pun (mis., admin, petani, pembeli, international_buyer) sebagai awalan email dan \"password\" sebagai kata sandi.",
+  "email_invalid_message": "Silakan masukkan alamat email yang valid.",
+  "password_required_message": "Kata sandi wajib diisi.",
   "user_type": "Tipe Pengguna",
   "status_active": "Aktif",
   "status_ended": "Selesai",

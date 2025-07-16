@@ -21,21 +21,21 @@ import type { Role } from '@/lib/roles';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required.",
-  }),
-})
-
 export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
   const { t } = useI18n();
   const { login } = useAuth();
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
+
+  const formSchema = z.object({
+    email: z.string().email({
+      message: t('email_invalid_message', 'Please enter a valid email address.'),
+    }),
+    password: z.string().min(1, {
+      message: t('password_required_message', 'Password is required.'),
+    }),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,7 +54,7 @@ export default function LoginPage() {
             title: t('login_failed_title', 'Login Failed'),
             description: t('login_failed_desc', 'Invalid credentials. Please try again.'),
         });
-        form.setError("password", { type: "manual", message: t('login_failed_desc', 'Invalid credentials. Please try again.') });
+        form.setError("root", { type: "manual", message: t('login_failed_desc', 'Invalid credentials. Please try again.') });
         return;
     }
     
@@ -143,7 +143,10 @@ export default function LoginPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
+                 {form.formState.errors.root && (
+                  <FormMessage>{form.formState.errors.root.message}</FormMessage>
+                )}
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                   {t('log_in')}
                 </Button>
               </form>

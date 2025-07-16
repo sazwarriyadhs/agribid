@@ -475,6 +475,8 @@
   "login_failed_qr_desc": "Invalid or expired QR code.",
   "login_role_invalid_desc": "Invalid user role specified in email.",
   "demo_login_instructions": "For demo, use any role (e.g., admin, petani, buyer, international_buyer) as the email prefix and \"password\" as the password.",
+  "email_invalid_message": "Please enter a valid email address.",
+  "password_required_message": "Password is required.",
   "user_type": "User Type",
   "individual": "Individual",
   "sales_by_category": "Sales by Category",
