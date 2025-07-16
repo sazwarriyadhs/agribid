@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect, Suspense } from 'react';
+import { useState, useRef, useEffect, Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -17,16 +17,9 @@ import { suggestPrice, SuggestPriceInput } from '@/ai/flows/suggest-price-flow';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useAuth } from '@/context/auth';
 import { initialSellerProducts } from '@/lib/mock-data';
+import { roleToCategoryMap, CategoryDefinition, allCategories } from '@/lib/categories';
+import type { Role } from '@/lib/roles';
 
-const categories = [
-    { key: "grains", label: "Grains" },
-    { key: "livestock", label: "Livestock" },
-    { key: "fruits_vegetables", label: "Fruits & Vegetables" },
-    { key: "plantation", label: "Plantation" },
-    { key: "marine_fishery", label: "Marine Fishery" },
-    { key: "inland_fishery", label: "Inland Fishery" },
-    { key: "forestry_products", label: "Forestry Products" },
-];
 
 function SellPageContents() {
     const { t, formatCurrency, language } = useI18n();
@@ -50,6 +43,17 @@ function SellPageContents() {
     
     const [isSuggestingPrice, setIsSuggestingPrice] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const allowedCategory = useMemo(() => {
+        if (!user) return null;
+        return roleToCategoryMap[user.role as Role] || null;
+    }, [user]);
+
+    useEffect(() => {
+        if (allowedCategory) {
+            setCategory(allowedCategory.key);
+        }
+    }, [allowedCategory]);
 
     useEffect(() => {
         const editId = searchParams.get('edit');
@@ -126,7 +130,11 @@ function SellPageContents() {
     const resetForm = () => {
         setProductName('');
         setDescription('');
-        setCategory('');
+        if (allowedCategory) {
+            setCategory(allowedCategory.key);
+        } else {
+            setCategory('');
+        }
         setQuantity('');
         setShelfLife('');
         setPackaging('');
@@ -161,6 +169,21 @@ function SellPageContents() {
         setIsSubmitting(false);
     };
 
+    if (!user || !allowedCategory) {
+        return (
+             <div className="container mx-auto max-w-3xl px-4 py-8 md:py-16">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>{t('access_denied', 'Access Denied')}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p>{t('must_be_producer_to_sell', 'You must be logged in as a producer role (Farmer, Fisherman, etc.) to list products.')}</p>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
+
     return (
         <div className="container mx-auto max-w-3xl px-4 py-8 md:py-16">
             <Card>
@@ -181,14 +204,12 @@ function SellPageContents() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="category">{t('category')}</Label>
-                                <Select onValueChange={setCategory} value={category} required>
+                                <Select onValueChange={setCategory} value={category} required disabled>
                                     <SelectTrigger id="category">
                                         <SelectValue placeholder={t('select_category_placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {categories.map((cat) => (
-                                            <SelectItem key={cat.key} value={cat.label}>{t(cat.key as any)}</SelectItem>
-                                        ))}
+                                        <SelectItem value={allowedCategory.key}>{t(allowedCategory.labelKey as any)}</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

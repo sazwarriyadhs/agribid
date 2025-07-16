@@ -536,5 +536,7 @@
   "international_demand_desc": "Penuhi permintaan dari seluruh dunia. Berikut adalah permintaan produk terbaru dari pembeli internasional kami.",
   "requested_by": "Diminta oleh",
   "volume_required": "Volume",
-  "contact_buyer": "Hubungi Pembeli"
+  "contact_buyer": "Hubungi Pembeli",
+  "must_be_producer_to_sell": "Anda harus masuk sebagai peran produsen (Petani, Nelayan, dll.) untuk mendaftarkan produk.",
+  "access_denied": "Akses Ditolak"
 }

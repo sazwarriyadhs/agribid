@@ -551,5 +551,7 @@
   "international_demand_desc": "Fulfill demand from around the world. Here are the latest product requests from our international buyers.",
   "requested_by": "Requested by",
   "volume_required": "Volume",
-  "contact_buyer": "Contact Buyer"
+  "contact_buyer": "Contact Buyer",
+  "must_be_producer_to_sell": "You must be logged in as a producer role (Farmer, Fisherman, etc.) to list products.",
+  "access_denied": "Access Denied"
 }

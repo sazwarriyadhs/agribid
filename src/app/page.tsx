@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tractor, Wheat, Fish, Handshake, Search, Gavel, Plane, Crown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Search, Gavel, Plane, Crown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useI18n } from '@/context/i18n';
 import { MembershipBenefits } from '@/components/membership-benefits';
 import { GlobalDemand } from '@/components/global-demand';
@@ -18,192 +18,8 @@ import { DirectFromProducer } from '@/components/direct-from-producer';
 import { InternationalDemand } from '@/components/international-demand';
 import CategoryGrid from '@/components/category-grid';
 import { FeaturedProcessedProducts } from '@/components/featured-processed-products';
+import { allActiveAuctions } from '@/lib/mock-data';
 
-
-// TODO: Connect to the database and fetch real data.
-// This is placeholder data based on user's database query.
-const allActiveAuctions = [
-    {
-      id: '1',
-      name: 'Lelang Cabai Organik',
-      name_id: 'Lelang Cabai Organik',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'organic chili',
-      seller: 'Petani Lokal',
-      seller_id: 'Petani Lokal',
-      currentBid: 30000,
-      bidders: [],
-      category: 'Pertanian'
-    },
-    {
-      id: '2',
-      name: 'Lelang Jagung Manis',
-      name_id: 'Lelang Jagung Manis',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'sweet corn',
-      seller: 'Petani Lokal',
-      seller_id: 'Petani Lokal',
-      currentBid: 15000,
-      bidders: [],
-      category: 'Pertanian'
-    },
-    {
-      id: '5',
-      name: 'Lelang Telur Ayam Kampung',
-      name_id: 'Lelang Telur Ayam Kampung',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'free range eggs',
-      seller: 'Peternak Lokal',
-      seller_id: 'Peternak Lokal',
-      currentBid: 20000,
-      bidders: [],
-      category: 'Peternakan'
-    },
-    {
-      id: '6',
-      name: 'Lelang Sayur Bayam Organik',
-      name_id: 'Lelang Sayur Bayam Organik',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'organic spinach',
-      seller: 'Petani Lokal',
-      seller_id: 'Petani Lokal',
-      currentBid: 10000,
-      bidders: [],
-      category: 'Pertanian'
-    },
-     {
-      id: '12',
-      name: 'Lelang Ikan Tuna Segar',
-      name_id: 'Lelang Ikan Tuna Segar',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'fresh tuna fish',
-      seller: 'Nelayan Sejahtera',
-      seller_id: 'Nelayan Sejahtera',
-      currentBid: 55000,
-      bidders: [],
-      category: 'Perikanan'
-    },
-    {
-      id: '8',
-      name: 'Lelang Padi IR64',
-      name_id: 'Lelang Padi IR64',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'rice paddy',
-      seller: 'Petani Lokal',
-      seller_id: 'Petani Lokal',
-      currentBid: 40000,
-      bidders: [],
-      category: 'Pertanian'
-    },
-    {
-      id: '12',
-      name: 'Lelang Ikan Nila Segar',
-      name_id: 'Lelang Ikan Nila Segar',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'fresh tilapia fish',
-      seller: 'Nelayan Lokal',
-      seller_id: 'Nelayan Lokal',
-      currentBid: 25000,
-      bidders: [],
-      category: 'Perikanan'
-    },
-    {
-      id: '13',
-      name: 'Lelang Udang Windu Beku',
-      name_id: 'Lelang Udang Windu Beku',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'frozen tiger prawn',
-      seller: 'Nelayan Lokal',
-      seller_id: 'Nelayan Lokal',
-      currentBid: 78000,
-      bidders: [],
-      category: 'Perikanan'
-    },
-    {
-      id: '10',
-      name: 'Lelang Tomat Merah Segar',
-      name_id: 'Lelang Tomat Merah Segar',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'fresh tomatoes',
-      seller: 'Petani Lokal',
-      seller_id: 'Petani Lokal',
-      currentBid: 12000,
-      bidders: [],
-      category: 'Pertanian'
-    },
-    {
-      id: '3',
-      name: 'Lelang Daging Sapi Segar',
-      name_id: 'Lelang Daging Sapi Segar',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'fresh beef',
-      seller: 'Peternak Lokal',
-      seller_id: 'Peternak Lokal',
-      currentBid: 85000,
-      bidders: [],
-      category: 'Peternakan'
-    },
-    {
-      id: '11',
-      name: 'Lelang Ayam Broiler Hidup',
-      name_id: 'Lelang Ayam Broiler Hidup',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'live broiler chicken',
-      seller: 'Peternak Lokal',
-      seller_id: 'Peternak Lokal',
-      currentBid: 60000,
-      bidders: [],
-      category: 'Peternakan'
-    },
-    {
-      id: '14',
-      name: 'Lelang Kopi Arabika Gayo',
-      name_id: 'Lelang Kopi Arabika Gayo',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'arabica coffee beans',
-      seller: 'Petani Kopi',
-      seller_id: 'Petani Kopi',
-      currentBid: 65000,
-      bidders: [],
-      category: 'Perkebunan'
-    },
-    {
-      id: '15',
-      name: 'Lelang Kakao Kering Fermentasi',
-      name_id: 'Lelang Kakao Kering Fermentasi',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'fermented dried cocoa beans',
-      seller: 'Petani Kakao',
-      seller_id: 'Petani Kakao',
-      currentBid: 72000,
-      bidders: [],
-      category: 'Perkebunan'
-    },
-    {
-      id: '16',
-      name: 'Lelang Madu Hutan Asli',
-      name_id: 'Lelang Madu Hutan Asli',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'wild forest honey',
-      seller: 'Petani Hutan',
-      seller_id: 'Petani Hutan',
-      currentBid: 95000,
-      bidders: [],
-      category: 'Hasil Hutan'
-    },
-    {
-      id: '17',
-      name: 'Lelang Getah Damar',
-      name_id: 'Lelang Getah Damar',
-      image: 'https://placehold.co/600x400.png',
-      aiHint: 'resin damar tree',
-      seller: 'Pengumpul Hutan',
-      seller_id: 'Pengumpul Hutan',
-      currentBid: 42000,
-      bidders: [],
-      category: 'Hasil Hutan'
-    }
-];
 
 const categories = [
     { key: "all", label: "All Categories" },
@@ -215,29 +31,27 @@ const categories = [
 ];
 
 const productCategories = [
-    { category: "Beras", image_url: "https://placehold.co/400x300.png", aiHint: "rice field" },
+    { category: "Pertanian", image_url: "https://placehold.co/400x300.png", aiHint: "rice field" },
     { category: "Sayuran", image_url: "https://placehold.co/400x300.png", aiHint: "fresh vegetables" },
     { category: "Buah", image_url: "https://placehold.co/400x300.png", aiHint: "tropical fruits" },
-    { category: "Ikan", image_url: "https://placehold.co/400x300.png", aiHint: "fresh fish" },
-    { category: "Daging", image_url: "https://placehold.co/400x300.png", aiHint: "raw meat" },
-    { category: "Kopi", image_url: "https://placehold.co/400x300.png", aiHint: "coffee beans" },
+    { category: "Perikanan", image_url: "https://placehold.co/400x300.png", aiHint: "fresh fish" },
+    { category: "Peternakan", image_url: "https://placehold.co/400x300.png", aiHint: "raw meat" },
+    { category: "Perkebunan", image_url: "https://placehold.co/400x300.png", aiHint: "coffee beans" },
     { category: "Rempah", image_url: "https://placehold.co/400x300.png", aiHint: "spices market" },
-    { category: "Kelapa Sawit", image_url: "https://placehold.co/400x300.png", aiHint: "palm oil" }
+    { category: "Hasil Hutan", image_url: "https://placehold.co/400x300.png", aiHint: "forest products" }
 ];
 
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 9;
 
 export default function Home() {
   const { t, formatCurrency, language } = useI18n();
-  // const allActiveAuctions = productDatabase.getProductsByStatus('Active'); // Replaced with placeholder
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredAuctions = useMemo(() => {
-    // TODO: Implement search and filter logic with database query.
     return allActiveAuctions.filter(item => {
       const nameMatches = language === 'id'
         ? item.name_id.toLowerCase().includes(searchTerm.toLowerCase())
@@ -294,12 +108,12 @@ export default function Home() {
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        setCurrentPage(1); // Reset to first page on search
+                        setCurrentPage(1);
                     }}
                 />
                 <Select onValueChange={(value) => {
                     setSelectedCategory(value);
-                    setCurrentPage(1); // Reset to first page on category change
+                    setCurrentPage(1);
                 }} value={selectedCategory}>
                     <SelectTrigger>
                         <SelectValue placeholder={t('select_category_placeholder')} />
@@ -307,7 +121,7 @@ export default function Home() {
                     <SelectContent>
                         {categories.map((cat) => (
                            <SelectItem key={cat.key} value={cat.label}>
-                                {cat.key === 'all' ? t('all_categories', 'All Categories') : t(cat.label.toLowerCase() as any, cat.label)}
+                                {cat.key === 'all' ? t('all_categories', 'All Categories') : t(cat.key as any, cat.label)}
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -364,14 +178,14 @@ export default function Home() {
                 })}
             </div>
              {filteredAuctions.length === 0 && (
-                <div className="text-center py-16 text-muted-foreground">
+                <div className="text-center py-16 text-muted-foreground col-span-full">
                     <p className="text-lg font-medium">{t('no_auctions_found', 'No auctions found.')}</p>
                     <p>{t('try_different_search', 'Try adjusting your search or category filters.')}</p>
                 </div>
             )}
 
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-4 mt-12">
+                <div className="flex justify-center items-center gap-4 mt-12 col-span-full">
                     <Button 
                         variant="outline" 
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
@@ -418,7 +232,13 @@ export default function Home() {
         <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center font-headline">{t('browse_by_category')}</h2>
             <p className="text-center text-muted-foreground mt-2 mb-12">{t('browse_by_category_subtitle')}</p>
-            <CategoryGrid categories={productCategories} onCategorySelect={setSelectedCategory} />
+            <CategoryGrid categories={productCategories} onCategorySelect={(cat) => {
+                setSelectedCategory(cat);
+                const element = document.getElementById('featured-auctions');
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }} />
         </div>
       </section>
       
