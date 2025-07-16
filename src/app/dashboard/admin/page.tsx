@@ -18,6 +18,7 @@ import { Line, XAxis, YAxis, CartesianGrid, LineChart as RechartsLineChart } fro
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { MemberCard } from '@/components/member-card';
 import { allActiveAuctions, initialSellerProducts } from '@/lib/mock-data';
+import UserMap from '@/components/user-map';
 
 
 const stats = [
@@ -34,11 +35,11 @@ const financialStats = [
 
 // TODO: Connect to the database and fetch real data from the 'users' table.
 const initialAllUsers: any[] = [
-    { id: 'usr_petani_jaya', name: 'Petani Jaya', type: 'individual', firstName: 'Petani', lastName: 'Jaya', email: 'petani@agribid.com', role: 'petani', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01' },
-    { id: 'usr_bakery_co', name: 'Bakery Co.', type: 'company', companyName: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15' },
-    { id: 'usr_global_logistics', name: 'Global Logistics', type: 'company', companyName: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20' },
-    { id: 'usr_exportindo', name: 'Exportindo', type: 'company', companyName: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10' },
-    { id: 'usr_nelayan_makmur', name: 'Nelayan Makmur', type: 'individual', firstName: 'Nelayan', lastName: 'Makmur', email: 'nelayan@agribid.com', role: 'nelayan', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null },
+    { id: 'usr_petani_jaya', name: 'Petani Jaya', type: 'individual', firstName: 'Petani', lastName: 'Jaya', email: 'petani@agribid.com', role: 'petani', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01', lat: -6.9175, lon: 107.6191 }, // Bandung
+    { id: 'usr_bakery_co', name: 'Bakery Co.', type: 'company', companyName: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15', lat: -6.2088, lon: 106.8456 }, // Jakarta
+    { id: 'usr_global_logistics', name: 'Global Logistics', type: 'company', companyName: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20', lat: -7.2575, lon: 112.7521 }, // Surabaya
+    { id: 'usr_exportindo', name: 'Exportindo', type: 'company', companyName: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10', lat: 3.5952, lon: 98.6722 }, // Medan
+    { id: 'usr_nelayan_makmur', name: 'Nelayan Makmur', type: 'individual', firstName: 'Nelayan', lastName: 'Makmur', email: 'nelayan@agribid.com', role: 'nelayan', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null, lat: -5.1477, lon: 119.4327 }, // Makassar
 ];
 
 // TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
@@ -170,6 +171,17 @@ export default function AdminDashboardPage() {
             
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-8">
                 <div className="lg:col-span-3 space-y-8">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>User Location Map</CardTitle>
+                            <CardDescription>Visualization of registered user locations and their status.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="w-full h-[400px] bg-secondary rounded-lg overflow-hidden">
+                                <UserMap users={allUsers} />
+                            </div>
+                        </CardContent>
+                    </Card>
                     <Card id="financial-reports">
                         <CardHeader>
                             <CardTitle>{t('financial_overview_title')}</CardTitle>
