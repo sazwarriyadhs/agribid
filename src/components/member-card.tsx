@@ -92,7 +92,7 @@ export function MemberCardFront({ user }: MemberCardProps) {
              </header>
 
             <div className="text-center my-2">
-                <AgriBidLogo className="mx-auto" />
+                <AgriBidLogo className="h-16 w-auto mx-auto" />
             </div>
 
             <div className="flex justify-center my-6">
@@ -148,6 +148,8 @@ export function MemberCardBack() {
                         <li>Hanya boleh digunakan oleh pemilik sah, tidak boleh dipindah-tangankan.</li>
                         <li>Tunjukkan kartu ini saat mengikuti lelang, pengiriman, atau kerja sama ekspor.</li>
                         <li>Jika kartu hilang, rusak, atau masa berlakunya habis, segera hubungi tim AgriBid.</li>
+                        <li>Masa berlaku kartu sesuai tanggal yang tercantum dan dapat diperpanjang.</li>
+                        <li>Pelanggaran terhadap aturan dapat menyebabkan keanggotaan dibekukan.</li>
                     </ul>
                 </div>
                  <div className="space-y-2">
@@ -157,6 +159,8 @@ export function MemberCardBack() {
                         <li>It is strictly personal and non-transferable.</li>
                         <li>Present this card when joining auctions, shipping, or export collaborations.</li>
                         <li>If the card is lost, damaged, or expired, please contact the AgriBid team immediately.</li>
+                        <li>Validity period follows the date listed and can be renewed.</li>
+                        <li>Violation of the rules may result in membership suspension.</li>
                     </ul>
                 </div>
             </div>
