@@ -91,53 +91,49 @@ export function MemberCardFront({ user }: MemberCardProps) {
     const flagEmoji = getFlagEmoji(user.country);
 
     return (
-        <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
-             <div className="bg-primary/10 text-primary-foreground text-center relative w-full p-4 flex items-center justify-center">
-                <AgriBidLogo className="h-24 w-auto" />
+        <div className="w-[350px] h-[550px] bg-card p-6 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
+             <header className="text-center mb-4">
+                <h2 className="text-xl font-bold uppercase text-primary tracking-wide">
+                    {t('membership_card', 'KARTU MEMBER')}
+                </h2>
+             </header>
+
+            <div className="text-center my-2">
+                <AgriBidLogo className="mx-auto" />
             </div>
-            <div className="p-6 flex flex-col flex-grow">
-                 <div className="flex justify-end items-start -mt-12">
-                     <Badge variant={user.verified ? "default" : "destructive"}>
-                        {user.verified ? (
-                            <ShieldCheck className="mr-2 h-4 w-4" />
-                        ) : (
-                            <ShieldAlert className="mr-2 h-4 w-4" />
-                        )}
-                        {t(user.verified ? 'status_verified' : 'status_unverified', user.verified ? 'Verified' : 'Unverified')}
-                    </Badge>
-                 </div>
-                <div className="flex justify-center -mt-16">
-                    <Avatar className="h-36 w-36 border-4 border-background shadow-md">
-                        <AvatarImage src={user.avatarUrl} data-ai-hint="portrait photo" />
-                        <AvatarFallback>{user.avatarFallback}</AvatarFallback>
-                    </Avatar>
-                </div>
-                <div className="text-center space-y-1 my-4">
-                    <p className="font-bold text-xl tracking-wide uppercase">{user.name}</p>
-                    <div className="flex items-center justify-center gap-2">
-                        <p className="text-primary font-medium">{language === 'id' ? user.role_label_id : user.role_label}</p>
-                        {user.country && (
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <span className="text-lg">{flagEmoji}</span>
-                                <span>({user.country})</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                 <div className="text-center my-4">
-                    <p className="text-sm text-muted-foreground">{t('membership_id')}</p>
-                    <p className="font-mono font-bold text-lg">{user.id}</p>
-                </div>
-                <div className="flex items-end justify-between mt-auto pt-4 flex-grow">
-                    <div className="text-center">
-                        <div className="bg-white p-2 rounded-md inline-block shadow-inner">
-                            <QRCode value={JSON.stringify(user.qrCodeData)} size={80} />
+
+            <div className="flex justify-center my-6">
+                 <Avatar className="h-36 w-36 border-4 border-background shadow-md">
+                    <AvatarImage src={user.avatarUrl} data-ai-hint="portrait photo" />
+                    <AvatarFallback>{user.avatarFallback}</AvatarFallback>
+                </Avatar>
+            </div>
+
+            <div className="text-center space-y-1">
+                <h3 className="font-bold text-2xl text-primary tracking-wide uppercase">{user.name}</h3>
+                <div className="flex items-center justify-center gap-2">
+                    <p className="text-muted-foreground font-medium italic">{language === 'id' ? user.role_label_id : user.role_label}</p>
+                    {user.country && (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span className="text-lg">{flagEmoji}</span>
+                            <span>({user.country})</span>
                         </div>
+                    )}
+                </div>
+                <p className="text-sm text-foreground/80 pt-2">
+                    <span className="font-semibold">{t('membership_id', 'No. Induk')}:</span> {user.id}
+                </p>
+            </div>
+
+            <div className="flex items-end justify-between mt-auto pt-6 flex-grow">
+                <div className="text-center">
+                    <div className="bg-white p-2 rounded-md inline-block shadow-inner">
+                        <QRCode value={JSON.stringify(user.qrCodeData)} size={80} />
                     </div>
-                    <div className="text-right">
-                        <p className="text-sm text-muted-foreground">{t('valid_until')}</p>
-                        <p className="font-semibold text-lg">{user.expires}</p>
-                    </div>
+                </div>
+                <div className="text-right">
+                    <p className="text-sm text-muted-foreground">{t('valid_until', 'Berlaku hingga')}</p>
+                    <p className="font-semibold text-lg text-accent">{user.expires}</p>
                 </div>
             </div>
         </div>
@@ -147,7 +143,7 @@ export function MemberCardFront({ user }: MemberCardProps) {
 export function MemberCardBack() {
     const { t } = useI18n();
     return (
-        <div className="w-[350px] bg-card p-6 rounded-2xl shadow-xl flex flex-col font-sans border h-full">
+        <div className="w-[350px] h-[550px] bg-card p-6 rounded-2xl shadow-xl flex flex-col font-sans border">
             <div className="border-b-2 border-primary/20 pb-2 mb-4">
                  <p className="text-primary font-bold text-lg tracking-wider">{t('regulations_title')}</p>
             </div>
@@ -222,3 +218,4 @@ export function MemberCard({ user }: { user: any }) {
         </div>
     );
 }
+
