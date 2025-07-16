@@ -71,6 +71,18 @@ const allActiveAuctions = [
       bidders: [],
       category: 'Pertanian'
     },
+     {
+      id: '12',
+      name: 'Lelang Ikan Tuna Segar',
+      name_id: 'Lelang Ikan Tuna Segar',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'fresh tuna fish',
+      seller: 'Nelayan Sejahtera',
+      seller_id: 'Nelayan Sejahtera',
+      currentBid: 55000,
+      bidders: [],
+      category: 'Perikanan'
+    },
     {
       id: '8',
       name: 'Lelang Padi IR64',
@@ -82,6 +94,18 @@ const allActiveAuctions = [
       currentBid: 40000,
       bidders: [],
       category: 'Pertanian'
+    },
+    {
+      id: '13',
+      name: 'Lelang Udang Windu',
+      name_id: 'Lelang Udang Windu',
+      image: 'https://placehold.co/600x400.png',
+      aiHint: 'tiger prawn',
+      seller: 'Tambak Jaya',
+      seller_id: 'Tambak Jaya',
+      currentBid: 75000,
+      bidders: [],
+      category: 'Perikanan'
     },
     {
       id: '10',
