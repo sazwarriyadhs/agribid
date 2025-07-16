@@ -69,13 +69,6 @@ interface MemberCardProps {
     user: UserForCard;
 }
 
-const regulations = [
-    "regulation_1",
-    "regulation_2",
-    "regulation_3",
-    "regulation_4",
-];
-
 export function MemberCardFront({ user }: MemberCardProps) {
     const { t, language } = useI18n();
     const isValidRole = allowedRoles.includes(user.role as Role);
@@ -145,16 +138,32 @@ export function MemberCardBack() {
     return (
         <div className="w-[350px] h-[550px] bg-card p-6 rounded-2xl shadow-xl flex flex-col font-sans border">
             <div className="border-b-2 border-primary/20 pb-2 mb-4">
-                 <p className="text-primary font-bold text-lg tracking-wider">{t('regulations_title')}</p>
+                 <p className="text-primary font-bold text-lg tracking-wider">Peraturan Kartu / Card Rules</p>
             </div>
-            <ul className="space-y-4 text-muted-foreground mt-4 text-base">
-                {regulations.map(reg => (
-                    <li key={reg} className="flex gap-3">
-                        <span className="mt-1.5">&#x2022;</span>
-                        <span>{t(reg as any)}</span>
-                    </li>
-                ))}
-            </ul>
+            <div className="space-y-4 text-muted-foreground mt-4 text-xs overflow-y-auto pr-2">
+                <div className="space-y-2">
+                    <p className="font-bold text-sm">🇮🇩 Bahasa Indonesia:</p>
+                    <ul className="list-disc pl-5 space-y-1">
+                        <li>Kartu ini adalah identitas resmi sebagai anggota AgriBid Indonesia.</li>
+                        <li>Hanya boleh digunakan oleh pemilik sah, tidak boleh dipindah-tangankan.</li>
+                        <li>Tunjukkan kartu ini saat mengikuti lelang, pengiriman, atau kerja sama ekspor.</li>
+                        <li>Jika kartu hilang, rusak, atau masa berlakunya habis, segera hubungi tim AgriBid.</li>
+                    </ul>
+                </div>
+                 <div className="space-y-2">
+                    <p className="font-bold text-sm">🇬🇧 English Version:</p>
+                    <ul className="list-disc pl-5 space-y-1">
+                        <li>This card is an official identification as a member of AgriBid Indonesia.</li>
+                        <li>It is strictly personal and non-transferable.</li>
+                        <li>Present this card when joining auctions, shipping, or export collaborations.</li>
+                        <li>If the card is lost, damaged, or expired, please contact the AgriBid team immediately.</li>
+                    </ul>
+                </div>
+            </div>
+             <div className="mt-auto pt-4 border-t border-primary/10 text-center text-xs text-muted-foreground">
+                <p>Informasi resmi tersedia di:</p>
+                <p className="font-semibold text-primary">www.agribid.id</p>
+            </div>
         </div>
     )
 }
@@ -218,4 +227,3 @@ export function MemberCard({ user }: { user: any }) {
         </div>
     );
 }
-
