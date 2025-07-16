@@ -30,6 +30,40 @@ interface UserForCard {
     country?: string;
 }
 
+// Function to get flag emoji from country code (approximated)
+const getFlagEmoji = (countryName?: string): string => {
+    if (!countryName) return '';
+    
+    // Simple mapping for demo purposes. In a real app, use a library or a more robust mapping.
+    const countryCodeMap: { [key: string]: string } = {
+        'USA': 'US',
+        'Netherlands': 'NL',
+        'Japan': 'JP',
+        'China': 'CN',
+        'India': 'IN',
+        'Germany': 'DE',
+        'France': 'FR',
+        'Vietnam': 'VN',
+        'Malaysia': 'MY',
+        'Singapore': 'SG',
+        'Australia': 'AU',
+        'Canada': 'CA',
+        'United Kingdom': 'GB',
+        'Brazil': 'BR',
+        'Spain': 'ES',
+        'Portugal': 'PT',
+    };
+
+    const code = countryCodeMap[countryName];
+    if (!code) return '🏳️'; // Default flag
+
+    const codePoints = code
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+};
+
 
 interface MemberCardProps {
     user: UserForCard;
@@ -53,6 +87,8 @@ export function MemberCardFront({ user }: MemberCardProps) {
         </div>
       );
     }
+
+    const flagEmoji = getFlagEmoji(user.country);
 
     return (
         <div className="w-[350px] bg-card p-0 rounded-2xl shadow-xl flex flex-col font-sans overflow-hidden border">
@@ -81,8 +117,8 @@ export function MemberCardFront({ user }: MemberCardProps) {
                     <div className="flex items-center justify-center gap-2">
                         <p className="text-primary font-medium">{language === 'id' ? user.role_label_id : user.role_label}</p>
                         {user.country && (
-                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                <Globe className="h-4 w-4" />
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <span className="text-lg">{flagEmoji}</span>
                                 <span>({user.country})</span>
                             </div>
                         )}
@@ -186,4 +222,3 @@ export function MemberCard({ user }: { user: any }) {
         </div>
     );
 }
-

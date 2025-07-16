@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck, ShoppingCart, Globe } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Gavel, Handshake, Plane, FilePlus, ShieldCheck, BookUser, Search, Banknote, LineChart, Truck, ShoppingCart, Globe, FileText } from 'lucide-react';
 import type { Role } from '@/lib/roles';
 
 export type GeneralRole = 'seller' | 'buyer' | 'admin' | 'vendor' | 'exporter' | 'international_buyer';
@@ -27,6 +27,7 @@ export const sidebarByRole: Record<GeneralRole, NavItem[]> = {
     { name: "Browse Commodities", path: "/dashboard/auctions", icon: Search, labelKey: 'browse_export_commodities' },
     { name: "Post a Request", path: "/dashboard/international-buyer/post-request", icon: FilePlus, labelKey: 'post_request_title' },
     { name: "My Imports", path: "/dashboard/international-buyer#my-imports", icon: Plane, labelKey: 'my_imports_title' },
+    { name: "SOP", path: "/sop-foreign-buyer", icon: FileText, labelKey: 'sop_foreign_buyer_title' },
   ],
   admin: [
     { name: "Overview", path: "/dashboard/admin", icon: LayoutDashboard, labelKey: 'admin_dashboard_title' },
