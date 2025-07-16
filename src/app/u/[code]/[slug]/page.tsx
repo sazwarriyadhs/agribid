@@ -25,7 +25,7 @@ import { useI18n } from '@/context/i18n';
 import { useParams, notFound } from 'next/navigation';
 import { useAuth } from '@/context/auth';
 import { MemberCardFront, MemberCardBack } from '@/components/member-card';
-import { Download, Upload } from 'lucide-react';
+import { Download, Upload, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { roleLabels } from '@/lib/roles';
 import {
@@ -43,6 +43,40 @@ import Image from 'next/image';
 
 // TODO: Connect to the database and fetch the user's products.
 const userProducts: any[] = [];
+
+// Function to get flag emoji from country code (approximated)
+const getFlagEmoji = (countryName?: string): string => {
+    if (!countryName) return '';
+    
+    // Simple mapping for demo purposes. In a real app, use a library or a more robust mapping.
+    const countryCodeMap: { [key: string]: string } = {
+        'USA': 'US',
+        'Netherlands': 'NL',
+        'Japan': 'JP',
+        'China': 'CN',
+        'India': 'IN',
+        'Germany': 'DE',
+        'France': 'FR',
+        'Vietnam': 'VN',
+        'Malaysia': 'MY',
+        'Singapore': 'SG',
+        'Australia': 'AU',
+        'Canada': 'CA',
+        'United Kingdom': 'GB',
+        'Brazil': 'BR',
+        'Spain': 'ES',
+        'Portugal': 'PT',
+    };
+
+    const code = countryCodeMap[countryName];
+    if (!code) return '🏳️'; // Default flag
+
+    const codePoints = code
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+};
 
 export default function ProfilePage() {
     const { t, language } = useI18n();
@@ -163,6 +197,12 @@ export default function ProfilePage() {
                 </Avatar>
                 <CardTitle className="text-2xl font-headline">{userProfile.name}</CardTitle>
                 <CardDescription>{userProfile.email}</CardDescription>
+                {user.country && (
+                  <CardDescription className="flex items-center gap-2 mt-1">
+                      <Globe className="h-4 w-4" />
+                      <span>{getFlagEmoji(user.country)} {user.country}</span>
+                  </CardDescription>
+                )}
                 <div className="flex gap-2 mt-2">
                     <Badge variant="outline">{language === 'id' ? userProfile.role_label_id : userProfile.role_label}</Badge>
                     <Badge variant={userProfile.verified ? 'default' : 'destructive'}>
