@@ -1,24 +1,27 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks, Contact, ShieldCheck, FileText, Calendar, Wallet } from "lucide-react"
+import { Users, Gavel, PackageCheck, CircleHelp, Check, X, MoreHorizontal, LineChart, Banknote, DollarSign, Truck, ListChecks, Contact, ShieldCheck, FileText, Calendar, Wallet, Search, MapPin } from "lucide-react"
 import { useI18n } from "@/context/i18n";
 import Image from "next/image";
 import { useToast } from '@/hooks/use-toast';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/context/auth';
-import { dashboardLabel } from '@/config/sidebar';
+import { dashboardLabel, roleToGeneralRoleMap } from '@/config/sidebar';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Line, XAxis, YAxis, CartesianGrid, LineChart as RechartsLineChart } from "recharts"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { MemberCard } from '@/components/member-card';
 import { allActiveAuctions, initialSellerProducts } from '@/lib/mock-data';
 import UserMap from '@/components/user-map';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { allowedRoles } from '@/lib/roles';
 
 
 const stats = [
@@ -74,6 +77,10 @@ export default function AdminDashboardPage() {
     const { t, formatCurrency, language } = useI18n();
     const { toast } = useToast();
     const { user } = useAuth();
+
+    const [mapSearchTerm, setMapSearchTerm] = useState('');
+    const [mapRoleFilter, setMapRoleFilter] = useState('all');
+    const [mapStatusFilter, setMapStatusFilter] = useState('all');
     
     // TODO: Connect to the database and fetch real data from the 'products' table where status is 'Pending'.
     const [pendingProducts, setPendingProducts] = useState<any[]>(initialSellerProducts.filter(p => p.status === 'Pending'));
@@ -83,6 +90,25 @@ export default function AdminDashboardPage() {
     const [shippingReports, setShippingReports] = useState(initialShippingReports);
     
     const pageTitle = user?.name ? dashboardLabel[user.role as keyof typeof dashboardLabel] || t('admin_dashboard_title') : t('admin_dashboard_title');
+    
+    const uniqueRoles = useMemo(() => {
+        const roles = new Set(allUsers.map(u => u.role));
+        return Array.from(roles);
+    }, [allUsers]);
+
+    const uniqueStatuses = useMemo(() => {
+        const statuses = new Set(allUsers.map(u => u.status));
+        return Array.from(statuses);
+    }, [allUsers]);
+
+    const filteredUsers = useMemo(() => {
+        return allUsers.filter(u => {
+            const searchMatch = u.name.toLowerCase().includes(mapSearchTerm.toLowerCase());
+            const roleMatch = mapRoleFilter === 'all' || u.role === mapRoleFilter;
+            const statusMatch = mapStatusFilter === 'all' || u.status === mapStatusFilter;
+            return searchMatch && roleMatch && statusMatch;
+        });
+    }, [allUsers, mapSearchTerm, mapRoleFilter, mapStatusFilter]);
 
     const handleProductVerification = (productId: string, action: 'approve' | 'reject') => {
         // TODO: Implement a server action to update the product status in the database.
@@ -179,9 +205,39 @@ export default function AdminDashboardPage() {
                             <CardTitle>User Location Map</CardTitle>
                             <CardDescription>Visualization of registered user locations and their status.</CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <Input 
+                                    placeholder="Search by name..."
+                                    value={mapSearchTerm}
+                                    onChange={(e) => setMapSearchTerm(e.target.value)}
+                                    className="sm:col-span-1"
+                                />
+                                <Select value={mapRoleFilter} onValueChange={setMapRoleFilter}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Filter by role..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All Roles</SelectItem>
+                                        {uniqueRoles.map(role => (
+                                            <SelectItem key={role} value={role}>{getRoleText(role)}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <Select value={mapStatusFilter} onValueChange={setMapStatusFilter}>
+                                     <SelectTrigger>
+                                        <SelectValue placeholder="Filter by status..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All Statuses</SelectItem>
+                                        {uniqueStatuses.map(status => (
+                                            <SelectItem key={status} value={status}>{getStatusText(status)}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                             <div className="w-full h-[400px] bg-secondary rounded-lg overflow-hidden">
-                                <UserMap users={allUsers} />
+                                <UserMap users={filteredUsers} />
                             </div>
                         </CardContent>
                     </Card>
@@ -440,3 +496,4 @@ export default function AdminDashboardPage() {
     )
 }
 
+    
