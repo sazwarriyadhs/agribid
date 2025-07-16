@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -63,7 +62,7 @@ export default function HeroSlider() {
                   className="object-cover w-full h-full"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+                <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
               </div>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
                 <div className="max-w-3xl">
