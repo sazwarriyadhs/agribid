@@ -10,9 +10,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 import { useI18n } from '@/context/i18n';
 import { useRef } from 'react';
-import Autoplay from 'embla-carousel-autoplay';
 
 const heroSlides = [
   {
@@ -38,7 +38,6 @@ const heroSlides = [
 export default function HeroSlider() {
   const { t } = useI18n();
 
-  // Gunakan ref untuk Autoplay plugin
   const plugin = useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
@@ -50,14 +49,17 @@ export default function HeroSlider() {
         plugins={[plugin.current]}
         className="relative w-full h-full"
       >
-        <CarouselContent className="flex h-full">
+        <CarouselContent className="flex h-full transition-transform duration-700 ease-in-out">
           {heroSlides.map((slide, index) => (
-            <CarouselItem key={index} className="flex-1 relative h-full">
+            <CarouselItem
+              key={index}
+              className="flex-1 relative h-full shrink-0 grow-0 basis-full transition-opacity duration-700 ease-in-out"
+            >
               <Image
                 src={slide.src}
                 alt={t(slide.titleKey) || 'Hero image'}
                 fill
-                className="object-cover"
+                className="object-cover transition-opacity duration-700 ease-in-out"
                 priority={index === 0}
               />
               <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center px-4">
