@@ -35,11 +35,14 @@ const financialStats = [
 
 // TODO: Connect to the database and fetch real data from the 'users' table.
 const initialAllUsers: any[] = [
-    { id: 'usr_petani_jaya', name: 'Petani Jaya', type: 'individual', firstName: 'Petani', lastName: 'Jaya', email: 'petani@agribid.com', role: 'petani', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01', lat: -6.9175, lon: 107.6191 }, // Bandung
-    { id: 'usr_bakery_co', name: 'Bakery Co.', type: 'company', companyName: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15', lat: -6.2088, lon: 106.8456 }, // Jakarta
-    { id: 'usr_global_logistics', name: 'Global Logistics', type: 'company', companyName: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20', lat: -7.2575, lon: 112.7521 }, // Surabaya
-    { id: 'usr_exportindo', name: 'Exportindo', type: 'company', companyName: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10', lat: 3.5952, lon: 98.6722 }, // Medan
-    { id: 'usr_nelayan_makmur', name: 'Nelayan Makmur', type: 'individual', firstName: 'Nelayan', lastName: 'Makmur', email: 'nelayan@agribid.com', role: 'nelayan', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null, lat: -5.1477, lon: 119.4327 }, // Makassar
+    { id: 'usr_petani_jaya', name: 'Petani Jaya', type: 'individual', firstName: 'Petani', lastName: 'Jaya', email: 'petani@agribid.com', role: 'petani', status: 'Active', registrationDate: '2024-07-01', paymentStatus: 'Paid', membershipExpires: '2025-07-01', lat: -6.9175, lon: 107.6191, country: 'Indonesia' },
+    { id: 'usr_bakery_co', name: 'Bakery Co.', type: 'company', companyName: 'Bakery Co.', email: 'buyer@agribid.com', role: 'buyer', status: 'Active', registrationDate: '2024-06-15', paymentStatus: 'Paid', membershipExpires: '2025-06-15', lat: -6.2088, lon: 106.8456, country: 'Indonesia' },
+    { id: 'usr_global_logistics', name: 'Global Logistics', type: 'company', companyName: 'Global Logistics', email: 'vendor@agribid.com', role: 'vendor', status: 'Active', registrationDate: '2024-05-20', paymentStatus: 'Paid', membershipExpires: '2025-05-20', lat: -7.2575, lon: 112.7521, country: 'Indonesia' },
+    { id: 'usr_exportindo', name: 'Exportindo', type: 'company', companyName: 'Exportindo', email: 'exporter@agribid.com', role: 'exporter', status: 'Suspended', registrationDate: '2024-03-10', paymentStatus: 'Paid', membershipExpires: '2025-03-10', lat: 3.5952, lon: 98.6722, country: 'Indonesia' },
+    { id: 'usr_nelayan_makmur', name: 'Nelayan Makmur', type: 'individual', firstName: 'Nelayan', lastName: 'Makmur', email: 'nelayan@agribid.com', role: 'nelayan', status: 'Pending Verification', registrationDate: '2024-07-10', paymentStatus: 'Unpaid', membershipExpires: null, lat: -5.1477, lon: 119.4327, country: 'Indonesia' },
+    { id: 'usr_nippon_foods', name: 'Nippon Foods', type: 'company', companyName: 'Nippon Foods', email: 'international_buyer@agribid.com', role: 'international_buyer', status: 'Active', registrationDate: '2024-07-05', paymentStatus: 'Paid', membershipExpires: '2025-07-05', lat: 35.6895, lon: 139.6917, country: 'Japan' },
+    { id: 'usr_usa_grains', name: 'USA Grains LLC', type: 'company', companyName: 'USA Grains LLC', email: 'international_buyer@agribid.com', role: 'international_buyer', status: 'Active', registrationDate: '2024-06-20', paymentStatus: 'Paid', membershipExpires: '2025-06-20', lat: 40.7128, lon: -74.0060, country: 'USA' },
+    { id: 'usr_euro_oils', name: 'Euro Oils B.V.', type: 'company', companyName: 'Euro Oils B.V.', email: 'international_buyer@agribid.com', role: 'international_buyer', status: 'Pending Verification', registrationDate: '2024-07-12', paymentStatus: 'Unpaid', membershipExpires: null, lat: 52.3676, lon: 4.9041, country: 'Netherlands' },
 ];
 
 // TODO: Connect to the database and fetch real data from a 'transactions' or 'auctions' table.
@@ -436,3 +439,4 @@ export default function AdminDashboardPage() {
         </>
     )
 }
+

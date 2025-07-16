@@ -43,7 +43,7 @@ const UserMap = ({ users }: UserMapProps) => {
       ],
       view: new View({
         center: fromLonLat([118.0158, -2.5489]), // Center of Indonesia
-        zoom: 5,
+        zoom: 4,
       }),
       controls: [],
     });
@@ -146,3 +146,4 @@ const UserMap = ({ users }: UserMapProps) => {
 };
 
 export default UserMap;
+
