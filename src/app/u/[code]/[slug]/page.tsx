@@ -199,8 +199,8 @@ export default function ProfilePage() {
                 <CardDescription>{userProfile.email}</CardDescription>
                 {user.country && (
                   <CardDescription className="flex items-center gap-2 mt-1">
-                      <Globe className="h-4 w-4" />
-                      <span>{getFlagEmoji(user.country)} {user.country}</span>
+                      <span className="text-lg">{getFlagEmoji(user.country)}</span>
+                      <span>{user.country}</span>
                   </CardDescription>
                 )}
                 <div className="flex gap-2 mt-2">
@@ -335,3 +335,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

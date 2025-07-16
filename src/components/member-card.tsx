@@ -92,7 +92,7 @@ export function MemberCardFront({ user }: MemberCardProps) {
              </header>
 
             <div className="text-center my-2">
-                <AgriBidLogo className="h-16 w-auto mx-auto" />
+                <AgriBidLogo className="h-24 w-auto mx-auto" />
             </div>
 
             <div className="flex justify-center my-6">
@@ -231,3 +231,4 @@ export function MemberCard({ user }: { user: any }) {
         </div>
     );
 }
+
