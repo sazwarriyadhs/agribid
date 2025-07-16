@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -59,32 +60,9 @@ export default function HeroSlider() {
                   data-ai-hint={slide.aiHint}
                   fill
                   sizes="100vw"
-                  className="object-cover w-full h-full"
+                  className="object-cover"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                <div className="max-w-3xl">
-                  <h1 className="text-3xl md:text-5xl font-headline font-bold tracking-tight">
-                    {t(slide.titleKey)}
-                  </h1>
-                  <p className="mt-4 text-lg text-primary-foreground/90">
-                    {t(slide.subtitleKey)}
-                  </p>
-                  <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button
-                      asChild
-                      size="lg"
-                      className="bg-accent hover:bg-accent/90 text-accent-foreground"
-                    >
-                      <Link href="#featured-auctions">{t('browse_auctions')}</Link>
-                    </Button>
-                    <Button asChild size="lg" variant="secondary">
-                      <Link href="/signup">{t('become_a_producer')}</Link>
-                    </Button>
-                  </div>
-                </div>
               </div>
             </CarouselItem>
           ))}
