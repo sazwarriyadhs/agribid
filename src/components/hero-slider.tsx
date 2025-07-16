@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { useI18n } from '@/context/i18n';
-import { useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 const heroSlides = [
   {
@@ -37,26 +37,35 @@ const heroSlides = [
 
 export default function HeroSlider() {
   const { t } = useI18n();
+  const [plugin, setPlugin] = useState<any>(null);
 
-  const plugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
+  useEffect(() => {
+    const autoplay = Autoplay({
+      delay: 5000,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    });
+    setPlugin(() => autoplay);
+  }, []);
 
   return (
     <section className="relative w-full h-[90vh] lg:h-screen overflow-hidden">
       <Carousel
         opts={{ loop: true }}
-        plugins={[plugin.current]}
+        plugins={plugin ? [plugin] : []}
         className="relative w-full h-full"
       >
-        <CarouselContent className="h-full">
+        <CarouselContent className="flex h-full transition-transform duration-700 ease-in-out">
           {heroSlides.map((slide, index) => (
-            <CarouselItem key={index} className="relative h-full">
+            <CarouselItem
+              key={index}
+              className="flex-1 relative h-full shrink-0 grow-0 basis-full transition-opacity duration-700 ease-in-out"
+            >
               <Image
                 src={slide.src}
                 alt={t(slide.titleKey) || 'Hero image'}
                 fill
-                className="object-cover"
+                className="object-cover transition-opacity duration-700 ease-in-out"
                 priority={index === 0}
               />
               <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center px-4">
