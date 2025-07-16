@@ -26,7 +26,7 @@ export const sidebarByRole: Record<GeneralRole, NavItem[]> = {
     { name: "Dashboard", path: "/dashboard/international-buyer", icon: LayoutDashboard, labelKey: 'dashboard' },
     { name: "Browse Commodities", path: "/", icon: Search, labelKey: 'browse_export_commodities' },
     { name: "Post a Request", path: "/dashboard/international-buyer/post-request", icon: FilePlus, labelKey: 'post_request_title' },
-    { name: "My Imports", path: "/dashboard/international-buyer", icon: Plane, labelKey: 'manage_imports_title' },
+    { name: "My Imports", path: "/dashboard/international-buyer#my-imports", icon: Plane, labelKey: 'my_imports_title' },
   ],
   admin: [
     { name: "Overview", path: "/dashboard/admin", icon: LayoutDashboard, labelKey: 'admin_dashboard_title' },
